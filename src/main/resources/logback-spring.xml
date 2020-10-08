@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <springProfile name="!docker">
+        <!--    default files for Spring Boot https://docs.spring.io/spring-boot/docs/current/reference/html/howto.html#howto-configure-logback-for-logging-->
+        <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+        <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
+        <root level="INFO">
+            <appender-ref ref="CONSOLE"/>
+        </root>
+        <logger name="org.springframework.web" level="INFO"/>
+        <!--    we want to log DEBUG and higher events locally for application's internal loggers-->
+        <logger name="com.wine.to.up" level="DEBUG"/>
+    </springProfile>
+
+    <springProfile name="docker">
+        <springProperty name="serviceName" source="spring.application.name"/>
+        <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+        <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
+
+        <appender name="STASH" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+            <!--            we want to sent logs to logstash in case of problems-->
+            <!--            <filter class="ch.qos.logback.classic.filter.ThresholdFilter">-->
+            <!--                <level>WARN</level>-->
+            <!--            </filter>-->
+            <destination>${S_LOGSTASH_HOST}</destination>
+            <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+                <customFields>{"serviceName":"${serviceName}"}</customFields>
+            </encoder>
+        </appender>
+
+        <root level="INFO">
+            <appender-ref ref="STASH"/>
+            <appender-ref ref="CONSOLE"/>
+        </root>
+    </springProfile>
+</configuration>
