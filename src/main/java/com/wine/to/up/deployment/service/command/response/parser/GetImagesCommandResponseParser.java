@@ -1,12 +1,14 @@
 package com.wine.to.up.deployment.service.command.response.parser;
 
-import org.springframework.beans.factory.annotation.Qualifier;
+import com.wine.to.up.deployment.service.vo.ImageVO;
 import org.springframework.stereotype.Component;
 
-import java.util.Map;
+import java.util.Collections;
+import java.util.List;
 
 @Component
-@Qualifier("firstRealization")
 public class GetImagesCommandResponseParser {
-    public void parse(String str, Map<String, Object> values){}
+    public List<ImageVO> parse(String str){
+        return Collections.emptyList();
+    }
 }

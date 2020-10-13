@@ -17,6 +17,8 @@ public class GetImagesCommandProvider implements ImageCommandProvider {
 
     private CommandProcessor commandProcessor;
     private GetImagesCommandResponseParser parser;
+    public static final String imagesKey = "getImagesResponse";
+    public static final String command = "docker service ls";
 
     @Autowired
     public void setCommandProcessor(final CommandProcessor commandProcessor) {
@@ -37,7 +39,7 @@ public class GetImagesCommandProvider implements ImageCommandProvider {
     @Override
     public ImageDto process(ImageDto imageDto) {
         final Map<String, Object> payload = new HashMap<>();
-        parser.parse(commandProcessor.processCommand("dai mne vse image"), payload);
+        payload.put(imagesKey, parser.parse(commandProcessor.processCommand(command)));
         return ImageDto.builder().payload(Collections.unmodifiableMap(payload)).build();
     }
 }
