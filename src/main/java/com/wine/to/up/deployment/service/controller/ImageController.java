@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collection;
 import java.util.List;
 
 
@@ -19,7 +18,7 @@ import java.util.List;
 @RequestMapping(value = "/api", produces = MediaType.APPLICATION_JSON_VALUE)
 public class ImageController {
 
-    public static final String imagesKey = "getImagesResponse";
+    public static final String IMAGES_KEY = "getImagesResponse";
     public final DeploymentServiceImpl deploymentService;
 
 
@@ -30,6 +29,11 @@ public class ImageController {
 
     @GetMapping(value = "/images")
     public List<ImageVO> images() {
-        return (List<ImageVO>)deploymentService.processImageRequest(ImageDto.builder().imageRequestType(ImageRequestType.FIND).build()).getPayload().get(imagesKey);
+        return (List<ImageVO>)(deploymentService.processImageRequest(
+                ImageDto.builder()
+                .imageRequestType(ImageRequestType.FIND)
+                .build())
+                .getPayload()
+                .get(IMAGES_KEY));
     }
 }

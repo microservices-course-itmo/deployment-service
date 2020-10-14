@@ -17,6 +17,7 @@ public class ImageVO {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private final String ports;
     private final String name;
+    @JsonIgnore
     private final String image;
     private final String replicas;
 }
