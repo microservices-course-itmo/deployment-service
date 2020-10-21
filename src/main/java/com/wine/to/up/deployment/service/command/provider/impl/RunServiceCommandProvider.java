@@ -15,8 +15,9 @@ import java.util.Map;
 @Component("RunServiceCommandProvider")
 public class RunServiceCommandProvider implements ImageCommandProvider {
 
+    static final String COMMAND = "docker service ls";
     private CommandProcessor commandProcessor;
-    public static final String COMMAND = "docker service ls";
+
 
     @Autowired
     public void setCommandProcessor(final CommandProcessor commandProcessor) {
@@ -30,8 +31,8 @@ public class RunServiceCommandProvider implements ImageCommandProvider {
 
     @Override
     public ImageDto process(ImageDto imageDto) {
-        final String answer = commandProcessor.processCommand(COMMAND);
-        final Map<String, Object> payload = new HashMap<>();
+         String answer = commandProcessor.processCommand(COMMAND);
+         Map<String, Object> payload = new HashMap<>();
         payload.put("answer", answer);
         return ImageDto.builder().payload(Collections.unmodifiableMap(payload)).build();
     }
