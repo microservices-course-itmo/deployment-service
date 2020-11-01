@@ -28,8 +28,8 @@ public class DeploymentController {
 
     @RequestMapping("/applicationInstances/getSingleInstance/{id}")
     public ApplicationInstanceVO singleInstanceByApplicationId(
-            @PathVariable String id) {
-        return this.deploymentService.getSingleInstanceByAppId(id);
+            @PathVariable long id) {
+        return this.deploymentService.getSingleInstanceById(id);
     }
 
 }

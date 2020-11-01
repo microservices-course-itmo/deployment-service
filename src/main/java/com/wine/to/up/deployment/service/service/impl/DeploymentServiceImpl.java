@@ -23,6 +23,7 @@ public class DeploymentServiceImpl implements DeploymentService {
     public List<ApplicationInstanceVO> getMultipleInstancesByAppId(String appId) {
         List<ApplicationInstanceVO> instances = new ArrayList<>();
         ApplicationInstanceVO applicationInstance = ApplicationInstanceVO.builder()
+                .id(1)
                 .appId(appId)
                 .templateId(15)
                 .version("1.0.1")
@@ -30,6 +31,7 @@ public class DeploymentServiceImpl implements DeploymentService {
                 .dateCreated("23412351245")
                 .createdBy("asukhoa")
                 .status(ApplicationInstanceStatus.STARTING)
+                .url("127.0.0.1:48080/order-service/swagger-ui.html")
                 .build();
         instances.add(applicationInstance);
 
@@ -37,15 +39,17 @@ public class DeploymentServiceImpl implements DeploymentService {
     }
 
     @Override
-    public ApplicationInstanceVO getSingleInstanceByAppId(String appId) {
+    public ApplicationInstanceVO getSingleInstanceById(long id) {
         ApplicationInstanceVO instance = ApplicationInstanceVO.builder()
-                .appId(appId)
+                .id(id)
+                .appId("order-service")
                 .templateId(15)
                 .version("1.0.1")
                 .containerId("12235123512")
                 .dateCreated("23412351245")
                 .createdBy("asukhoa")
                 .status(ApplicationInstanceStatus.STARTING)
+                .url("127.0.0.1:48080/order-service/swagger-ui.html")
                 .build();
 
         return instance;

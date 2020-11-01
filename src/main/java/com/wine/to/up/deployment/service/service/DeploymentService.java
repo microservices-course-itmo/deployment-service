@@ -9,7 +9,7 @@ import java.util.List;
 public interface DeploymentService {
     void test();
 
-    public List<ApplicationInstanceVO> getMultipleInstancesByAppId(String appId);
+     List<ApplicationInstanceVO> getMultipleInstancesByAppId(String appId);
 
-    public ApplicationInstanceVO getSingleInstanceByAppId(String appId);
+     ApplicationInstanceVO getSingleInstanceById(long id);
 }

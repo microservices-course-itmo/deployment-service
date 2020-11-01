@@ -9,7 +9,7 @@ import lombok.Data;
 @Builder
 public class ApplicationInstanceVO   {
 
-    private final String id;
+    private final long id;
 
     private final String appId;
 
@@ -24,6 +24,8 @@ public class ApplicationInstanceVO   {
     private final String createdBy;
 
     private final String alias ;
+
+    private final String url;
 
     private final ApplicationInstanceStatus status;
 }
