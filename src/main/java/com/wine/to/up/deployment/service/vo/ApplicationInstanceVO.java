@@ -25,5 +25,5 @@ public class ApplicationInstanceVO   {
 
     private final String alias ;
 
-    public final ApplicationInstanceStatus status;
+    private final ApplicationInstanceStatus status;
 }

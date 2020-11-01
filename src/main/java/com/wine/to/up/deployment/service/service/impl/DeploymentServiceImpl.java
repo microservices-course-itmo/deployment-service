@@ -21,8 +21,8 @@ public class DeploymentServiceImpl implements DeploymentService {
 
     @Override
     public List<ApplicationInstanceVO> getMultipleInstancesByAppId(String appId) {
-        List<ApplicationInstanceVO> Instances = new ArrayList<>();
-        ApplicationInstanceVO ApplicationInstance = ApplicationInstanceVO.builder()
+        List<ApplicationInstanceVO> instances = new ArrayList<>();
+        ApplicationInstanceVO applicationInstance = ApplicationInstanceVO.builder()
                 .appId(appId)
                 .templateId(15)
                 .version("1.0.1")
@@ -31,14 +31,14 @@ public class DeploymentServiceImpl implements DeploymentService {
                 .createdBy("asukhoa")
                 .status(ApplicationInstanceStatus.STARTING)
                 .build();
-        Instances.add(ApplicationInstance);
+        instances.add(applicationInstance);
 
-        return Instances;
+        return instances;
     }
 
     @Override
     public ApplicationInstanceVO getSingleInstanceByAppId(String appId) {
-        ApplicationInstanceVO Instance = ApplicationInstanceVO.builder()
+        ApplicationInstanceVO instance = ApplicationInstanceVO.builder()
                 .appId(appId)
                 .templateId(15)
                 .version("1.0.1")
@@ -48,6 +48,6 @@ public class DeploymentServiceImpl implements DeploymentService {
                 .status(ApplicationInstanceStatus.STARTING)
                 .build();
 
-        return Instance;
+        return instance;
     }
 }

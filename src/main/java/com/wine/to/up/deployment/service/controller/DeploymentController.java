@@ -21,13 +21,13 @@ public class DeploymentController {
     }
 
     @RequestMapping("/applicationInstances/getInstances/{id}")
-    public List<ApplicationInstanceVO> MultipleInstancesByApplicationId(
+    public List<ApplicationInstanceVO> multipleInstancesByApplicationId(
             @PathVariable String id) {
         return this.deploymentService.getMultipleInstancesByAppId(id);
     }
 
     @RequestMapping("/applicationInstances/getSingleInstance/{id}")
-    public ApplicationInstanceVO SingleInstanceByApplicationName(
+    public ApplicationInstanceVO singleInstanceByApplicationId(
             @PathVariable String id) {
         return this.deploymentService.getSingleInstanceByAppId(id);
     }
