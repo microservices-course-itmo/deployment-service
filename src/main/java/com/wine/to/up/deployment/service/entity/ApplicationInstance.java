@@ -22,7 +22,7 @@ public class ApplicationInstance {
     @Id
     private Long id;
     private String appId;
-    private String templateId;
+    private Long templateId;
     private String version;
     private String containerId;
     private String dateCreated;
