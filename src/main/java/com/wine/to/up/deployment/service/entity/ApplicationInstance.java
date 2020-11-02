@@ -1,5 +1,6 @@
 package com.wine.to.up.deployment.service.entity;
 
+import com.wine.to.up.deployment.service.enums.ApplicationInstanceStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,7 +27,7 @@ public class ApplicationInstance {
     private String containerId;
     private String dateCreated;
     private String userCreated;
-    private String status;
+    private ApplicationInstanceStatus status;
     private String url;
 
 }
