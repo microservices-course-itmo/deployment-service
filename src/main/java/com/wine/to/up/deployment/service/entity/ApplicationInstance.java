@@ -20,7 +20,7 @@ public class ApplicationInstance {
     public static final String SEQUENCE_NAME = "users_sequence";
 
     @Id
-    private long id;
+    private Long id;
     private String appId;
     private String templateId;
     private String version;

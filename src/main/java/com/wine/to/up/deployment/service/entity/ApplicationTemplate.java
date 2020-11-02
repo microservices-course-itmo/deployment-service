@@ -22,7 +22,7 @@ public class ApplicationTemplate {
     public static final String SEQUENCE_NAME = "users_sequence";
 
     @Id
-    private long id;
+    private Long id;
     private String templateVersion;
     private String createdBy;
     private String name;
