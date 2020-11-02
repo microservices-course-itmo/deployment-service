@@ -8,8 +8,6 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.time.LocalDateTime;
-
 @Getter
 @Setter
 @AllArgsConstructor
@@ -26,7 +24,7 @@ public class ApplicationInstance {
     private String templateId;
     private String version;
     private String containerId;
-    private LocalDateTime dateCreated;
+    private String dateCreated;
     private String userCreated;
     private String status;
     private String url;
