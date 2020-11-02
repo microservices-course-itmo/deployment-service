@@ -28,7 +28,7 @@ public class ApplicationTemplate {
     private String name;
     private List<String> portMappings;
     private List<String> volumes;
-    private Environment env;
+    private List<Environment> env;
     private long memoryLimits = 3000000000L;
 
 }

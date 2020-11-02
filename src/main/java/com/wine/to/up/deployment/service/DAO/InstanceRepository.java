@@ -1,6 +1,0 @@
-package com.wine.to.up.deployment.service.DAO;
-
-import com.wine.to.up.deployment.service.entity.ApplicationInstance;
-import org.springframework.data.mongodb.repository.MongoRepository;
-
-public interface InstanceRepository extends MongoRepository<ApplicationInstance, String> { }

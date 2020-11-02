@@ -1,0 +1,13 @@
+mongo:
+  image: mongo
+  restart: always
+  environment:
+    MONGO_INITDB_ROOT_USERNAME: mongo
+    MONGO_INITDB_ROOT_PASSWORD: mongo
+    MONGO_INITDB_DATABASE: texts
+  ports:
+    - '27017:27017'
+
+volumes:
+  mongo_data:
+    driver: local
