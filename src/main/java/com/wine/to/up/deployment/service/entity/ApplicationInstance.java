@@ -26,7 +26,7 @@ public class ApplicationInstance {
     private String templateId;
     private String version;
     private String containerId;
-    private LocalDateTime dateCreated; //Possibly wrong type
+    private LocalDateTime dateCreated;
     private String userCreated;
     private String status;
     private String url;
