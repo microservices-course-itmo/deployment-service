@@ -5,10 +5,7 @@ import com.wine.to.up.deployment.service.service.DeploymentService;
 import com.wine.to.up.deployment.service.vo.ApplicationInstanceVO;
 import com.wine.to.up.deployment.service.vo.ApplicationTemplateVO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -22,29 +19,29 @@ public class DeploymentController {
         this.deploymentService = deploymentService;
     }
 
-    @RequestMapping("/applicationInstances/getInstances/{templateId}")
+    @GetMapping("/applicationInstances/getInstances/{templateId}")
     public List<ApplicationInstanceVO> multipleInstancesByApplicationId(
             @PathVariable Long templateId) {
         return this.deploymentService.getMultipleInstancesByAppId(templateId);
     }
 
-    @RequestMapping("/applicationInstances/getSingleInstance/{id}")
+    @GetMapping("/applicationInstances/getSingleInstance/{id}")
     public ApplicationInstanceVO singleInstanceByApplicationId(
             @PathVariable long id) {
         return this.deploymentService.getSingleInstanceById(id);
     }
 
-    @RequestMapping("/application/get/{id}")
+    @GetMapping("/application/get/{id}")
     public ApplicationTemplateVO getApplication(@PathVariable Long id) {
         return deploymentService.getApplicationById(id);
     }
 
-    @RequestMapping("/application/create")
+    @PostMapping("/application/create")
     public ApplicationTemplateVO createApplicationTemplate(@RequestBody ApplicationTemplateVO applicationTemplateVO) {
         return deploymentService.createApplicationTemplate(applicationTemplateVO);
     }
 
-    @RequestMapping("/applicationInstance/deploy")
+    @PostMapping("/applicationInstance/deploy")
     public ApplicationInstanceVO deployApplicationInstance(@RequestBody ApplicationTemplateVO applicationTemplateVO) {
         return deploymentService.deployApplicationInstance(applicationTemplateVO);
     }
