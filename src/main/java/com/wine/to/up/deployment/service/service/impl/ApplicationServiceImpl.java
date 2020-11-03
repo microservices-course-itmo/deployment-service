@@ -70,12 +70,13 @@ public class ApplicationServiceImpl implements ApplicationService {
     }
 
     //TODO rewrite with connection to database
+    @Override
     public ApplicationTemplateVO createApplication(ApplicationTemplateVO applicationTemplateVO) {
         /*ApplicationTemplate applicationTemplate = new ApplicationTemplate(applicationTemplateVO.getLastRelease(),
                 applicationTemplateVO.getCreatedBy(), applicationTemplateVO.getName(), applicationTemplateVO.getPorts(),
                 applicationTemplateVO.getVolumes(), applicationTemplateVO.getEnv());
         applicationTemplateRepository.save(applicationTemplate);*/
 
-        return ApplicationTemplateVO.builder().id(1L).dateCreated(new Date()).build();
+        return applicationTemplateVO;
     }
 }

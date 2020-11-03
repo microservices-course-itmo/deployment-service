@@ -7,8 +7,6 @@ import com.wine.to.up.deployment.service.service.DockerClientFactory
 import com.wine.to.up.deployment.service.vo.ApplicationInstanceVO
 import com.wine.to.up.deployment.service.vo.ApplicationTemplateVO
 import org.springframework.stereotype.Service
-import java.time.LocalDate
-import java.util.*
 
 @Service("applicationInstanceService")
 class ApplicationInstanceServiceImpl(
@@ -20,14 +18,16 @@ class ApplicationInstanceServiceImpl(
     override fun deployInstance(applicationTemplateVO: ApplicationTemplateVO): ApplicationInstanceVO {
         return ApplicationInstanceVO.builder()
                 .id(1L)
-                .dateCreated(LocalDate
-                        .parse("2020-10-10")
-                        .toString())
+                .version("1.0.1")
+                .createdBy("asukhoa")
+                .alias("alias")
+                .status(ApplicationInstanceStatus.RUNNING)
                 .build()
     }
 
+    //TODO rewrite with connection to database
     override fun getInstancesByTemplateId(templateId: Long): List<ApplicationInstanceVO> {
-        val entities = applicationInstanceRepository.findByTemplateId(templateId)
+        /*val entities = applicationInstanceRepository.findByTemplateId(templateId)
         val dockerClient = if (entities.isEmpty()) {
             return emptyList()
         } else {
@@ -53,6 +53,15 @@ class ApplicationInstanceServiceImpl(
                     .version("STUB")
                     .url(it.url)
                     .build()
-        }
+        } */
+        return listOf(
+                ApplicationInstanceVO.builder()
+                        .id(1L)
+                        .version("1.0.1")
+                        .createdBy("asukhoa")
+                        .alias("alias")
+                        .status(ApplicationInstanceStatus.RUNNING)
+                        .build()
+        )
     }
 }
