@@ -1,33 +1,33 @@
 package com.wine.to.up.deployment.service.entity;
 
-import com.wine.to.up.deployment.service.enums.ApplicationInstanceStatus;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.boot.context.properties.ConstructorBinding;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.List;
+
 @Getter
 @Setter
-@AllArgsConstructor
+@ConstructorBinding
 @NoArgsConstructor
 @Document(collection = "templates")
-public class ApplicationInstance {
+public class ApplicationTemplate {
 
     @Transient
     public static final String SEQUENCE_NAME = "users_sequence";
 
     @Id
     private Long id;
-    private String appId;
-    private Long templateId;
-    private String version;
-    private String containerId;
-    private String dateCreated;
-    private String userCreated;
-    private ApplicationInstanceStatus status;
-    private String url;
+    private String templateVersion;
+    private String createdBy;
+    private String name;
+    private List<String> portMappings;
+    private List<String> volumes;
+    private List<Environment> env;
+    private long memoryLimits = 3000000000L;
 
 }
