@@ -5,6 +5,7 @@ import com.wine.to.up.deployment.service.enums.ApplicationInstanceStatus
 import com.wine.to.up.deployment.service.service.ApplicationInstanceService
 import com.wine.to.up.deployment.service.service.DockerClientFactory
 import com.wine.to.up.deployment.service.vo.ApplicationInstanceVO
+import com.wine.to.up.deployment.service.vo.ApplicationTemplateVO
 import org.springframework.stereotype.Service
 import java.time.LocalDate
 import java.util.*
@@ -15,7 +16,8 @@ class ApplicationInstanceServiceImpl(
         val dockerClientFactory: DockerClientFactory
 ) : ApplicationInstanceService {
 
-    override fun deployInstance(applicationInstanceVO: ApplicationInstanceVO): ApplicationInstanceVO {
+    //TODO rewrite with connection to database
+    override fun deployInstance(applicationTemplateVO: ApplicationTemplateVO): ApplicationInstanceVO {
         return ApplicationInstanceVO.builder()
                 .id(1L)
                 .dateCreated(LocalDate

@@ -5,6 +5,5 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.List;
 
-public interface ApplicationTemplateRepository extends MongoRepository<ApplicationTemplate, String> {
-    ApplicationTemplate findById(Long id);
+public interface ApplicationTemplateRepository extends MongoRepository<ApplicationTemplate, Long> {
 }

@@ -47,7 +47,7 @@ public class DeploymentServiceImpl implements DeploymentService {
     }
 
     @Override
-    public ApplicationInstanceVO deployApplicationInstance(ApplicationInstanceVO applicationInstanceVO) {
-        return applicationInstanceService.deployInstance(applicationInstanceVO);
+    public ApplicationInstanceVO deployApplicationInstance(ApplicationTemplateVO applicationTemplateVO) {
+        return applicationInstanceService.deployInstance(applicationTemplateVO);
     }
 }

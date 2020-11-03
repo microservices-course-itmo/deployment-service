@@ -2,8 +2,10 @@ package com.wine.to.up.deployment.service.service.impl;
 
 import com.wine.to.up.deployment.service.dao.ApplicationTemplateRepository;
 import com.wine.to.up.deployment.service.entity.Log;
+import com.wine.to.up.deployment.service.enums.ApplicationInstanceStatus;
 import com.wine.to.up.deployment.service.service.ApplicationInstanceService;
 import com.wine.to.up.deployment.service.service.ApplicationService;
+import com.wine.to.up.deployment.service.vo.ApplicationInstanceVO;
 import com.wine.to.up.deployment.service.vo.ApplicationTemplateVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,6 +32,7 @@ public class ApplicationServiceImpl implements ApplicationService {
         this.applicationInstanceService = applicationInstanceService;
     }
 
+    //TODO rewrite with connection to database
     @Override
     public ApplicationTemplateVO getApplicationTemplate(Long id) {
         /*List<ApplicationInstanceVO> instancesByTemplateId = applicationInstanceService.getInstancesByTemplateId(id);
@@ -48,17 +51,16 @@ public class ApplicationServiceImpl implements ApplicationService {
                 .description("STUB")
                 .build();*/
 
-        Log log = new Log(new Date(), "STUB");
-        List<Log> logs = new ArrayList<>();
-        logs.add(log);
-
         return ApplicationTemplateVO.builder()
                 .lastRelease("LATEST")
                 .alias("STUB")
-                .instances(Collections.emptyList())
+                .instances(Collections.singletonList(ApplicationInstanceVO.builder()
+                        .id(1L)
+                        .status(ApplicationInstanceStatus.RUNNING)
+                        .build()))
                 .name("NAME")
                 .env(Collections.emptyList())
-                .logs(logs)
+                .logs(Collections.singletonList(new Log(new Date(), "STUB")))
                 .ports(Collections.emptyList())
                 .versions(Collections.emptyList())
                 .volumes(Collections.emptyList())
@@ -66,6 +68,7 @@ public class ApplicationServiceImpl implements ApplicationService {
                 .build();
     }
 
+    //TODO rewrite with connection to database
     public ApplicationTemplateVO createApplication(ApplicationTemplateVO applicationTemplateVO) {
         /*ApplicationTemplate applicationTemplate = new ApplicationTemplate(applicationTemplateVO.getLastRelease(),
                 applicationTemplateVO.getCreatedBy(), applicationTemplateVO.getName(), applicationTemplateVO.getPorts(),

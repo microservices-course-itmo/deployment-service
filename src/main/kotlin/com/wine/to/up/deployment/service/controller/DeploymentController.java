@@ -45,8 +45,8 @@ public class DeploymentController {
     }
 
     @RequestMapping("/applicationInstance/deploy")
-    public ApplicationInstanceVO deployApplicationInstance(@RequestBody ApplicationInstanceVO applicationInstanceVO) {
-        return deploymentService.deployApplicationInstance(applicationInstanceVO);
+    public ApplicationInstanceVO deployApplicationInstance(@RequestBody ApplicationTemplateVO applicationTemplateVO) {
+        return deploymentService.deployApplicationInstance(applicationTemplateVO);
     }
 }
 

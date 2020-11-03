@@ -17,5 +17,5 @@ public interface DeploymentService {
 
      ApplicationTemplateVO createApplicationTemplate(ApplicationTemplateVO applicationTemplateVO);
 
-     ApplicationInstanceVO deployApplicationInstance(ApplicationInstanceVO applicationInstanceVO);
+     ApplicationInstanceVO deployApplicationInstance(ApplicationTemplateVO applicationTemplateVO);
 }
