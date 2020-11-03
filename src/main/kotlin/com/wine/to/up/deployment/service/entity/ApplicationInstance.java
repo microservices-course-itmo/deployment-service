@@ -11,7 +11,6 @@ public class ApplicationInstance {
     @Transient
     public static final String SEQUENCE_NAME = "users_sequence";
 
-    @Id
     private Long id;
     private String appId;
     private Long templateId;
@@ -38,6 +37,7 @@ public class ApplicationInstance {
 
     }
 
+    @Id
     public Long getId() {
         return id;
     }
