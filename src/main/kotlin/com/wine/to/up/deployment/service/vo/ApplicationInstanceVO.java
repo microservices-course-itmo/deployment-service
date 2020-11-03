@@ -1,10 +1,12 @@
 package com.wine.to.up.deployment.service.vo;
 
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.wine.to.up.deployment.service.enums.ApplicationInstanceStatus;
 import lombok.Data;
 
 @Data
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ApplicationInstanceVO   {
 
     private final Long id;

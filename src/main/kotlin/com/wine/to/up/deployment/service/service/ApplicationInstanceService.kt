@@ -4,4 +4,5 @@ import com.wine.to.up.deployment.service.vo.ApplicationInstanceVO
 
 interface ApplicationInstanceService {
     fun getInstancesByTemplateId(templateId: Long): List<ApplicationInstanceVO>
+    fun deployInstance(applicationInstanceVO: ApplicationInstanceVO) : ApplicationInstanceVO
 }
