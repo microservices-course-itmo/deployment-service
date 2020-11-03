@@ -10,10 +10,8 @@ import com.wine.to.up.deployment.service.vo.ApplicationTemplateVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
-import java.util.List;
 
 @Service
 public class ApplicationServiceImpl implements ApplicationService {
@@ -53,14 +51,17 @@ public class ApplicationServiceImpl implements ApplicationService {
 
         return ApplicationTemplateVO.builder()
                 .lastRelease("LATEST")
-                .alias("STUB")
+                .alias("alias")
                 .instances(Collections.singletonList(ApplicationInstanceVO.builder()
                         .id(1L)
+                        .version("1.0.1")
+                        .createdBy("asukhoa")
+                        .alias("alias")
                         .status(ApplicationInstanceStatus.RUNNING)
                         .build()))
                 .name("NAME")
                 .env(Collections.emptyList())
-                .logs(Collections.singletonList(new Log(new Date(), "STUB")))
+                .logs(Collections.singletonList(new Log(new Date(), "log message")))
                 .ports(Collections.emptyList())
                 .versions(Collections.emptyList())
                 .volumes(Collections.emptyList())
