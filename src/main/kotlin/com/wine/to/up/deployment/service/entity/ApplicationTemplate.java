@@ -25,9 +25,19 @@ public class ApplicationTemplate {
     private String templateVersion;
     private String createdBy;
     private String name;
+    private String description;
     private List<String> portMappings;
     private List<String> volumes;
-    private List<Environment> env;
+    private List<Environment> environmentVariables;
     private long memoryLimits = 3000000000L;
 
+    public ApplicationTemplate(String templateVersion, String createdBy, String name, List<String> portMappings, List<String> volumes, List<Environment> environmentVariables, String description) {
+        this.templateVersion = templateVersion;
+        this.createdBy = createdBy;
+        this.name = name;
+        this.portMappings = portMappings;
+        this.volumes = volumes;
+        this.environmentVariables = environmentVariables;
+        this.description = description;
+    }
 }

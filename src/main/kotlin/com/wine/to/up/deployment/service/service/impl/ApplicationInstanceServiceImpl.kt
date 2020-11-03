@@ -5,13 +5,26 @@ import com.wine.to.up.deployment.service.enums.ApplicationInstanceStatus
 import com.wine.to.up.deployment.service.service.ApplicationInstanceService
 import com.wine.to.up.deployment.service.service.DockerClientFactory
 import com.wine.to.up.deployment.service.vo.ApplicationInstanceVO
+import com.wine.to.up.deployment.service.vo.ApplicationTemplateVO
 import org.springframework.stereotype.Service
+import java.time.LocalDate
+import java.util.*
 
 @Service("applicationInstanceService")
 class ApplicationInstanceServiceImpl(
         val applicationInstanceRepository: ApplicationInstanceRepository,
         val dockerClientFactory: DockerClientFactory
 ) : ApplicationInstanceService {
+
+    //TODO rewrite with connection to database
+    override fun deployInstance(applicationTemplateVO: ApplicationTemplateVO): ApplicationInstanceVO {
+        return ApplicationInstanceVO.builder()
+                .id(1L)
+                .dateCreated(LocalDate
+                        .parse("2020-10-10")
+                        .toString())
+                .build()
+    }
 
     override fun getInstancesByTemplateId(templateId: Long): List<ApplicationInstanceVO> {
         val entities = applicationInstanceRepository.findByTemplateId(templateId)
