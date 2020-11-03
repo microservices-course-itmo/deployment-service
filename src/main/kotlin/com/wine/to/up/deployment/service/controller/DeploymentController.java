@@ -20,10 +20,10 @@ public class DeploymentController {
         this.deploymentService = deploymentService;
     }
 
-    @RequestMapping("/applicationInstances/getInstances/{id}")
+    @RequestMapping("/applicationInstances/getInstances/{templateId}")
     public List<ApplicationInstanceVO> multipleInstancesByApplicationId(
-            @PathVariable String id) {
-        return this.deploymentService.getMultipleInstancesByAppId(id);
+            @PathVariable Long templateId) {
+        return this.deploymentService.getMultipleInstancesByAppId(templateId);
     }
 
     @RequestMapping("/applicationInstances/getSingleInstance/{id}")

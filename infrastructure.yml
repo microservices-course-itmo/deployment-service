@@ -1,12 +1,15 @@
-mongo:
-  image: mongo
-  restart: always
-  environment:
-    MONGO_INITDB_ROOT_USERNAME: mongo
-    MONGO_INITDB_ROOT_PASSWORD: mongo
-    MONGO_INITDB_DATABASE: texts
-  ports:
-    - '27017:27017'
+version: '3'
+
+services:
+  mongo:
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: mongo
+      MONGO_INITDB_ROOT_PASSWORD: mongo
+      MONGO_INITDB_DATABASE: DeploymentService
+    ports:
+      - '27017:27017'
 
 volumes:
   mongo_data:
