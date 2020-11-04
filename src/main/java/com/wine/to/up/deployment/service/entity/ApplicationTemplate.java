@@ -8,6 +8,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -22,22 +23,24 @@ public class ApplicationTemplate {
 
     @Id
     private Long id;
-    private String templateVersion;
+    private List<String> templateVersions;
     private String createdBy;
     private String name;
     private String description;
     private List<String> portMappings;
     private List<String> volumes;
     private List<Environment> environmentVariables;
+    private LocalDateTime dateCreated;
     private long memoryLimits = 3000000000L;
 
-    public ApplicationTemplate(String templateVersion, String createdBy, String name, List<String> portMappings, List<String> volumes, List<Environment> environmentVariables, String description) {
-        this.templateVersion = templateVersion;
+    public ApplicationTemplate(List<String> templateVersions, String createdBy, String name, List<String> portMappings, List<String> volumes, List<Environment> environmentVariables, String description) {
+        this.templateVersions = templateVersions;
         this.createdBy = createdBy;
         this.name = name;
         this.portMappings = portMappings;
         this.volumes = volumes;
         this.environmentVariables = environmentVariables;
         this.description = description;
+        this.dateCreated = LocalDateTime.now();
     }
 }

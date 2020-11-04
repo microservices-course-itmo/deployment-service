@@ -10,8 +10,8 @@ import com.wine.to.up.deployment.service.vo.ApplicationTemplateVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
-import java.util.Date;
 
 @Service
 public class ApplicationServiceImpl implements ApplicationService {
@@ -50,6 +50,7 @@ public class ApplicationServiceImpl implements ApplicationService {
                 .build();*/
 
         return ApplicationTemplateVO.builder()
+                .id(1L)
                 .lastRelease("LATEST")
                 .alias("alias")
                 .instances(Collections.singletonList(ApplicationInstanceVO.builder()
@@ -61,7 +62,7 @@ public class ApplicationServiceImpl implements ApplicationService {
                         .build()))
                 .name("NAME")
                 .env(Collections.emptyList())
-                .logs(Collections.singletonList(new Log(new Date(), "log message")))
+                .logs(Collections.singletonList(new Log(LocalDateTime.now(), "log message")))
                 .ports(Collections.emptyList())
                 .versions(Collections.emptyList())
                 .volumes(Collections.emptyList())
@@ -76,7 +77,19 @@ public class ApplicationServiceImpl implements ApplicationService {
                 applicationTemplateVO.getCreatedBy(), applicationTemplateVO.getName(), applicationTemplateVO.getPorts(),
                 applicationTemplateVO.getVolumes(), applicationTemplateVO.getEnv());
         applicationTemplateRepository.save(applicationTemplate);*/
-
-        return applicationTemplateVO;
+        //return applicationTemplateVO;
+        return ApplicationTemplateVO.builder()
+                .id(1L)
+                .lastRelease(applicationTemplateVO.getLastRelease())
+                .alias(applicationTemplateVO.getAlias())
+                .instances(Collections.emptyList())
+                .name(applicationTemplateVO.getName())
+                .env(applicationTemplateVO.getEnv())
+                .logs(Collections.emptyList())
+                .ports(applicationTemplateVO.getPorts())
+                .versions(applicationTemplateVO.getVersions())
+                .volumes(applicationTemplateVO.getVolumes())
+                .description(applicationTemplateVO.getDescription())
+                .build();
     }
 }
