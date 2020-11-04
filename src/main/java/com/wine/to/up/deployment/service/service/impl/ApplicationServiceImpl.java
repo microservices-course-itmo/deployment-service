@@ -81,6 +81,7 @@ public class ApplicationServiceImpl implements ApplicationService {
         return ApplicationTemplateVO.builder()
                 .id(1L)
                 .lastRelease(applicationTemplateVO.getLastRelease())
+                .dateCreated(LocalDateTime.now())
                 .alias(applicationTemplateVO.getAlias())
                 .instances(Collections.emptyList())
                 .name(applicationTemplateVO.getName())
