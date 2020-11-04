@@ -1,6 +1,7 @@
 package com.wine.to.up.deployment.service.service.impl
 
 import com.wine.to.up.deployment.service.dao.ApplicationInstanceRepository
+import com.wine.to.up.deployment.service.entity.ApplicationInstance
 import com.wine.to.up.deployment.service.enums.ApplicationInstanceStatus
 import com.wine.to.up.deployment.service.service.ApplicationInstanceService
 import com.wine.to.up.deployment.service.service.DockerClientFactory
@@ -23,6 +24,35 @@ class ApplicationInstanceServiceImpl(
                 .alias("alias")
                 .status(ApplicationInstanceStatus.RUNNING)
                 .build()
+    }
+
+    override fun entitiesToVies(entities: List<ApplicationInstance>): List<ApplicationInstanceVO> {
+        return entities.map {
+            val dockerClient = if (entities.isEmpty()) {
+                return emptyList()
+            } else {
+                dockerClientFactory.getDockerClient("", "")
+            }
+            val dockerService = dockerClient.inspectServiceCmd(it.appId).exec()
+            val dockerTasks = dockerClient.listTasksCmd().withNameFilter(dockerService.spec?.name).exec()
+            val status = if (dockerTasks.any { task -> task.status.state.value == "running" }) {
+                ApplicationInstanceStatus.RUNNING
+            } else {
+                ApplicationInstanceStatus.STOPPED
+            }
+            ApplicationInstanceVO.builder()
+                    .id(it.id)
+                    .templateId(it.templateId)
+                    .appId(it.appId)
+                    .alias("STUB")
+                    .containerId("STUB")
+                    .createdBy(it.userCreated)
+                    .dateCreated(it.dateCreated)
+                    .status(status)
+                    .version("STUB")
+                    .url(it.url)
+                    .build()
+        }
     }
 
     //TODO rewrite with connection to database

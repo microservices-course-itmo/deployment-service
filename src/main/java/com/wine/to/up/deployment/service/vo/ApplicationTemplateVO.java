@@ -7,7 +7,7 @@ import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Builder
@@ -27,6 +27,6 @@ public class ApplicationTemplateVO {
     private final List<ApplicationInstanceVO> instances;
     private final List<Log> logs;
     private final String createdBy;
-    private final Date dateCreated;
+    private final LocalDateTime dateCreated;
 
 }

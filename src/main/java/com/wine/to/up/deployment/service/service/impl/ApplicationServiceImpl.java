@@ -1,10 +1,13 @@
 package com.wine.to.up.deployment.service.service.impl;
 
 import com.wine.to.up.deployment.service.dao.ApplicationTemplateRepository;
+import com.wine.to.up.deployment.service.entity.ApplicationInstance;
+import com.wine.to.up.deployment.service.entity.ApplicationTemplate;
 import com.wine.to.up.deployment.service.entity.Log;
 import com.wine.to.up.deployment.service.enums.ApplicationInstanceStatus;
 import com.wine.to.up.deployment.service.service.ApplicationInstanceService;
 import com.wine.to.up.deployment.service.service.ApplicationService;
+import com.wine.to.up.deployment.service.service.SequenceGeneratorService;
 import com.wine.to.up.deployment.service.vo.ApplicationInstanceVO;
 import com.wine.to.up.deployment.service.vo.ApplicationTemplateVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class ApplicationServiceImpl implements ApplicationService {
@@ -19,6 +23,8 @@ public class ApplicationServiceImpl implements ApplicationService {
     private ApplicationTemplateRepository applicationTemplateRepository;
 
     private ApplicationInstanceService applicationInstanceService;
+
+    private SequenceGeneratorService sequenceGeneratorService;
 
     @Autowired
     public void setApplicationTemplateRepository(ApplicationTemplateRepository applicationTemplateRepository) {
@@ -72,11 +78,31 @@ public class ApplicationServiceImpl implements ApplicationService {
     //TODO rewrite with connection to database
     @Override
     public ApplicationTemplateVO createApplication(ApplicationTemplateVO applicationTemplateVO) {
-        /*ApplicationTemplate applicationTemplate = new ApplicationTemplate(applicationTemplateVO.getLastRelease(),
+        ApplicationTemplate applicationTemplate = new ApplicationTemplate(applicationTemplateVO.getVersions(),
                 applicationTemplateVO.getCreatedBy(), applicationTemplateVO.getName(), applicationTemplateVO.getPorts(),
-                applicationTemplateVO.getVolumes(), applicationTemplateVO.getEnv());
-        applicationTemplateRepository.save(applicationTemplate);*/
+                applicationTemplateVO.getVolumes(), applicationTemplateVO.getEnv(), applicationTemplateVO.getDescription());
+        applicationTemplateRepository.save(applicationTemplate);
 
-        return applicationTemplateVO;
+        var id = sequenceGeneratorService.generateSequence(ApplicationTemplate.SEQUENCE_NAME);
+        applicationTemplate.setId(id);
+
+        return entityToView(applicationTemplateRepository.save(applicationTemplate), Collections.emptyList(), Collections.emptyList());
+    }
+
+    public ApplicationTemplateVO entityToView(ApplicationTemplate entity, List<ApplicationInstance> instances, List<Log> logs) {
+        return ApplicationTemplateVO.builder()
+                .alias("Alias")
+                .dateCreated(entity.getDateCreated())
+                .description(entity.getDescription())
+                .env(entity.getEnvironmentVariables())
+                .instances(applicationInstanceService.entitiesToVies(instances))
+                .logs(logs)
+                .lastRelease("RELEASE")
+                .versions(entity.getTemplateVersions())
+                .id(entity.getId())
+                .name(entity.getName())
+                .createdBy(entity.getCreatedBy())
+                .volumes(entity.getVolumes())
+                .build();
     }
 }
