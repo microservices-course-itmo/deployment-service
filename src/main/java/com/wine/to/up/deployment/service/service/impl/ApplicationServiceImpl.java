@@ -1,12 +1,11 @@
 package com.wine.to.up.deployment.service.service.impl;
 
 import com.wine.to.up.deployment.service.dao.ApplicationTemplateRepository;
-import com.wine.to.up.deployment.service.entity.ApplicationInstance;
 import com.wine.to.up.deployment.service.entity.ApplicationTemplate;
 import com.wine.to.up.deployment.service.entity.Log;
-import com.wine.to.up.deployment.service.enums.ApplicationInstanceStatus;
 import com.wine.to.up.deployment.service.service.ApplicationInstanceService;
 import com.wine.to.up.deployment.service.service.ApplicationService;
+import com.wine.to.up.deployment.service.service.LogService;
 import com.wine.to.up.deployment.service.service.SequenceGeneratorService;
 import com.wine.to.up.deployment.service.vo.ApplicationInstanceVO;
 import com.wine.to.up.deployment.service.vo.ApplicationTemplateVO;
@@ -14,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 @Service
@@ -26,6 +24,18 @@ public class ApplicationServiceImpl implements ApplicationService {
 
     private SequenceGeneratorService sequenceGeneratorService;
 
+    private LogService logService;
+
+    @Autowired
+    public void setLogService(final LogService logService) {
+        this.logService = logService;
+    }
+
+    @Autowired
+    public void setSequenceGeneratorService(final SequenceGeneratorService sequenceGeneratorService) {
+        this.sequenceGeneratorService = sequenceGeneratorService;
+    }
+
     @Autowired
     public void setApplicationTemplateRepository(ApplicationTemplateRepository applicationTemplateRepository) {
         this.applicationTemplateRepository = applicationTemplateRepository;
@@ -36,52 +46,23 @@ public class ApplicationServiceImpl implements ApplicationService {
         this.applicationInstanceService = applicationInstanceService;
     }
 
-    //TODO rewrite with connection to database
     @Override
     public ApplicationTemplateVO getApplicationTemplate(Long id) {
-        /*List<ApplicationInstanceVO> instancesByTemplateId = applicationInstanceService.getInstancesByTemplateId(id);
-        ApplicationTemplate applicationTemplate = applicationTemplateRepository.findById(id);
+        ApplicationTemplate applicationTemplate = applicationTemplateRepository.findById(id).orElseThrow();
 
-        return ApplicationTemplateVO.builder()
-                .lastRelease(applicationTemplate.getTemplateVersion())
-                .alias("STUB")
-                .instances(instancesByTemplateId)
-                .name(applicationTemplate.getName())
-                .env(applicationTemplate.getEnvironmentVariables())
-                .logs(logs)
-                .ports(applicationTemplate.getPortMappings())
-                .versions(Collections.emptyList())
-                .volumes(applicationTemplate.getVolumes())
-                .description("STUB")
-                .build();*/
+        var instances = applicationInstanceService.getInstancesByTemplateId(applicationTemplate.getId());
+        var logs = logService.logsByInstances(instances);
 
-        return ApplicationTemplateVO.builder()
-                .lastRelease("LATEST")
-                .alias("alias")
-                .instances(Collections.singletonList(ApplicationInstanceVO.builder()
-                        .id(1L)
-                        .version("1.0.1")
-                        .createdBy("asukhoa")
-                        .alias("alias")
-                        .status(ApplicationInstanceStatus.RUNNING)
-                        .build()))
-                .name("NAME")
-                .env(Collections.emptyList())
-                .logs(Collections.singletonList(new Log(new Date(), "log message")))
-                .ports(Collections.emptyList())
-                .versions(Collections.emptyList())
-                .volumes(Collections.emptyList())
-                .description("DESCRIPTION")
-                .build();
+        return entityToView(applicationTemplate, instances, logs);
+
     }
 
-    //TODO rewrite with connection to database
     @Override
     public ApplicationTemplateVO createApplication(ApplicationTemplateVO applicationTemplateVO) {
         ApplicationTemplate applicationTemplate = new ApplicationTemplate(applicationTemplateVO.getVersions(),
                 applicationTemplateVO.getCreatedBy(), applicationTemplateVO.getName(), applicationTemplateVO.getPorts(),
                 applicationTemplateVO.getVolumes(), applicationTemplateVO.getEnv(), applicationTemplateVO.getDescription());
-        applicationTemplateRepository.save(applicationTemplate);
+        //applicationTemplateRepository.save(applicationTemplate);
 
         var id = sequenceGeneratorService.generateSequence(ApplicationTemplate.SEQUENCE_NAME);
         applicationTemplate.setId(id);
@@ -89,16 +70,17 @@ public class ApplicationServiceImpl implements ApplicationService {
         return entityToView(applicationTemplateRepository.save(applicationTemplate), Collections.emptyList(), Collections.emptyList());
     }
 
-    public ApplicationTemplateVO entityToView(ApplicationTemplate entity, List<ApplicationInstance> instances, List<Log> logs) {
+    public ApplicationTemplateVO entityToView(ApplicationTemplate entity, List<ApplicationInstanceVO> instances, List<Log> logs) {
         return ApplicationTemplateVO.builder()
                 .alias("Alias")
                 .dateCreated(entity.getDateCreated())
                 .description(entity.getDescription())
                 .env(entity.getEnvironmentVariables())
-                .instances(applicationInstanceService.entitiesToVies(instances))
+                .instances(instances)
                 .logs(logs)
                 .lastRelease("RELEASE")
                 .versions(entity.getTemplateVersions())
+                .ports(entity.getPortMappings())
                 .id(entity.getId())
                 .name(entity.getName())
                 .createdBy(entity.getCreatedBy())
