@@ -1,8 +1,8 @@
 package com.wine.to.up.deployment.service.vo;
 
 public class ApplicationDeployRequestWrapper {
-    private String version;
-    private ApplicationTemplateVO applicationTemplateVO;
+    private final String version;
+    private final ApplicationTemplateVO applicationTemplateVO;
 
     public ApplicationDeployRequestWrapper(String version, ApplicationTemplateVO applicationTemplateVO) {
         this.version = version;

@@ -2,18 +2,15 @@ package com.wine.to.up.deployment.service.service.impl
 
 import com.github.dockerjava.api.model.*
 import com.wine.to.up.deployment.service.dao.ApplicationInstanceRepository
-import com.wine.to.up.deployment.service.dao.ApplicationTemplateRepository
 import com.wine.to.up.deployment.service.entity.ApplicationInstance
 import com.wine.to.up.deployment.service.enums.ApplicationInstanceStatus
 import com.wine.to.up.deployment.service.service.ApplicationInstanceService
-import com.wine.to.up.deployment.service.service.ApplicationService
 import com.wine.to.up.deployment.service.service.DockerClientFactory
 import com.wine.to.up.deployment.service.service.SequenceGeneratorService
-import com.wine.to.up.deployment.service.vo.ApplicationDeployRequest
 import com.wine.to.up.deployment.service.vo.ApplicationDeployRequestWrapper
 import com.wine.to.up.deployment.service.vo.ApplicationInstanceVO
-import com.wine.to.up.deployment.service.vo.ApplicationTemplateVO
 import org.springframework.stereotype.Service
+import java.time.LocalDateTime
 
 @Service("applicationInstanceService")
 class ApplicationInstanceServiceImpl(
@@ -28,7 +25,7 @@ class ApplicationInstanceServiceImpl(
         val id = sequenceGeneratorService.generateSequence(ApplicationInstance.SEQUENCE_NAME)
         val entity = ApplicationInstance(id, "${applicationTemplateVO.name}_${id}", applicationTemplateVO.id,
                 applicationTemplateVO.versions?.last()
-                        ?: "unknown", "LocalDateTime.now()", "test user", ApplicationInstanceStatus.STARTING, "test url")
+                        ?: version, LocalDateTime.now(), "system", ApplicationInstanceStatus.STARTING, "test url")
         val dockerClient = dockerClientFactory.getDockerClient("", "")
         dockerClient.createServiceCmd(ServiceSpec().withName(entity.appId)
                 .withTaskTemplate(TaskSpec()
@@ -66,9 +63,9 @@ class ApplicationInstanceServiceImpl(
                     .alias("STUB")
                     .containerId("STUB")
                     .createdBy(it.userCreated)
-                    .dateCreated(it.dateCreated)
+                    .dateCreated(it.dateCreated.toString())
                     .status(status)
-                    .version("STUB")
+                    .version(it.version)
                     .url(it.url)
                     .build()
         }

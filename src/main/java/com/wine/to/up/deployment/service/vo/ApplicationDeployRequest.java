@@ -1,8 +1,8 @@
 package com.wine.to.up.deployment.service.vo;
 
 public class ApplicationDeployRequest {
-    private String name;
-    private String version;
+    private final String name;
+    private final String version;
 
     public ApplicationDeployRequest(String name, String version) {
         this.name = name;
