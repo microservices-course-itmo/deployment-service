@@ -15,8 +15,6 @@ public class ApplicationInstanceVO   {
 
     private final String version;
 
-    private final String containerId;
-
     private final String dateCreated;
 
     private final String createdBy;
@@ -27,12 +25,11 @@ public class ApplicationInstanceVO   {
 
     private final ApplicationInstanceStatus status;
 
-    ApplicationInstanceVO(Long id, String appId, Long templateId, String version, String containerId, String dateCreated, String createdBy, String alias, String url, ApplicationInstanceStatus status) {
+    ApplicationInstanceVO(Long id, String appId, Long templateId, String version, String dateCreated, String createdBy, String alias, String url, ApplicationInstanceStatus status) {
         this.id = id;
         this.appId = appId;
         this.templateId = templateId;
         this.version = version;
-        this.containerId = containerId;
         this.dateCreated = dateCreated;
         this.createdBy = createdBy;
         this.alias = alias;
@@ -60,10 +57,6 @@ public class ApplicationInstanceVO   {
         return this.version;
     }
 
-    public String getContainerId() {
-        return this.containerId;
-    }
-
     public String getDateCreated() {
         return this.dateCreated;
     }
@@ -84,6 +77,10 @@ public class ApplicationInstanceVO   {
         return this.status;
     }
 
+    public String toString() {
+        return "ApplicationInstanceVO(id=" + this.getId() + ", appId=" + this.getAppId() + ", templateId=" + this.getTemplateId() + ", version=" + this.getVersion() + ", dateCreated=" + this.getDateCreated() + ", createdBy=" + this.getCreatedBy() + ", alias=" + this.getAlias() + ", url=" + this.getUrl() + ", status=" + this.getStatus() + ")";
+    }
+
     public boolean equals(final Object o) {
         if (o == this) return true;
         if (!(o instanceof ApplicationInstanceVO)) return false;
@@ -102,10 +99,6 @@ public class ApplicationInstanceVO   {
         final Object this$version = this.getVersion();
         final Object other$version = other.getVersion();
         if (this$version == null ? other$version != null : !this$version.equals(other$version)) return false;
-        final Object this$containerId = this.getContainerId();
-        final Object other$containerId = other.getContainerId();
-        if (this$containerId == null ? other$containerId != null : !this$containerId.equals(other$containerId))
-            return false;
         final Object this$dateCreated = this.getDateCreated();
         final Object other$dateCreated = other.getDateCreated();
         if (this$dateCreated == null ? other$dateCreated != null : !this$dateCreated.equals(other$dateCreated))
@@ -140,8 +133,6 @@ public class ApplicationInstanceVO   {
         result = result * PRIME + ($templateId == null ? 43 : $templateId.hashCode());
         final Object $version = this.getVersion();
         result = result * PRIME + ($version == null ? 43 : $version.hashCode());
-        final Object $containerId = this.getContainerId();
-        result = result * PRIME + ($containerId == null ? 43 : $containerId.hashCode());
         final Object $dateCreated = this.getDateCreated();
         result = result * PRIME + ($dateCreated == null ? 43 : $dateCreated.hashCode());
         final Object $createdBy = this.getCreatedBy();
@@ -153,10 +144,6 @@ public class ApplicationInstanceVO   {
         final Object $status = this.getStatus();
         result = result * PRIME + ($status == null ? 43 : $status.hashCode());
         return result;
-    }
-
-    public String toString() {
-        return "ApplicationInstanceVO(id=" + this.getId() + ", appId=" + this.getAppId() + ", templateId=" + this.getTemplateId() + ", version=" + this.getVersion() + ", containerId=" + this.getContainerId() + ", dateCreated=" + this.getDateCreated() + ", createdBy=" + this.getCreatedBy() + ", alias=" + this.getAlias() + ", url=" + this.getUrl() + ", status=" + this.getStatus() + ")";
     }
 
     public static class ApplicationInstanceVOBuilder {
@@ -225,7 +212,7 @@ public class ApplicationInstanceVO   {
         }
 
         public ApplicationInstanceVO build() {
-            return new ApplicationInstanceVO(id, appId, templateId, version, containerId, dateCreated, createdBy, alias, url, status);
+            return new ApplicationInstanceVO(id, appId, templateId, version, dateCreated, createdBy, alias, url, status);
         }
 
         public String toString() {

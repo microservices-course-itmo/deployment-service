@@ -15,18 +15,16 @@ public class ApplicationInstance {
     private String appId;
     private Long templateId;
     private String version;
-    private String containerId;
     private String dateCreated;
     private String userCreated;
     private ApplicationInstanceStatus status;
     private String url;
 
-    public ApplicationInstance(final Long id, final String appId, final Long templateId, final String version, final String containerId, final String dateCreated, final String userCreated, final ApplicationInstanceStatus status, final String url) {
+    public ApplicationInstance(final Long id, final String appId, final Long templateId, final String version, final String dateCreated, final String userCreated, final ApplicationInstanceStatus status, final String url) {
         this.id = id;
         this.appId = appId;
         this.templateId = templateId;
         this.version = version;
-        this.containerId = containerId;
         this.dateCreated = dateCreated;
         this.userCreated = userCreated;
         this.status = status;
@@ -68,14 +66,6 @@ public class ApplicationInstance {
 
     public void setVersion(final String version) {
         this.version = version;
-    }
-
-    public String getContainerId() {
-        return containerId;
-    }
-
-    public void setContainerId(final String containerId) {
-        this.containerId = containerId;
     }
 
     public String getDateCreated() {

@@ -2,6 +2,7 @@ package com.wine.to.up.deployment.service.controller;
 
 
 import com.wine.to.up.deployment.service.service.DeploymentService;
+import com.wine.to.up.deployment.service.vo.ApplicationDeployRequest;
 import com.wine.to.up.deployment.service.vo.ApplicationInstanceVO;
 import com.wine.to.up.deployment.service.vo.ApplicationTemplateVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,9 +32,9 @@ public class DeploymentController {
         return this.deploymentService.getSingleInstanceById(id);
     }
 
-    @GetMapping("/application/get/{id}")
-    public ApplicationTemplateVO getApplication(@PathVariable Long id) {
-        return deploymentService.getApplicationById(id);
+    @GetMapping("/application/get/{name}")
+    public ApplicationTemplateVO getApplication(@PathVariable String name) {
+        return deploymentService.getApplicationByName(name);
     }
 
     @PostMapping("/application/create")
@@ -42,8 +43,8 @@ public class DeploymentController {
     }
 
     @PostMapping("/applicationInstance/deploy")
-    public ApplicationInstanceVO deployApplicationInstance(@RequestBody ApplicationTemplateVO applicationTemplateVO) {
-        return deploymentService.deployApplicationInstance(applicationTemplateVO);
+    public ApplicationInstanceVO deployApplicationInstance(@RequestBody ApplicationDeployRequest applicationDeployRequest) {
+        return deploymentService.deployApplicationInstance(applicationDeployRequest);
     }
 }
 

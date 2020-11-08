@@ -47,8 +47,8 @@ public class ApplicationServiceImpl implements ApplicationService {
     }
 
     @Override
-    public ApplicationTemplateVO getApplicationTemplate(Long id) {
-        ApplicationTemplate applicationTemplate = applicationTemplateRepository.findById(id).orElseThrow();
+    public ApplicationTemplateVO getApplicationTemplate(String name) {
+        ApplicationTemplate applicationTemplate = applicationTemplateRepository.findFirstByNameOrderByIdDesc(name).orElseThrow();
 
         var instances = applicationInstanceService.getInstancesByTemplateId(applicationTemplate.getId());
         var logs = logService.logsByInstances(instances);
