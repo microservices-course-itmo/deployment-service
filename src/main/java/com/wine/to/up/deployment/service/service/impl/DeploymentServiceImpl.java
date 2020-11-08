@@ -51,7 +51,10 @@ public class DeploymentServiceImpl implements DeploymentService {
     @Override
     public ApplicationInstanceVO deployApplicationInstance(ApplicationDeployRequest applicationDeployRequest) {
         var actualVo = getApplicationByName(applicationDeployRequest.getName());
-        ApplicationDeployRequestWrapper applicationDeployRequestWrapper = new ApplicationDeployRequestWrapper(applicationDeployRequest.getVersion(), actualVo);
+        ApplicationDeployRequestWrapper applicationDeployRequestWrapper = new ApplicationDeployRequestWrapper(
+                applicationDeployRequest.getVersion(),
+                actualVo,
+                applicationDeployRequest.getAlias());
         return applicationInstanceService.deployInstance(applicationDeployRequestWrapper);
     }
 }

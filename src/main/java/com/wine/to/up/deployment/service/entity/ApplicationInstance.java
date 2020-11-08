@@ -19,9 +19,10 @@ public class ApplicationInstance {
     private LocalDateTime dateCreated;
     private String userCreated;
     private ApplicationInstanceStatus status;
+    private String alias;
     private String url;
 
-    public ApplicationInstance(final Long id, final String appId, final Long templateId, final String version, final LocalDateTime dateCreated, final String userCreated, final ApplicationInstanceStatus status, final String url) {
+    public ApplicationInstance(final Long id, final String appId, final Long templateId, final String version, final LocalDateTime dateCreated, final String userCreated, final ApplicationInstanceStatus status, final String url, final String alias) {
         this.id = id;
         this.appId = appId;
         this.templateId = templateId;
@@ -30,6 +31,7 @@ public class ApplicationInstance {
         this.userCreated = userCreated;
         this.status = status;
         this.url = url;
+        this.alias = alias;
     }
 
     public ApplicationInstance() {
@@ -99,5 +101,13 @@ public class ApplicationInstance {
 
     public void setUrl(final String url) {
         this.url = url;
+    }
+
+    public String getAlias() {
+        return alias;
+    }
+
+    public void setAlias(String alias) {
+        this.alias = alias;
     }
 }
