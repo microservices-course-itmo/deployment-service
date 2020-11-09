@@ -2,6 +2,7 @@ package com.wine.to.up.deployment.service.service;
 
 
 
+import com.wine.to.up.deployment.service.vo.ApplicationDeployRequest;
 import com.wine.to.up.deployment.service.vo.ApplicationInstanceVO;
 import com.wine.to.up.deployment.service.vo.ApplicationTemplateVO;
 
@@ -13,9 +14,9 @@ public interface DeploymentService {
 
      ApplicationInstanceVO getSingleInstanceById(long id);
 
-     ApplicationTemplateVO getApplicationById(Long id);
+     ApplicationTemplateVO getApplicationByName(String name);
 
      ApplicationTemplateVO createApplicationTemplate(ApplicationTemplateVO applicationTemplateVO);
 
-     ApplicationInstanceVO deployApplicationInstance(ApplicationTemplateVO applicationTemplateVO);
+     ApplicationInstanceVO deployApplicationInstance(ApplicationDeployRequest applicationDeployRequest);
 }

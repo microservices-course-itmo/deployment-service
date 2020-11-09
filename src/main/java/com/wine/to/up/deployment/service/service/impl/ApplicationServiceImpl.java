@@ -1,17 +1,19 @@
 package com.wine.to.up.deployment.service.service.impl;
 
 import com.wine.to.up.deployment.service.dao.ApplicationTemplateRepository;
+import com.wine.to.up.deployment.service.entity.ApplicationTemplate;
 import com.wine.to.up.deployment.service.entity.Log;
-import com.wine.to.up.deployment.service.enums.ApplicationInstanceStatus;
 import com.wine.to.up.deployment.service.service.ApplicationInstanceService;
 import com.wine.to.up.deployment.service.service.ApplicationService;
+import com.wine.to.up.deployment.service.service.LogService;
+import com.wine.to.up.deployment.service.service.SequenceGeneratorService;
 import com.wine.to.up.deployment.service.vo.ApplicationInstanceVO;
 import com.wine.to.up.deployment.service.vo.ApplicationTemplateVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.Collections;
+import java.util.List;
 
 @Service
 public class ApplicationServiceImpl implements ApplicationService {
@@ -19,6 +21,20 @@ public class ApplicationServiceImpl implements ApplicationService {
     private ApplicationTemplateRepository applicationTemplateRepository;
 
     private ApplicationInstanceService applicationInstanceService;
+
+    private SequenceGeneratorService sequenceGeneratorService;
+
+    private LogService logService;
+
+    @Autowired
+    public void setLogService(final LogService logService) {
+        this.logService = logService;
+    }
+
+    @Autowired
+    public void setSequenceGeneratorService(final SequenceGeneratorService sequenceGeneratorService) {
+        this.sequenceGeneratorService = sequenceGeneratorService;
+    }
 
     @Autowired
     public void setApplicationTemplateRepository(ApplicationTemplateRepository applicationTemplateRepository) {
@@ -30,67 +46,45 @@ public class ApplicationServiceImpl implements ApplicationService {
         this.applicationInstanceService = applicationInstanceService;
     }
 
-    //TODO rewrite with connection to database
     @Override
-    public ApplicationTemplateVO getApplicationTemplate(Long id) {
-        /*List<ApplicationInstanceVO> instancesByTemplateId = applicationInstanceService.getInstancesByTemplateId(id);
-        ApplicationTemplate applicationTemplate = applicationTemplateRepository.findById(id);
+    public ApplicationTemplateVO getApplicationTemplate(String name) {
+        ApplicationTemplate applicationTemplate = applicationTemplateRepository.findFirstByNameOrderByIdDesc(name).orElseThrow();
 
-        return ApplicationTemplateVO.builder()
-                .lastRelease(applicationTemplate.getTemplateVersion())
-                .alias("STUB")
-                .instances(instancesByTemplateId)
-                .name(applicationTemplate.getName())
-                .env(applicationTemplate.getEnvironmentVariables())
-                .logs(logs)
-                .ports(applicationTemplate.getPortMappings())
-                .versions(Collections.emptyList())
-                .volumes(applicationTemplate.getVolumes())
-                .description("STUB")
-                .build();*/
+        var instances = applicationInstanceService.getInstancesByTemplateId(applicationTemplate.getId());
+        var logs = logService.logsByInstances(instances);
 
-        return ApplicationTemplateVO.builder()
-                .id(1L)
-                .lastRelease("LATEST")
-                .alias("alias")
-                .instances(Collections.singletonList(ApplicationInstanceVO.builder()
-                        .id(1L)
-                        .version("1.0.1")
-                        .createdBy("asukhoa")
-                        .alias("alias")
-                        .status(ApplicationInstanceStatus.RUNNING)
-                        .build()))
-                .name("NAME")
-                .env(Collections.emptyList())
-                .logs(Collections.singletonList(new Log(LocalDateTime.now(), "log message")))
-                .ports(Collections.emptyList())
-                .versions(Collections.emptyList())
-                .volumes(Collections.emptyList())
-                .description("DESCRIPTION")
-                .build();
+        return entityToView(applicationTemplate, instances, logs);
+
     }
 
-    //TODO rewrite with connection to database
     @Override
     public ApplicationTemplateVO createApplication(ApplicationTemplateVO applicationTemplateVO) {
-        /*ApplicationTemplate applicationTemplate = new ApplicationTemplate(applicationTemplateVO.getLastRelease(),
+        ApplicationTemplate applicationTemplate = new ApplicationTemplate(applicationTemplateVO.getVersions(),
                 applicationTemplateVO.getCreatedBy(), applicationTemplateVO.getName(), applicationTemplateVO.getPorts(),
-                applicationTemplateVO.getVolumes(), applicationTemplateVO.getEnv());
-        applicationTemplateRepository.save(applicationTemplate);*/
-        //return applicationTemplateVO;
+                applicationTemplateVO.getVolumes(), applicationTemplateVO.getEnv(), applicationTemplateVO.getDescription());
+        //applicationTemplateRepository.save(applicationTemplate);
+
+        var id = sequenceGeneratorService.generateSequence(ApplicationTemplate.SEQUENCE_NAME);
+        applicationTemplate.setId(id);
+
+        return entityToView(applicationTemplateRepository.save(applicationTemplate), Collections.emptyList(), Collections.emptyList());
+    }
+
+    public ApplicationTemplateVO entityToView(ApplicationTemplate entity, List<ApplicationInstanceVO> instances, List<Log> logs) {
         return ApplicationTemplateVO.builder()
-                .id(1L)
-                .lastRelease(applicationTemplateVO.getLastRelease())
-                .dateCreated(LocalDateTime.now())
-                .alias(applicationTemplateVO.getAlias())
-                .instances(Collections.emptyList())
-                .name(applicationTemplateVO.getName())
-                .env(applicationTemplateVO.getEnv())
-                .logs(Collections.emptyList())
-                .ports(applicationTemplateVO.getPorts())
-                .versions(applicationTemplateVO.getVersions())
-                .volumes(applicationTemplateVO.getVolumes())
-                .description(applicationTemplateVO.getDescription())
+                .alias("Alias")
+                .dateCreated(entity.getDateCreated())
+                .description(entity.getDescription())
+                .env(entity.getEnvironmentVariables())
+                .instances(instances)
+                .logs(logs)
+                .lastRelease("RELEASE")
+                .versions(entity.getTemplateVersions())
+                .ports(entity.getPortMappings())
+                .id(entity.getId())
+                .name(entity.getName())
+                .createdBy(entity.getCreatedBy())
+                .volumes(entity.getVolumes())
                 .build();
     }
 }

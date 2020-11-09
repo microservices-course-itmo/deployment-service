@@ -4,6 +4,7 @@ import com.wine.to.up.deployment.service.enums.ApplicationInstanceStatus;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
+import java.time.LocalDateTime;
 
 @Document(collection = "templates")
 public class ApplicationInstance {
@@ -15,22 +16,22 @@ public class ApplicationInstance {
     private String appId;
     private Long templateId;
     private String version;
-    private String containerId;
-    private String dateCreated;
+    private LocalDateTime dateCreated;
     private String userCreated;
     private ApplicationInstanceStatus status;
+    private String alias;
     private String url;
 
-    public ApplicationInstance(final Long id, final String appId, final Long templateId, final String version, final String containerId, final String dateCreated, final String userCreated, final ApplicationInstanceStatus status, final String url) {
+    public ApplicationInstance(final Long id, final String appId, final Long templateId, final String version, final LocalDateTime dateCreated, final String userCreated, final ApplicationInstanceStatus status, final String url, final String alias) {
         this.id = id;
         this.appId = appId;
         this.templateId = templateId;
         this.version = version;
-        this.containerId = containerId;
         this.dateCreated = dateCreated;
         this.userCreated = userCreated;
         this.status = status;
         this.url = url;
+        this.alias = alias;
     }
 
     public ApplicationInstance() {
@@ -70,19 +71,11 @@ public class ApplicationInstance {
         this.version = version;
     }
 
-    public String getContainerId() {
-        return containerId;
-    }
-
-    public void setContainerId(final String containerId) {
-        this.containerId = containerId;
-    }
-
-    public String getDateCreated() {
+    public LocalDateTime getDateCreated() {
         return dateCreated;
     }
 
-    public void setDateCreated(final String dateCreated) {
+    public void setDateCreated(final LocalDateTime dateCreated) {
         this.dateCreated = dateCreated;
     }
 
@@ -108,5 +101,13 @@ public class ApplicationInstance {
 
     public void setUrl(final String url) {
         this.url = url;
+    }
+
+    public String getAlias() {
+        return alias;
+    }
+
+    public void setAlias(String alias) {
+        this.alias = alias;
     }
 }
