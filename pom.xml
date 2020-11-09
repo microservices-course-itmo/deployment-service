@@ -24,11 +24,11 @@
     </properties>
 
     <dependencies>
-        <dependency>
+        <!-- <dependency>
             <groupId>com.wine.to.up</groupId>
             <artifactId>service-common-lib</artifactId>
             <version>${service.commonlib.version}</version>
-        </dependency>
+        </dependency> -->
 
         <!-- https://mvnrepository.com/artifact/com.github.docker-java/docker-java -->
         <dependency>
