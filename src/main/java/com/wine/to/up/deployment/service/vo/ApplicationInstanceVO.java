@@ -4,6 +4,8 @@ package com.wine.to.up.deployment.service.vo;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.wine.to.up.deployment.service.enums.ApplicationInstanceStatus;
 
+import java.time.LocalDateTime;
+
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ApplicationInstanceVO   {
 
@@ -15,9 +17,7 @@ public class ApplicationInstanceVO   {
 
     private final String version;
 
-    private final String containerId;
-
-    private final String dateCreated;
+    private final LocalDateTime dateCreated;
 
     private final String createdBy;
 
@@ -27,12 +27,11 @@ public class ApplicationInstanceVO   {
 
     private final ApplicationInstanceStatus status;
 
-    ApplicationInstanceVO(Long id, String appId, Long templateId, String version, String containerId, String dateCreated, String createdBy, String alias, String url, ApplicationInstanceStatus status) {
+    ApplicationInstanceVO(Long id, String appId, Long templateId, String version, LocalDateTime dateCreated, String createdBy, String alias, String url, ApplicationInstanceStatus status) {
         this.id = id;
         this.appId = appId;
         this.templateId = templateId;
         this.version = version;
-        this.containerId = containerId;
         this.dateCreated = dateCreated;
         this.createdBy = createdBy;
         this.alias = alias;
@@ -60,11 +59,7 @@ public class ApplicationInstanceVO   {
         return this.version;
     }
 
-    public String getContainerId() {
-        return this.containerId;
-    }
-
-    public String getDateCreated() {
+    public LocalDateTime getDateCreated() {
         return this.dateCreated;
     }
 
@@ -82,6 +77,10 @@ public class ApplicationInstanceVO   {
 
     public ApplicationInstanceStatus getStatus() {
         return this.status;
+    }
+
+    public String toString() {
+        return "ApplicationInstanceVO(id=" + this.getId() + ", appId=" + this.getAppId() + ", templateId=" + this.getTemplateId() + ", version=" + this.getVersion() + ", dateCreated=" + this.getDateCreated() + ", createdBy=" + this.getCreatedBy() + ", alias=" + this.getAlias() + ", url=" + this.getUrl() + ", status=" + this.getStatus() + ")";
     }
 
     public boolean equals(final Object o) {
@@ -102,10 +101,6 @@ public class ApplicationInstanceVO   {
         final Object this$version = this.getVersion();
         final Object other$version = other.getVersion();
         if (this$version == null ? other$version != null : !this$version.equals(other$version)) return false;
-        final Object this$containerId = this.getContainerId();
-        final Object other$containerId = other.getContainerId();
-        if (this$containerId == null ? other$containerId != null : !this$containerId.equals(other$containerId))
-            return false;
         final Object this$dateCreated = this.getDateCreated();
         final Object other$dateCreated = other.getDateCreated();
         if (this$dateCreated == null ? other$dateCreated != null : !this$dateCreated.equals(other$dateCreated))
@@ -140,8 +135,6 @@ public class ApplicationInstanceVO   {
         result = result * PRIME + ($templateId == null ? 43 : $templateId.hashCode());
         final Object $version = this.getVersion();
         result = result * PRIME + ($version == null ? 43 : $version.hashCode());
-        final Object $containerId = this.getContainerId();
-        result = result * PRIME + ($containerId == null ? 43 : $containerId.hashCode());
         final Object $dateCreated = this.getDateCreated();
         result = result * PRIME + ($dateCreated == null ? 43 : $dateCreated.hashCode());
         final Object $createdBy = this.getCreatedBy();
@@ -155,17 +148,12 @@ public class ApplicationInstanceVO   {
         return result;
     }
 
-    public String toString() {
-        return "ApplicationInstanceVO(id=" + this.getId() + ", appId=" + this.getAppId() + ", templateId=" + this.getTemplateId() + ", version=" + this.getVersion() + ", containerId=" + this.getContainerId() + ", dateCreated=" + this.getDateCreated() + ", createdBy=" + this.getCreatedBy() + ", alias=" + this.getAlias() + ", url=" + this.getUrl() + ", status=" + this.getStatus() + ")";
-    }
-
     public static class ApplicationInstanceVOBuilder {
         private Long id;
         private String appId;
         private Long templateId;
         private String version;
-        private String containerId;
-        private String dateCreated;
+        private LocalDateTime dateCreated;
         private String createdBy;
         private String alias;
         private String url;
@@ -194,12 +182,7 @@ public class ApplicationInstanceVO   {
             return this;
         }
 
-        public ApplicationInstanceVOBuilder containerId(String containerId) {
-            this.containerId = containerId;
-            return this;
-        }
-
-        public ApplicationInstanceVOBuilder dateCreated(String dateCreated) {
+        public ApplicationInstanceVOBuilder dateCreated(LocalDateTime dateCreated) {
             this.dateCreated = dateCreated;
             return this;
         }
@@ -225,11 +208,11 @@ public class ApplicationInstanceVO   {
         }
 
         public ApplicationInstanceVO build() {
-            return new ApplicationInstanceVO(id, appId, templateId, version, containerId, dateCreated, createdBy, alias, url, status);
+            return new ApplicationInstanceVO(id, appId, templateId, version, dateCreated, createdBy, alias, url, status);
         }
 
         public String toString() {
-            return "ApplicationInstanceVO.ApplicationInstanceVOBuilder(id=" + this.id + ", appId=" + this.appId + ", templateId=" + this.templateId + ", version=" + this.version + ", containerId=" + this.containerId + ", dateCreated=" + this.dateCreated + ", createdBy=" + this.createdBy + ", alias=" + this.alias + ", url=" + this.url + ", status=" + this.status + ")";
+            return "ApplicationInstanceVO.ApplicationInstanceVOBuilder(id=" + this.id + ", appId=" + this.appId + ", templateId=" + this.templateId + ", version=" + this.version + ", dateCreated=" + this.dateCreated + ", createdBy=" + this.createdBy + ", alias=" + this.alias + ", url=" + this.url + ", status=" + this.status + ")";
         }
     }
 }

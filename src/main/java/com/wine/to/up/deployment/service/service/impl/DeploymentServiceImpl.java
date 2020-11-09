@@ -3,6 +3,8 @@ package com.wine.to.up.deployment.service.service.impl;
 import com.wine.to.up.deployment.service.service.ApplicationInstanceService;
 import com.wine.to.up.deployment.service.service.ApplicationService;
 import com.wine.to.up.deployment.service.service.DeploymentService;
+import com.wine.to.up.deployment.service.vo.ApplicationDeployRequest;
+import com.wine.to.up.deployment.service.vo.ApplicationDeployRequestWrapper;
 import com.wine.to.up.deployment.service.vo.ApplicationInstanceVO;
 import com.wine.to.up.deployment.service.vo.ApplicationTemplateVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,8 +39,8 @@ public class DeploymentServiceImpl implements DeploymentService {
     }
 
     @Override
-    public ApplicationTemplateVO getApplicationById(Long id) {
-        return applicationService.getApplicationTemplate(id);
+    public ApplicationTemplateVO getApplicationByName(String name) {
+        return applicationService.getApplicationTemplate(name);
     }
 
     @Override
@@ -47,8 +49,12 @@ public class DeploymentServiceImpl implements DeploymentService {
     }
 
     @Override
-    public ApplicationInstanceVO deployApplicationInstance(ApplicationTemplateVO applicationTemplateVO) {
-        var actualVo = getApplicationById(applicationTemplateVO.getId());
-        return applicationInstanceService.deployInstance(actualVo);
+    public ApplicationInstanceVO deployApplicationInstance(ApplicationDeployRequest applicationDeployRequest) {
+        var actualVo = getApplicationByName(applicationDeployRequest.getName());
+        ApplicationDeployRequestWrapper applicationDeployRequestWrapper = new ApplicationDeployRequestWrapper(
+                applicationDeployRequest.getVersion(),
+                actualVo,
+                applicationDeployRequest.getAlias());
+        return applicationInstanceService.deployInstance(applicationDeployRequestWrapper);
     }
 }
