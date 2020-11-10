@@ -29,13 +29,13 @@ public class DeploymentServiceImpl implements DeploymentService {
 
 
     @Override
-    public List<ApplicationInstanceVO> getMultipleInstancesByAppId(Long templateId) {
-        return applicationInstanceService.getInstancesByTemplateId(templateId);
+    public List<ApplicationInstanceVO> getInstancesByAppName(String templateName) {
+        return applicationInstanceService.getInstancesByTemplateName(templateName);
     }
 
     @Override
-    public ApplicationInstanceVO getSingleInstanceById(long id) {
-        return applicationInstanceService.getInstancesByTemplateId(id).stream().findFirst().orElseThrow();
+    public ApplicationInstanceVO getSingleInstanceById(Long id) {
+        return applicationInstanceService.getInstanceById(id);
     }
 
     @Override
@@ -44,8 +44,13 @@ public class DeploymentServiceImpl implements DeploymentService {
     }
 
     @Override
-    public ApplicationTemplateVO createApplicationTemplate(ApplicationTemplateVO applicationTemplateVO) {
-        return applicationService.createApplication(applicationTemplateVO);
+    public ApplicationTemplateVO getApplicationById(Long id) {
+        return applicationService.getApplicationTemplate(id);
+    }
+
+    @Override
+    public ApplicationTemplateVO createOrUpdateApplicationTemplate(ApplicationTemplateVO applicationTemplateVO) {
+        return applicationService.createOrUpdateApplication(applicationTemplateVO);
     }
 
     @Override

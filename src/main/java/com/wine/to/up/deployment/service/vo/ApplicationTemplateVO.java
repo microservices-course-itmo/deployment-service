@@ -2,10 +2,10 @@ package com.wine.to.up.deployment.service.vo;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.wine.to.up.deployment.service.entity.Environment;
-import com.wine.to.up.deployment.service.entity.Log;
 import lombok.EqualsAndHashCode;
 
 import java.util.List;
+import java.util.Map;
 
 @EqualsAndHashCode
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -13,22 +13,22 @@ public class ApplicationTemplateVO {
     private final Long id;
     private final String name;
     private final String description;
-    private final String lastRelease;
+    private final Long templateVersion;
     private final String alias;
     private final List<Environment> env;
     private final List<String> volumes;
-    private final List<String> ports;
+    private final Map<String, String> ports;
     private final List<String> versions;
     private final List<ApplicationInstanceVO> instances;
-    private final List<Log> logs;
+    private final List<LogVO> logs;
     private final String createdBy;
-    private final long dateCreated;
+    private final Long dateCreated;
 
-    ApplicationTemplateVO(Long id, String name, String description, String lastRelease, String alias, List<Environment> env, List<String> volumes, List<String> ports, List<String> versions, List<ApplicationInstanceVO> instances, List<Log> logs, String createdBy, long dateCreated) {
+    private ApplicationTemplateVO(Long id, String name, String description, Long templateVersion, String alias, List<Environment> env, List<String> volumes, Map<String, String> ports, List<String> versions, List<ApplicationInstanceVO> instances, List<LogVO> logs, String createdBy, Long dateCreated) {
         this.id = id;
         this.name = name;
         this.description = description;
-        this.lastRelease = lastRelease;
+        this.templateVersion = templateVersion;
         this.alias = alias;
         this.env = env;
         this.volumes = volumes;
@@ -56,8 +56,8 @@ public class ApplicationTemplateVO {
         return this.description;
     }
 
-    public String getLastRelease() {
-        return this.lastRelease;
+    public Long getTemplateVersion() {
+        return this.templateVersion;
     }
 
     public String getAlias() {
@@ -72,7 +72,7 @@ public class ApplicationTemplateVO {
         return this.volumes;
     }
 
-    public List<String> getPorts() {
+    public Map<String, String> getPorts() {
         return this.ports;
     }
 
@@ -84,7 +84,7 @@ public class ApplicationTemplateVO {
         return this.instances;
     }
 
-    public List<Log> getLogs() {
+    public List<LogVO> getLogs() {
         return this.logs;
     }
 
@@ -92,7 +92,7 @@ public class ApplicationTemplateVO {
         return this.createdBy;
     }
 
-    public long getDateCreated() {
+    public Long getDateCreated() {
         return this.dateCreated;
     }
 
@@ -100,16 +100,16 @@ public class ApplicationTemplateVO {
         private Long id;
         private String name;
         private String description;
-        private String lastRelease;
+        private Long templateVersion;
         private String alias;
         private List<Environment> env;
         private List<String> volumes;
-        private List<String> ports;
+        private Map<String, String> ports;
         private List<String> versions;
         private List<ApplicationInstanceVO> instances;
-        private List<Log> logs;
+        private List<LogVO> logs;
         private String createdBy;
-        private long dateCreated;
+        private Long dateCreated;
 
         ApplicationTemplateVOBuilder() {
         }
@@ -129,8 +129,8 @@ public class ApplicationTemplateVO {
             return this;
         }
 
-        public ApplicationTemplateVOBuilder lastRelease(String lastRelease) {
-            this.lastRelease = lastRelease;
+        public ApplicationTemplateVOBuilder templateVersion(Long templateVersion) {
+            this.templateVersion = templateVersion;
             return this;
         }
 
@@ -149,7 +149,7 @@ public class ApplicationTemplateVO {
             return this;
         }
 
-        public ApplicationTemplateVOBuilder ports(List<String> ports) {
+        public ApplicationTemplateVOBuilder ports(Map<String, String> ports) {
             this.ports = ports;
             return this;
         }
@@ -164,7 +164,7 @@ public class ApplicationTemplateVO {
             return this;
         }
 
-        public ApplicationTemplateVOBuilder logs(List<Log> logs) {
+        public ApplicationTemplateVOBuilder logs(List<LogVO> logs) {
             this.logs = logs;
             return this;
         }
@@ -174,17 +174,17 @@ public class ApplicationTemplateVO {
             return this;
         }
 
-        public ApplicationTemplateVOBuilder dateCreated(long dateCreated) {
+        public ApplicationTemplateVOBuilder dateCreated(Long dateCreated) {
             this.dateCreated = dateCreated;
             return this;
         }
 
         public ApplicationTemplateVO build() {
-            return new ApplicationTemplateVO(id, name, description, lastRelease, alias, env, volumes, ports, versions, instances, logs, createdBy, dateCreated);
+            return new ApplicationTemplateVO(id, name, description, templateVersion, alias, env, volumes, ports, versions, instances, logs, createdBy, dateCreated);
         }
 
         public String toString() {
-            return "ApplicationTemplateVO.ApplicationTemplateVOBuilder(id=" + this.id + ", name=" + this.name + ", description=" + this.description + ", lastRelease=" + this.lastRelease + ", alias=" + this.alias + ", env=" + this.env + ", volumes=" + this.volumes + ", ports=" + this.ports + ", versions=" + this.versions + ", instances=" + this.instances + ", logs=" + this.logs + ", createdBy=" + this.createdBy + ", dateCreated=" + this.dateCreated + ")";
+            return "ApplicationTemplateVO.ApplicationTemplateVOBuilder(id=" + this.id + ", name=" + this.name + ", description=" + this.description + ", lastRelease=" + this.templateVersion + ", alias=" + this.alias + ", env=" + this.env + ", volumes=" + this.volumes + ", ports=" + this.ports + ", versions=" + this.versions + ", instances=" + this.instances + ", logs=" + this.logs + ", createdBy=" + this.createdBy + ", dateCreated=" + this.dateCreated + ")";
         }
     }
 }

@@ -9,21 +9,24 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class ApplicationInstance {
 
     @Transient
-    public static final String SEQUENCE_NAME = "users_sequence";
+    public static final String SEQUENCE_NAME = "app_instance_sequence";
 
+    @Id
     private Long id;
     private String appId;
+    private String templateName;
     private Long templateId;
     private String version;
-    private long dateCreated;
+    private Long dateCreated;
     private String userCreated;
     private ApplicationInstanceStatus status;
     private String alias;
     private String url;
 
-    public ApplicationInstance(final Long id, final String appId, final Long templateId, final String version, final long dateCreated, final String userCreated, final ApplicationInstanceStatus status, final String url, final String alias) {
+    public ApplicationInstance(final Long id, final String templateName, final String appId, final Long templateId, final String version, final Long dateCreated, final String userCreated, final ApplicationInstanceStatus status, final String url, final String alias) {
         this.id = id;
         this.appId = appId;
+        this.templateName = templateName;
         this.templateId = templateId;
         this.version = version;
         this.dateCreated = dateCreated;
@@ -37,58 +40,83 @@ public class ApplicationInstance {
 
     }
 
-    @Id
-    public Long getId() { return id; }
+    public Long getId() {
+        return this.id;
+    }
 
-    public void setId(final Long id) { this.id = id; }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public String getAppId() { return appId; }
+    public String getAppId() {
+        return this.appId;
+    }
 
-    public void setAppId(final String appId) { this.appId = appId; }
+    public void setAppId(String appId) {
+        this.appId = appId;
+    }
 
-    public Long getTemplateId() { return templateId; }
+    public String getTemplateName() {
+        return this.templateName;
+    }
 
-    public void setTemplateId(final Long templateId) { this.templateId = templateId; }
+    public void setTemplateName(String templateName) {
+        this.templateName = templateName;
+    }
 
-    public String getVersion() { return version; }
+    public Long getTemplateId() {
+        return this.templateId;
+    }
 
-    public void setVersion(final String version) { this.version = version; }
+    public void setTemplateId(Long templateId) {
+        this.templateId = templateId;
+    }
 
-    public long getDateCreated() { return dateCreated; }
+    public String getVersion() {
+        return this.version;
+    }
 
-    public void setDateCreated(final long dateCreated) {
+    public void setVersion(String version) {
+        this.version = version;
+    }
+
+    public Long getDateCreated() {
+        return this.dateCreated;
+    }
+
+    public void setDateCreated(Long dateCreated) {
         this.dateCreated = dateCreated;
     }
 
     public String getUserCreated() {
-        return userCreated;
+        return this.userCreated;
     }
 
-    public void setUserCreated(final String userCreated) {
+    public void setUserCreated(String userCreated) {
         this.userCreated = userCreated;
     }
 
     public ApplicationInstanceStatus getStatus() {
-        return status;
+        return this.status;
     }
 
-    public void setStatus(final ApplicationInstanceStatus status) {
+    public void setStatus(ApplicationInstanceStatus status) {
         this.status = status;
     }
 
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(final String url) {
-        this.url = url;
-    }
-
     public String getAlias() {
-        return alias;
+        return this.alias;
+    }
+
+    public String getUrl() {
+        return this.url;
     }
 
     public void setAlias(String alias) {
         this.alias = alias;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 }

@@ -10,6 +10,7 @@ import com.wine.to.up.deployment.service.service.SequenceGeneratorService
 import com.wine.to.up.deployment.service.vo.ApplicationDeployRequestWrapper
 import com.wine.to.up.deployment.service.vo.ApplicationInstanceVO
 import org.springframework.stereotype.Service
+import javax.ws.rs.NotFoundException
 
 @Service("applicationInstanceService")
 class ApplicationInstanceServiceImpl(
@@ -23,21 +24,20 @@ class ApplicationInstanceServiceImpl(
         val alias = applicationDeployRequestWrapper.alias
         val version = applicationDeployRequestWrapper.version
         val id = sequenceGeneratorService.generateSequence(ApplicationInstance.SEQUENCE_NAME)
-        val entity = ApplicationInstance(id, "${applicationTemplateVO.name}_${id}", applicationTemplateVO.id,
-                applicationTemplateVO.versions?.last()
-                        ?: version, System.currentTimeMillis(), "system", ApplicationInstanceStatus.STARTING, "test url", alias)
+        val entity = ApplicationInstance(id, "${applicationTemplateVO.name}_${id}", applicationTemplateVO.name, applicationTemplateVO.id,
+                version, System.currentTimeMillis(), "system", ApplicationInstanceStatus.STARTING, "test url", alias)
         val dockerClient = dockerClientFactory.getDockerClient("", "")
         dockerClient.createServiceCmd(ServiceSpec().withName(entity.appId)
                 .withTaskTemplate(TaskSpec()
                         .withContainerSpec(ContainerSpec()
                                 .withImage("${applicationTemplateVO.name}:dev_${version}")
+                                //.withImage("${applicationTemplateVO.name}:latest")
                                 .withEnv(applicationTemplateVO.env.map { "${it.name}: ${it.value}" })
                         )
                 )
                 .withEndpointSpec(EndpointSpec()
                         .withPorts(applicationTemplateVO.ports.map {
-                            val ports = it.split(":")
-                            PortConfig().withPublishedPort(ports[0].toInt()).withTargetPort(ports[1].toInt())
+                            PortConfig().withPublishedPort(it.key.toInt()).withTargetPort(it.value.toInt())
                         }))).exec()
         return entitiesToVies(listOf(entity))[0]
     }
@@ -70,8 +70,18 @@ class ApplicationInstanceServiceImpl(
         }
     }
 
+    override fun getInstancesByTemplateName(templateName: String): List<ApplicationInstanceVO> {
+        val entities = applicationInstanceRepository.findByTemplateName(templateName)
+        return entitiesToVies(entities)
+    }
+
     override fun getInstancesByTemplateId(templateId: Long): List<ApplicationInstanceVO> {
         val entities = applicationInstanceRepository.findByTemplateId(templateId)
         return entitiesToVies(entities)
+    }
+
+    override fun getInstanceById(instanceId: Long): ApplicationInstanceVO {
+        return entitiesToVies(listOf(applicationInstanceRepository.findById(instanceId)
+                .orElseThrow { NotFoundException() })).first()
     }
 }

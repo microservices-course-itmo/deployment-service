@@ -15,7 +15,7 @@ public class ApplicationInstanceVO   {
 
     private final String version;
 
-    private final long dateCreated;
+    private final Long dateCreated;
 
     private final String createdBy;
 
@@ -25,7 +25,7 @@ public class ApplicationInstanceVO   {
 
     private final ApplicationInstanceStatus status;
 
-    ApplicationInstanceVO(Long id, String appId, Long templateId, String version, long dateCreated, String createdBy, String alias, String url, ApplicationInstanceStatus status) {
+    ApplicationInstanceVO(Long id, String appId, Long templateId, String version, Long dateCreated, String createdBy, String alias, String url, ApplicationInstanceStatus status) {
         this.id = id;
         this.appId = appId;
         this.templateId = templateId;
@@ -57,7 +57,7 @@ public class ApplicationInstanceVO   {
         return this.version;
     }
 
-    public long getDateCreated() {
+    public Long getDateCreated() {
         return this.dateCreated;
     }
 
@@ -151,7 +151,7 @@ public class ApplicationInstanceVO   {
         private String appId;
         private Long templateId;
         private String version;
-        private long dateCreated;
+        private Long dateCreated;
         private String createdBy;
         private String alias;
         private String url;
@@ -180,7 +180,7 @@ public class ApplicationInstanceVO   {
             return this;
         }
 
-        public ApplicationInstanceVOBuilder dateCreated(long dateCreated) {
+        public ApplicationInstanceVOBuilder dateCreated(Long dateCreated) {
             this.dateCreated = dateCreated;
             return this;
         }
