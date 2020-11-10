@@ -1,45 +1,33 @@
 package com.wine.to.up.deployment.service.service.impl
 
-import com.github.dockerjava.api.async.ResultCallbackTemplate
-import com.github.dockerjava.api.model.Frame
+import com.wine.to.up.deployment.service.dao.LogRepository
+import com.wine.to.up.deployment.service.entity.ApplicationTemplate
 import com.wine.to.up.deployment.service.entity.Log
-import com.wine.to.up.deployment.service.service.DockerClientFactory
 import com.wine.to.up.deployment.service.service.LogService
-import com.wine.to.up.deployment.service.vo.ApplicationInstanceVO
+import com.wine.to.up.deployment.service.service.SequenceGeneratorService
+import com.wine.to.up.deployment.service.vo.LogVO
 import org.springframework.stereotype.Service
-import java.util.concurrent.CompletableFuture
 
 @Service
 class LogServiceImpl(
-        val dockerClientFactory: DockerClientFactory
+        private val logRepository: LogRepository,
+        val sequenceGeneratorService: SequenceGeneratorService
 ) : LogService {
-
-
-    override fun logsByInstances(instances: List<ApplicationInstanceVO>): List<Log> {
-        val dockerClient = dockerClientFactory.getDockerClient("", "")
-        return instances.flatMap {
-            val logs = mutableListOf<Log>()
-            val syncPoint = CompletableFuture<Boolean>()
-            dockerClient.logServiceCmd(it.appId).exec(ResultCallback(logs, syncPoint))
-            syncPoint.get()
-            logs
-        }
+    override fun writeLog(user: String, message: String, templateName: String, templateId: Long): LogVO {
+        val log = Log(null, System.currentTimeMillis(), message, user, templateName, templateId)
+        log.id = sequenceGeneratorService.generateSequence(Log.SEQUENCE_NAME)
+        return entitiesToViews(listOf(logRepository.save(log))).first()
     }
 
-    class ResultCallback(
-            val resultList: MutableList<Log>,
-            val syncPoint: CompletableFuture<Boolean>
-    ) : ResultCallbackTemplate<ResultCallback, Frame>() {
+    override fun logsByTemplate(template: ApplicationTemplate): List<LogVO> {
+        return entitiesToViews(
+                logRepository.findAllByTemplateName(template.name)
+        )
+    }
 
-        override fun onNext(`object`: Frame?) {
-            resultList.add(
-                    Log(System.currentTimeMillis(), String(`object`?.payload ?: "Error: no log found".toByteArray()))
-            )
-        }
-
-        override fun onComplete() {
-            super.onComplete()
-            syncPoint.complete(true)
+    override fun entitiesToViews(logs: List<Log>): List<LogVO> {
+        return logs.map {
+            LogVO(it.createdDate, it.user, it.log, it.templateName, it.templateId)
         }
     }
 }

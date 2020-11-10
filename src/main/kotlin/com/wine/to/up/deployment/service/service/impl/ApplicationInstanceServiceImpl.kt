@@ -10,6 +10,7 @@ import com.wine.to.up.deployment.service.service.SequenceGeneratorService
 import com.wine.to.up.deployment.service.vo.ApplicationDeployRequestWrapper
 import com.wine.to.up.deployment.service.vo.ApplicationInstanceVO
 import org.springframework.stereotype.Service
+import javax.ws.rs.NotFoundException
 
 @Service("applicationInstanceService")
 class ApplicationInstanceServiceImpl(
@@ -23,26 +24,25 @@ class ApplicationInstanceServiceImpl(
         val alias = applicationDeployRequestWrapper.alias
         val version = applicationDeployRequestWrapper.version
         val id = sequenceGeneratorService.generateSequence(ApplicationInstance.SEQUENCE_NAME)
-        val entity = ApplicationInstance(id, "${applicationTemplateVO.name}_${id}", applicationTemplateVO.id,
-                applicationTemplateVO.versions?.last()
-                        ?: version, System.currentTimeMillis(), "system", ApplicationInstanceStatus.STARTING, "test url", alias)
+        val entity = ApplicationInstance(id, applicationTemplateVO.name, "${applicationTemplateVO.name}_${id}", applicationTemplateVO.id,
+                version, System.currentTimeMillis(), "system", ApplicationInstanceStatus.STARTING, "test url", alias)
         val dockerClient = dockerClientFactory.getDockerClient("", "")
         dockerClient.createServiceCmd(ServiceSpec().withName(entity.appId)
                 .withTaskTemplate(TaskSpec()
                         .withContainerSpec(ContainerSpec()
                                 .withImage("${applicationTemplateVO.name}:dev_${version}")
+                                //.withImage("${applicationTemplateVO.name}:latest")
                                 .withEnv(applicationTemplateVO.env.map { "${it.name}: ${it.value}" })
                         )
                 )
                 .withEndpointSpec(EndpointSpec()
                         .withPorts(applicationTemplateVO.ports.map {
-                            val ports = it.split(":")
-                            PortConfig().withPublishedPort(ports[0].toInt()).withTargetPort(ports[1].toInt())
+                            PortConfig().withPublishedPort(it.key.toInt()).withTargetPort(it.value.toInt())
                         }))).exec()
-        return entitiesToVies(listOf(entity))[0]
+        return entitiesToVies(listOf(applicationInstanceRepository.save(entity)), ApplicationInstanceStatus.STARTING).first()
     }
 
-    override fun entitiesToVies(entities: List<ApplicationInstance>): List<ApplicationInstanceVO> {
+    override fun entitiesToVies(entities: List<ApplicationInstance>, forceStatus: ApplicationInstanceStatus?): List<ApplicationInstanceVO> {
         return entities.map {
             val dockerClient = if (entities.isEmpty()) {
                 return emptyList()
@@ -51,7 +51,9 @@ class ApplicationInstanceServiceImpl(
             }
             val dockerService = dockerClient.inspectServiceCmd(it.appId).exec()
             val dockerTasks = dockerClient.listTasksCmd().withNameFilter(dockerService.spec?.name).exec()
-            val status = if (dockerTasks.any { task -> task.status.state.value == "running" }) {
+            val status = if (forceStatus != null) {
+                forceStatus
+            } else if (dockerTasks.any { task -> task.status.state.value == "running" }) {
                 ApplicationInstanceStatus.RUNNING
             } else {
                 ApplicationInstanceStatus.STOPPED
@@ -70,8 +72,18 @@ class ApplicationInstanceServiceImpl(
         }
     }
 
+    override fun getInstancesByTemplateName(templateName: String): List<ApplicationInstanceVO> {
+        val entities = applicationInstanceRepository.findByTemplateName(templateName)
+        return entitiesToVies(entities)
+    }
+
     override fun getInstancesByTemplateId(templateId: Long): List<ApplicationInstanceVO> {
         val entities = applicationInstanceRepository.findByTemplateId(templateId)
         return entitiesToVies(entities)
+    }
+
+    override fun getInstanceById(instanceId: Long): ApplicationInstanceVO {
+        return entitiesToVies(listOf(applicationInstanceRepository.findById(instanceId)
+                .orElseThrow { NotFoundException() })).first()
     }
 }

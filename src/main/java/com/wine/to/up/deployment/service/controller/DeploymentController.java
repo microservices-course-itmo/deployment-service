@@ -6,8 +6,10 @@ import com.wine.to.up.deployment.service.vo.ApplicationDeployRequest;
 import com.wine.to.up.deployment.service.vo.ApplicationInstanceVO;
 import com.wine.to.up.deployment.service.vo.ApplicationTemplateVO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.ws.rs.NotFoundException;
 import java.util.List;
 
 @RestController
@@ -20,26 +22,44 @@ public class DeploymentController {
         this.deploymentService = deploymentService;
     }
 
-    @GetMapping("/applicationInstances/getInstances/{templateId}")
-    public List<ApplicationInstanceVO> multipleInstancesByApplicationId(
-            @PathVariable Long templateId) {
-        return this.deploymentService.getMultipleInstancesByAppId(templateId);
+
+    @GetMapping("/applicationInstances/getInstances/byName/{templateName}")
+    public List<ApplicationInstanceVO> multipleInstancesByApplicationName(
+            @PathVariable String templateName) {
+        return this.deploymentService.getInstancesByAppName(templateName);
     }
 
     @GetMapping("/applicationInstances/getSingleInstance/{id}")
-    public ApplicationInstanceVO singleInstanceByApplicationId(
-            @PathVariable long id) {
-        return this.deploymentService.getSingleInstanceById(id);
+    public ResponseEntity<ApplicationInstanceVO> singleInstanceByApplicationId(
+            @PathVariable Long id) {
+        try {
+            return ResponseEntity.ok(this.deploymentService.getSingleInstanceById(id));
+        } catch (NotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
-    @GetMapping("/application/get/{name}")
-    public ApplicationTemplateVO getApplication(@PathVariable String name) {
-        return deploymentService.getApplicationByName(name);
+    @GetMapping("/application/get/byName/{name}")
+    public ResponseEntity<ApplicationTemplateVO> getApplication(@PathVariable String name) {
+        try {
+            return ResponseEntity.ok(deploymentService.getApplicationByName(name));
+        } catch (NotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
-    @PostMapping("/application/create")
-    public ApplicationTemplateVO createApplicationTemplate(@RequestBody ApplicationTemplateVO applicationTemplateVO) {
-        return deploymentService.createApplicationTemplate(applicationTemplateVO);
+    @GetMapping("/application/get/byId/{id}")
+    public ResponseEntity<ApplicationTemplateVO> getApplication(@PathVariable Long id) {
+        try {
+            return ResponseEntity.ok(deploymentService.getApplicationById(id));
+        } catch (NotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @PostMapping("/application/createOrUpdate")
+    public ApplicationTemplateVO createOrUpdateApplicationTemplate(@RequestBody ApplicationTemplateVO applicationTemplateVO) {
+        return deploymentService.createOrUpdateApplicationTemplate(applicationTemplateVO);
     }
 
     @PostMapping("/applicationInstance/deploy")

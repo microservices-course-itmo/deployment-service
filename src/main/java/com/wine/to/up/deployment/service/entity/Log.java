@@ -1,23 +1,53 @@
 package com.wine.to.up.deployment.service.entity;
 
-public class Log {
-    private long createdDate;
-    private String log;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-    public Log(long createdDate, String log) {
-        this.createdDate = createdDate;
-        this.log = log;
-    }
+@Document(collection = "logs")
+public class Log {
+
+    @Transient
+    public static final String SEQUENCE_NAME = "log_sequence";
+
+    private Long id;
+    private Long createdDate;
+    private String log;
+    private String user;
+    private String templateName;
+    private Long templateId;
 
     public Log() {
     }
 
-    public long getCreatedDate() {
-        return this.createdDate;
+    public Log(final Long id, final Long createdDate, final String log, final String user, final String templateName, final Long templateId) {
+        this.id = id;
+        this.createdDate = createdDate;
+        this.log = log;
+        this.user = user;
+        this.templateName = templateName;
+        this.templateId = templateId;
     }
 
-    public void setCreatedDate(long createdDate) {
-        this.createdDate = createdDate;
+    public Long getTemplateId() {
+        return templateId;
+    }
+
+    public void setTemplateId(final Long templateId) {
+        this.templateId = templateId;
+    }
+
+    @Id
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(final Long id) {
+        this.id = id;
+    }
+
+    public Long getCreatedDate() {
+        return this.createdDate;
     }
 
     public String getLog() {
@@ -28,36 +58,23 @@ public class Log {
         this.log = log;
     }
 
-    public boolean equals(final Object o) {
-        if (o == this) return true;
-        if (!(o instanceof Log)) return false;
-        final Log other = (Log) o;
-        if (!other.canEqual((Object) this)) return false;
-        final Object this$createdDate = this.getCreatedDate();
-        final Object other$createdDate = other.getCreatedDate();
-        if (this$createdDate == null ? other$createdDate != null : !this$createdDate.equals(other$createdDate))
-            return false;
-        final Object this$log = this.getLog();
-        final Object other$log = other.getLog();
-        if (this$log == null ? other$log != null : !this$log.equals(other$log)) return false;
-        return true;
+    public void setCreatedDate(Long createdDate) {
+        this.createdDate = createdDate;
     }
 
-    protected boolean canEqual(final Object other) {
-        return other instanceof Log;
+    public String getUser() {
+        return user;
     }
 
-    public int hashCode() {
-        final int PRIME = 59;
-        int result = 1;
-        final Object $createdDate = this.getCreatedDate();
-        result = result * PRIME + ($createdDate == null ? 43 : $createdDate.hashCode());
-        final Object $log = this.getLog();
-        result = result * PRIME + ($log == null ? 43 : $log.hashCode());
-        return result;
+    public void setUser(final String user) {
+        this.user = user;
     }
 
-    public String toString() {
-        return "Log(createdDate=" + this.getCreatedDate() + ", log=" + this.getLog() + ")";
+    public String getTemplateName() {
+        return templateName;
+    }
+
+    public void setTemplateName(final String templateName) {
+        this.templateName = templateName;
     }
 }

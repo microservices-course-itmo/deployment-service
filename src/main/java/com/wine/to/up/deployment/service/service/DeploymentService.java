@@ -10,13 +10,15 @@ import java.util.List;
 
 public interface DeploymentService {
 
-     List<ApplicationInstanceVO> getMultipleInstancesByAppId(Long templateId);
+     List<ApplicationInstanceVO> getInstancesByAppName(String templateName);
 
-     ApplicationInstanceVO getSingleInstanceById(long id);
+     ApplicationInstanceVO getSingleInstanceById(Long id);
 
      ApplicationTemplateVO getApplicationByName(String name);
 
-     ApplicationTemplateVO createApplicationTemplate(ApplicationTemplateVO applicationTemplateVO);
+     ApplicationTemplateVO getApplicationById(Long id);
+
+     ApplicationTemplateVO createOrUpdateApplicationTemplate(ApplicationTemplateVO applicationTemplateVO);
 
      ApplicationInstanceVO deployApplicationInstance(ApplicationDeployRequest applicationDeployRequest);
 }
