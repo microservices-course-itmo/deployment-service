@@ -24,7 +24,7 @@ class ApplicationInstanceServiceImpl(
         val alias = applicationDeployRequestWrapper.alias
         val version = applicationDeployRequestWrapper.version
         val id = sequenceGeneratorService.generateSequence(ApplicationInstance.SEQUENCE_NAME)
-        val entity = ApplicationInstance(id, "${applicationTemplateVO.name}_${id}", applicationTemplateVO.name, applicationTemplateVO.id,
+        val entity = ApplicationInstance(id, applicationTemplateVO.name, "${applicationTemplateVO.name}_${id}", applicationTemplateVO.id,
                 version, System.currentTimeMillis(), "system", ApplicationInstanceStatus.STARTING, "test url", alias)
         val dockerClient = dockerClientFactory.getDockerClient("", "")
         dockerClient.createServiceCmd(ServiceSpec().withName(entity.appId)
@@ -39,10 +39,10 @@ class ApplicationInstanceServiceImpl(
                         .withPorts(applicationTemplateVO.ports.map {
                             PortConfig().withPublishedPort(it.key.toInt()).withTargetPort(it.value.toInt())
                         }))).exec()
-        return entitiesToVies(listOf(entity))[0]
+        return entitiesToVies(listOf(applicationInstanceRepository.save(entity)), ApplicationInstanceStatus.STARTING).first()
     }
 
-    override fun entitiesToVies(entities: List<ApplicationInstance>): List<ApplicationInstanceVO> {
+    override fun entitiesToVies(entities: List<ApplicationInstance>, forceStatus: ApplicationInstanceStatus?): List<ApplicationInstanceVO> {
         return entities.map {
             val dockerClient = if (entities.isEmpty()) {
                 return emptyList()
@@ -51,7 +51,9 @@ class ApplicationInstanceServiceImpl(
             }
             val dockerService = dockerClient.inspectServiceCmd(it.appId).exec()
             val dockerTasks = dockerClient.listTasksCmd().withNameFilter(dockerService.spec?.name).exec()
-            val status = if (dockerTasks.any { task -> task.status.state.value == "running" }) {
+            val status = if (forceStatus != null) {
+                forceStatus
+            } else if (dockerTasks.any { task -> task.status.state.value == "running" }) {
                 ApplicationInstanceStatus.RUNNING
             } else {
                 ApplicationInstanceStatus.STOPPED
