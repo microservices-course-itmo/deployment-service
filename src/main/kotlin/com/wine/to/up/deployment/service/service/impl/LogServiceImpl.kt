@@ -7,7 +7,6 @@ import com.wine.to.up.deployment.service.service.DockerClientFactory
 import com.wine.to.up.deployment.service.service.LogService
 import com.wine.to.up.deployment.service.vo.ApplicationInstanceVO
 import org.springframework.stereotype.Service
-import java.time.LocalDateTime
 import java.util.concurrent.CompletableFuture
 
 @Service
@@ -34,7 +33,7 @@ class LogServiceImpl(
 
         override fun onNext(`object`: Frame?) {
             resultList.add(
-                    Log(LocalDateTime.now(), String(`object`?.payload ?: "Error: no log found".toByteArray()))
+                    Log(System.currentTimeMillis(), String(`object`?.payload ?: "Error: no log found".toByteArray()))
             )
         }
 

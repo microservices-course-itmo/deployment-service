@@ -4,7 +4,6 @@ import com.wine.to.up.deployment.service.enums.ApplicationInstanceStatus;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
-import java.time.LocalDateTime;
 
 @Document(collection = "templates")
 public class ApplicationInstance {
@@ -16,13 +15,13 @@ public class ApplicationInstance {
     private String appId;
     private Long templateId;
     private String version;
-    private LocalDateTime dateCreated;
+    private long dateCreated;
     private String userCreated;
     private ApplicationInstanceStatus status;
     private String alias;
     private String url;
 
-    public ApplicationInstance(final Long id, final String appId, final Long templateId, final String version, final LocalDateTime dateCreated, final String userCreated, final ApplicationInstanceStatus status, final String url, final String alias) {
+    public ApplicationInstance(final Long id, final String appId, final Long templateId, final String version, final long dateCreated, final String userCreated, final ApplicationInstanceStatus status, final String url, final String alias) {
         this.id = id;
         this.appId = appId;
         this.templateId = templateId;
@@ -39,43 +38,25 @@ public class ApplicationInstance {
     }
 
     @Id
-    public Long getId() {
-        return id;
-    }
+    public Long getId() { return id; }
 
-    public void setId(final Long id) {
-        this.id = id;
-    }
+    public void setId(final Long id) { this.id = id; }
 
-    public String getAppId() {
-        return appId;
-    }
+    public String getAppId() { return appId; }
 
-    public void setAppId(final String appId) {
-        this.appId = appId;
-    }
+    public void setAppId(final String appId) { this.appId = appId; }
 
-    public Long getTemplateId() {
-        return templateId;
-    }
+    public Long getTemplateId() { return templateId; }
 
-    public void setTemplateId(final Long templateId) {
-        this.templateId = templateId;
-    }
+    public void setTemplateId(final Long templateId) { this.templateId = templateId; }
 
-    public String getVersion() {
-        return version;
-    }
+    public String getVersion() { return version; }
 
-    public void setVersion(final String version) {
-        this.version = version;
-    }
+    public void setVersion(final String version) { this.version = version; }
 
-    public LocalDateTime getDateCreated() {
-        return dateCreated;
-    }
+    public long getDateCreated() { return dateCreated; }
 
-    public void setDateCreated(final LocalDateTime dateCreated) {
+    public void setDateCreated(final long dateCreated) {
         this.dateCreated = dateCreated;
     }
 

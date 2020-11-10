@@ -1,12 +1,10 @@
 package com.wine.to.up.deployment.service.entity;
 
-import java.time.LocalDateTime;
-
 public class Log {
-    private LocalDateTime createdDate;
+    private long createdDate;
     private String log;
 
-    public Log(LocalDateTime createdDate, String log) {
+    public Log(long createdDate, String log) {
         this.createdDate = createdDate;
         this.log = log;
     }
@@ -14,11 +12,11 @@ public class Log {
     public Log() {
     }
 
-    public LocalDateTime getCreatedDate() {
+    public long getCreatedDate() {
         return this.createdDate;
     }
 
-    public void setCreatedDate(LocalDateTime createdDate) {
+    public void setCreatedDate(long createdDate) {
         this.createdDate = createdDate;
     }
 

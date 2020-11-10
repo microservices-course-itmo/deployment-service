@@ -10,7 +10,6 @@ import com.wine.to.up.deployment.service.service.SequenceGeneratorService
 import com.wine.to.up.deployment.service.vo.ApplicationDeployRequestWrapper
 import com.wine.to.up.deployment.service.vo.ApplicationInstanceVO
 import org.springframework.stereotype.Service
-import java.time.LocalDateTime
 
 @Service("applicationInstanceService")
 class ApplicationInstanceServiceImpl(
@@ -26,7 +25,7 @@ class ApplicationInstanceServiceImpl(
         val id = sequenceGeneratorService.generateSequence(ApplicationInstance.SEQUENCE_NAME)
         val entity = ApplicationInstance(id, "${applicationTemplateVO.name}_${id}", applicationTemplateVO.id,
                 applicationTemplateVO.versions?.last()
-                        ?: version, LocalDateTime.now(), "system", ApplicationInstanceStatus.STARTING, "test url", alias)
+                        ?: version, System.currentTimeMillis(), "system", ApplicationInstanceStatus.STARTING, "test url", alias)
         val dockerClient = dockerClientFactory.getDockerClient("", "")
         dockerClient.createServiceCmd(ServiceSpec().withName(entity.appId)
                 .withTaskTemplate(TaskSpec()

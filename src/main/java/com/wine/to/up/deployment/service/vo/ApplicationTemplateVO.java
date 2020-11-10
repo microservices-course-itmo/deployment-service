@@ -5,7 +5,6 @@ import com.wine.to.up.deployment.service.entity.Environment;
 import com.wine.to.up.deployment.service.entity.Log;
 import lombok.EqualsAndHashCode;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @EqualsAndHashCode
@@ -23,9 +22,9 @@ public class ApplicationTemplateVO {
     private final List<ApplicationInstanceVO> instances;
     private final List<Log> logs;
     private final String createdBy;
-    private final LocalDateTime dateCreated;
+    private final long dateCreated;
 
-    ApplicationTemplateVO(Long id, String name, String description, String lastRelease, String alias, List<Environment> env, List<String> volumes, List<String> ports, List<String> versions, List<ApplicationInstanceVO> instances, List<Log> logs, String createdBy, LocalDateTime dateCreated) {
+    ApplicationTemplateVO(Long id, String name, String description, String lastRelease, String alias, List<Environment> env, List<String> volumes, List<String> ports, List<String> versions, List<ApplicationInstanceVO> instances, List<Log> logs, String createdBy, long dateCreated) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -93,7 +92,7 @@ public class ApplicationTemplateVO {
         return this.createdBy;
     }
 
-    public LocalDateTime getDateCreated() {
+    public long getDateCreated() {
         return this.dateCreated;
     }
 
@@ -110,7 +109,7 @@ public class ApplicationTemplateVO {
         private List<ApplicationInstanceVO> instances;
         private List<Log> logs;
         private String createdBy;
-        private LocalDateTime dateCreated;
+        private long dateCreated;
 
         ApplicationTemplateVOBuilder() {
         }
@@ -175,7 +174,7 @@ public class ApplicationTemplateVO {
             return this;
         }
 
-        public ApplicationTemplateVOBuilder dateCreated(LocalDateTime dateCreated) {
+        public ApplicationTemplateVOBuilder dateCreated(long dateCreated) {
             this.dateCreated = dateCreated;
             return this;
         }
