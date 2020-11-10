@@ -8,7 +8,6 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -30,7 +29,7 @@ public class ApplicationTemplate {
     private List<String> portMappings;
     private List<String> volumes;
     private List<Environment> environmentVariables;
-    private LocalDateTime dateCreated;
+    private long dateCreated;
     private long memoryLimits = 3000000000L;
 
     public ApplicationTemplate(List<String> templateVersions, String createdBy, String name, List<String> portMappings, List<String> volumes, List<Environment> environmentVariables, String description) {
@@ -41,6 +40,6 @@ public class ApplicationTemplate {
         this.volumes = volumes;
         this.environmentVariables = environmentVariables;
         this.description = description;
-        this.dateCreated = LocalDateTime.now();
+        this.dateCreated = System.currentTimeMillis();
     }
 }

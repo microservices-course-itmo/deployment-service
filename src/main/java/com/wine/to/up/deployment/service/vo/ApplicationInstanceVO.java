@@ -4,8 +4,6 @@ package com.wine.to.up.deployment.service.vo;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.wine.to.up.deployment.service.enums.ApplicationInstanceStatus;
 
-import java.time.LocalDateTime;
-
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ApplicationInstanceVO   {
 
@@ -17,7 +15,7 @@ public class ApplicationInstanceVO   {
 
     private final String version;
 
-    private final LocalDateTime dateCreated;
+    private final long dateCreated;
 
     private final String createdBy;
 
@@ -27,7 +25,7 @@ public class ApplicationInstanceVO   {
 
     private final ApplicationInstanceStatus status;
 
-    ApplicationInstanceVO(Long id, String appId, Long templateId, String version, LocalDateTime dateCreated, String createdBy, String alias, String url, ApplicationInstanceStatus status) {
+    ApplicationInstanceVO(Long id, String appId, Long templateId, String version, long dateCreated, String createdBy, String alias, String url, ApplicationInstanceStatus status) {
         this.id = id;
         this.appId = appId;
         this.templateId = templateId;
@@ -59,7 +57,7 @@ public class ApplicationInstanceVO   {
         return this.version;
     }
 
-    public LocalDateTime getDateCreated() {
+    public long getDateCreated() {
         return this.dateCreated;
     }
 
@@ -153,7 +151,7 @@ public class ApplicationInstanceVO   {
         private String appId;
         private Long templateId;
         private String version;
-        private LocalDateTime dateCreated;
+        private long dateCreated;
         private String createdBy;
         private String alias;
         private String url;
@@ -182,7 +180,7 @@ public class ApplicationInstanceVO   {
             return this;
         }
 
-        public ApplicationInstanceVOBuilder dateCreated(LocalDateTime dateCreated) {
+        public ApplicationInstanceVOBuilder dateCreated(long dateCreated) {
             this.dateCreated = dateCreated;
             return this;
         }
