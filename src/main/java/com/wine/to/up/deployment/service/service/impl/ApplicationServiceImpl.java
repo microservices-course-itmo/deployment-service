@@ -77,7 +77,10 @@ public class ApplicationServiceImpl implements ApplicationService {
         final boolean updatingEntity = applicationTemplateRepository.countByName(applicationTemplateVO.getName()) > 0;
         ApplicationTemplate applicationTemplate = new ApplicationTemplate(applicationTemplateVO.getTemplateVersion(),
                 applicationTemplateVO.getCreatedBy(), applicationTemplateVO.getName(), applicationTemplateVO.getPorts(),
-                applicationTemplateVO.getVolumes(), applicationTemplateVO.getEnv(), applicationTemplateVO.getDescription());
+                applicationTemplateVO.getVolumes(), applicationTemplateVO.getEnv(), applicationTemplateVO.getDescription(),
+                applicationTemplateVO.getBaseBranch() != null ? applicationTemplateVO.getBaseBranch() : "dev");
+
+
 
         var id = sequenceGeneratorService.generateSequence(ApplicationTemplate.SEQUENCE_NAME);
         applicationTemplate.setId(id);
@@ -107,6 +110,7 @@ public class ApplicationServiceImpl implements ApplicationService {
                 .name(entity.getName())
                 .createdBy(entity.getCreatedBy())
                 .volumes(entity.getVolumes())
+                .baseBranch(entity.getBaseBranch())
                 .build();
     }
 }

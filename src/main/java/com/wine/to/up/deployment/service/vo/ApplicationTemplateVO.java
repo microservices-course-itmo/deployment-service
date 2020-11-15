@@ -23,8 +23,9 @@ public class ApplicationTemplateVO {
     private final List<LogVO> logs;
     private final String createdBy;
     private final Long dateCreated;
+    private final String baseBranch;
 
-    private ApplicationTemplateVO(Long id, String name, String description, Long templateVersion, String alias, List<Environment> env, List<String> volumes, Map<String, String> ports, List<String> versions, List<ApplicationInstanceVO> instances, List<LogVO> logs, String createdBy, Long dateCreated) {
+    private ApplicationTemplateVO(Long id, String name, String description, Long templateVersion, String alias, List<Environment> env, List<String> volumes, Map<String, String> ports, List<String> versions, List<ApplicationInstanceVO> instances, List<LogVO> logs, String createdBy, Long dateCreated, String baseBranch) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -38,10 +39,15 @@ public class ApplicationTemplateVO {
         this.logs = logs;
         this.createdBy = createdBy;
         this.dateCreated = dateCreated;
+        this.baseBranch = baseBranch;
     }
 
     public static ApplicationTemplateVOBuilder builder() {
         return new ApplicationTemplateVOBuilder();
+    }
+
+    public String getBaseBranch() {
+        return baseBranch;
     }
 
     public Long getId() {
@@ -110,6 +116,7 @@ public class ApplicationTemplateVO {
         private List<LogVO> logs;
         private String createdBy;
         private Long dateCreated;
+        private String baseBranch;
 
         ApplicationTemplateVOBuilder() {
         }
@@ -121,6 +128,11 @@ public class ApplicationTemplateVO {
 
         public ApplicationTemplateVOBuilder name(String name) {
             this.name = name;
+            return this;
+        }
+
+        public ApplicationTemplateVOBuilder baseBranch(String baseBranch) {
+            this.baseBranch = baseBranch;
             return this;
         }
 
@@ -180,11 +192,11 @@ public class ApplicationTemplateVO {
         }
 
         public ApplicationTemplateVO build() {
-            return new ApplicationTemplateVO(id, name, description, templateVersion, alias, env, volumes, ports, versions, instances, logs, createdBy, dateCreated);
+            return new ApplicationTemplateVO(id, name, description, templateVersion, alias, env, volumes, ports, versions, instances, logs, createdBy, dateCreated, baseBranch);
         }
 
         public String toString() {
-            return "ApplicationTemplateVO.ApplicationTemplateVOBuilder(id=" + this.id + ", name=" + this.name + ", description=" + this.description + ", lastRelease=" + this.templateVersion + ", alias=" + this.alias + ", env=" + this.env + ", volumes=" + this.volumes + ", ports=" + this.ports + ", versions=" + this.versions + ", instances=" + this.instances + ", logs=" + this.logs + ", createdBy=" + this.createdBy + ", dateCreated=" + this.dateCreated + ")";
+            return "ApplicationTemplateVO.ApplicationTemplateVOBuilder(id=" + this.id + ", name=" + this.name + ", description=" + this.description + ", lastRelease=" + this.templateVersion + ", alias=" + this.alias + ", env=" + this.env + ", volumes=" + this.volumes + ", ports=" + this.ports + ", versions=" + this.versions + ", instances=" + this.instances + ", logs=" + this.logs + ", createdBy=" + this.createdBy + ", dateCreated=" + this.dateCreated + ", baseBranch=" + this.baseBranch + ")";
         }
     }
 }

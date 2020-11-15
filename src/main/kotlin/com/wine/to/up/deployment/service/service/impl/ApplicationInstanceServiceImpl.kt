@@ -30,7 +30,7 @@ class ApplicationInstanceServiceImpl(
         dockerClient.createServiceCmd(ServiceSpec().withName(entity.appId)
                 .withTaskTemplate(TaskSpec()
                         .withContainerSpec(ContainerSpec()
-                                .withImage("${applicationTemplateVO.name}:dev_${version}")
+                                .withImage("${applicationTemplateVO.name}:${applicationTemplateVO.baseBranch}_${version}")
                                 //.withImage("${applicationTemplateVO.name}:latest")
                                 .withEnv(applicationTemplateVO.env.map { "${it.name}: ${it.value}" })
                         )
