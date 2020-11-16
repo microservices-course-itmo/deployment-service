@@ -1,12 +1,10 @@
 package com.wine.to.up.deployment.service.service.impl;
 
+import com.wine.to.up.deployment.service.entity.Settings;
 import com.wine.to.up.deployment.service.service.ApplicationInstanceService;
 import com.wine.to.up.deployment.service.service.ApplicationService;
 import com.wine.to.up.deployment.service.service.DeploymentService;
-import com.wine.to.up.deployment.service.vo.ApplicationDeployRequest;
-import com.wine.to.up.deployment.service.vo.ApplicationDeployRequestWrapper;
-import com.wine.to.up.deployment.service.vo.ApplicationInstanceVO;
-import com.wine.to.up.deployment.service.vo.ApplicationTemplateVO;
+import com.wine.to.up.deployment.service.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -61,5 +59,14 @@ public class DeploymentServiceImpl implements DeploymentService {
                 actualVo,
                 applicationDeployRequest.getAlias());
         return applicationInstanceService.deployInstance(applicationDeployRequestWrapper);
+    }
+
+    @Override
+    public SettingsVO setSettings(Settings setting) {
+        SettingsVO settingsVO = SettingsVO.builder()
+                .dockerAddress(setting.getDockerAddress())
+                .registry(setting.getRegistry())
+                .build();
+        return settingsVO;
     }
 }

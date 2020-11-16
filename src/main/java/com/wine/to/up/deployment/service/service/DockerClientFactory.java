@@ -2,15 +2,28 @@ package com.wine.to.up.deployment.service.service;
 
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.core.DefaultDockerClientConfig;
-import com.wine.to.up.deployment.service.entity.DockerSettings;
+import com.github.dockerjava.core.DockerClientBuilder;
+import com.wine.to.up.deployment.service.dao.SettingsRepository;
+import com.wine.to.up.deployment.service.entity.Settings;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
 
 @Component
 public class DockerClientFactory {
 
-    public DockerClient getDockerClient(DockerSettings dockerSettings ) {
-        return (DockerClient) DefaultDockerClientConfig.createDefaultConfigBuilder()
-                .withDockerHost(dockerSettings.getDockerAddress())
-                .build();
+    private SettingsRepository settingsRepository;
+
+    @Autowired
+    public void setDockerSettingsRepository(SettingsRepository settingsRepository) {
+        this.settingsRepository = settingsRepository;
+    }
+
+    public DockerClient getDockerClient(Settings settings) {
+        return DockerClientBuilder.getInstance(DefaultDockerClientConfig.createDefaultConfigBuilder()
+                .withDockerHost(settings.getDockerAddress())
+                .build()
+        ).build();
     }
 }
+

@@ -1,10 +1,12 @@
 package com.wine.to.up.deployment.service.controller;
 
 
+import com.wine.to.up.deployment.service.entity.Settings;
 import com.wine.to.up.deployment.service.service.DeploymentService;
 import com.wine.to.up.deployment.service.vo.ApplicationDeployRequest;
 import com.wine.to.up.deployment.service.vo.ApplicationInstanceVO;
 import com.wine.to.up.deployment.service.vo.ApplicationTemplateVO;
+import com.wine.to.up.deployment.service.vo.SettingsVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -65,6 +67,11 @@ public class DeploymentController {
     @PostMapping("/applicationInstance/deploy")
     public ApplicationInstanceVO deployApplicationInstance(@RequestBody ApplicationDeployRequest applicationDeployRequest) {
         return deploymentService.deployApplicationInstance(applicationDeployRequest);
+    }
+
+    @PostMapping("/settings/set")
+    public SettingsVO setSettings(@RequestBody Settings settings) {
+        return deploymentService.setSettings(settings);
     }
 }
 
