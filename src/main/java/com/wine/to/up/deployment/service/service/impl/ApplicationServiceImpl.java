@@ -54,7 +54,8 @@ public class ApplicationServiceImpl implements ApplicationService {
                 .orElseThrow(NotFoundException::new);
 
         var instances = applicationInstanceService.getInstancesByTemplateName(name);
-        var logs = logService.logsByTemplate(applicationTemplate);
+        //TODO limit should be applied automatically
+        var logs = logService.logsByTemplate(applicationTemplate, 30);
 
         return entityToView(applicationTemplate, instances, logs);
 
@@ -67,7 +68,8 @@ public class ApplicationServiceImpl implements ApplicationService {
                 .orElseThrow(NotFoundException::new);
 
         var instances = applicationInstanceService.getInstancesByTemplateId(applicationTemplate.getId());
-        var logs = logService.logsByTemplate(applicationTemplate);
+        //TODO limit should be applied automatically
+        var logs = logService.logsByTemplate(applicationTemplate, 30);
 
         return entityToView(applicationTemplate, instances, logs);
     }
@@ -92,6 +94,7 @@ public class ApplicationServiceImpl implements ApplicationService {
             log = logService.writeLog("system", "Приложение создано", applicationTemplateVO.getName(), id);
         }
 
+        applicationTemplate.setTemplateVersion(sequenceGeneratorService.generateSequence("appliactionTemplate_"+applicationTemplate.getId()));
         return entityToView(applicationTemplateRepository.save(applicationTemplate), Collections.emptyList(), Collections.singletonList(log));
     }
 
