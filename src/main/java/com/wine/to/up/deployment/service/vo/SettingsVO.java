@@ -9,7 +9,6 @@ import lombok.Setter;
 @Builder
 @EqualsAndHashCode
 @JsonInclude(JsonInclude.Include.NON_NULL)
-
 @Getter
 @Setter
 public class SettingsVO {

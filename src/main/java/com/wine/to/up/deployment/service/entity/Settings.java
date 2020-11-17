@@ -6,11 +6,12 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "docker_settings")
 @Getter
+
 public class Settings {
+    public static final String SINGLETON_ID = "SINGLETON";
 
     @Id
-    private String id;
-
+    private final String id = SINGLETON_ID;
     private String dockerAddress;
     private String registry;
 
@@ -18,7 +19,6 @@ public class Settings {
     }
 
     public Settings(String dockerAddress, String registry) {
-        this.id = "docker_settings";
         this.dockerAddress = dockerAddress;
         this.registry = registry;
     }

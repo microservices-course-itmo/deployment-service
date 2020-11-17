@@ -1,7 +1,5 @@
 package com.wine.to.up.deployment.service.controller;
 
-
-import com.wine.to.up.deployment.service.entity.Settings;
 import com.wine.to.up.deployment.service.service.DeploymentService;
 import com.wine.to.up.deployment.service.vo.ApplicationDeployRequest;
 import com.wine.to.up.deployment.service.vo.ApplicationInstanceVO;
@@ -70,8 +68,9 @@ public class DeploymentController {
     }
 
     @PostMapping("/settings/set")
-    public SettingsVO setSettings(@RequestBody Settings settings) {
+    public SettingsVO setSettings(@RequestBody SettingsVO settings) {
         return deploymentService.setSettings(settings);
     }
+
 }
 
