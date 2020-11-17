@@ -19,10 +19,18 @@ class LogServiceImpl(
         return entitiesToViews(listOf(logRepository.save(log))).first()
     }
 
-    override fun logsByTemplate(template: ApplicationTemplate): List<LogVO> {
-        return entitiesToViews(
+    //return last 30 logs
+    override fun logsByTemplate(template: ApplicationTemplate, limit: Int): List<LogVO> {
+        val a = entitiesToViews(
                 logRepository.findAllByTemplateName(template.name)
         )
+        var i = a.size - 1
+        val temp : MutableList<LogVO> = mutableListOf()
+        while(i - limit >= 0) {
+            temp.add(i, a[i])
+            i--
+        }
+        return temp
     }
 
     override fun entitiesToViews(logs: List<Log>): List<LogVO> {
