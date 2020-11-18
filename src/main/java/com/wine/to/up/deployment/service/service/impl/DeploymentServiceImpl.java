@@ -27,6 +27,10 @@ public class DeploymentServiceImpl implements DeploymentService {
         this.settingsService = settingsService;
     }
 
+    @Override
+    public List<String> getAllNames() {
+        return applicationService.getAllNames();
+    }
 
     @Override
     public List<ApplicationInstanceVO> getInstancesByAppName(String templateName) {
