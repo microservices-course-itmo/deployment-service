@@ -26,7 +26,7 @@ class ApplicationInstanceServiceImpl(
         val id = sequenceGeneratorService.generateSequence(ApplicationInstance.SEQUENCE_NAME)
         val entity = ApplicationInstance(id, applicationTemplateVO.name, "${applicationTemplateVO.name}_${id}", applicationTemplateVO.id,
                 version, System.currentTimeMillis(), "system", ApplicationInstanceStatus.STARTING, "test url", alias)
-        val dockerClient = dockerClientFactory.getDockerClient("", "")
+        val dockerClient = dockerClientFactory.getDockerClient()
         dockerClient.createServiceCmd(ServiceSpec().withName(entity.appId)
                 .withTaskTemplate(TaskSpec()
                         .withContainerSpec(ContainerSpec()
@@ -47,7 +47,7 @@ class ApplicationInstanceServiceImpl(
             val dockerClient = if (entities.isEmpty()) {
                 return emptyList()
             } else {
-                dockerClientFactory.getDockerClient("", "")
+                dockerClientFactory.getDockerClient()
             }
             val dockerService = dockerClient.inspectServiceCmd(it.appId).exec()
             val dockerTasks = dockerClient.listTasksCmd().withNameFilter(dockerService.spec?.name).exec()
