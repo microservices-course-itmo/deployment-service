@@ -1,10 +1,9 @@
 package com.wine.to.up.deployment.service.service;
 
-
-
 import com.wine.to.up.deployment.service.vo.ApplicationDeployRequest;
 import com.wine.to.up.deployment.service.vo.ApplicationInstanceVO;
 import com.wine.to.up.deployment.service.vo.ApplicationTemplateVO;
+import com.wine.to.up.deployment.service.vo.SettingsVO;
 
 import java.util.List;
 
@@ -21,4 +20,6 @@ public interface DeploymentService {
      ApplicationTemplateVO createOrUpdateApplicationTemplate(ApplicationTemplateVO applicationTemplateVO);
 
      ApplicationInstanceVO deployApplicationInstance(ApplicationDeployRequest applicationDeployRequest);
+
+     SettingsVO setSettings(SettingsVO settings);
 }
