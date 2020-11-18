@@ -7,8 +7,10 @@ import com.wine.to.up.deployment.service.enums.ApplicationInstanceStatus
 import com.wine.to.up.deployment.service.service.ApplicationInstanceService
 import com.wine.to.up.deployment.service.service.DockerClientFactory
 import com.wine.to.up.deployment.service.service.SequenceGeneratorService
+import com.wine.to.up.deployment.service.service.ServiceVersionProvider
 import com.wine.to.up.deployment.service.vo.ApplicationDeployRequestWrapper
 import com.wine.to.up.deployment.service.vo.ApplicationInstanceVO
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import javax.ws.rs.NotFoundException
 
@@ -16,22 +18,26 @@ import javax.ws.rs.NotFoundException
 class ApplicationInstanceServiceImpl(
         val applicationInstanceRepository: ApplicationInstanceRepository,
         val dockerClientFactory: DockerClientFactory,
-        val sequenceGeneratorService: SequenceGeneratorService
+        val sequenceGeneratorService: SequenceGeneratorService,
+        val serviceVersionProvider: ServiceVersionProvider
 ) : ApplicationInstanceService {
+
+    private val logger = LoggerFactory.getLogger(this::class.java)
 
     override fun deployInstance(applicationDeployRequestWrapper: ApplicationDeployRequestWrapper): ApplicationInstanceVO {
         val applicationTemplateVO = applicationDeployRequestWrapper.applicationTemplateVO
         val alias = applicationDeployRequestWrapper.alias
-        val version = applicationDeployRequestWrapper.version
+        val version = serviceVersionProvider.findFullTagName(applicationDeployRequestWrapper.version, applicationDeployRequestWrapper.applicationTemplateVO)
+        logger.info("Received version: ${version}")
         val id = sequenceGeneratorService.generateSequence(ApplicationInstance.SEQUENCE_NAME)
         val entity = ApplicationInstance(id, applicationTemplateVO.name, "${applicationTemplateVO.name}_${id}", applicationTemplateVO.id,
                 version, System.currentTimeMillis(), "system", ApplicationInstanceStatus.STARTING, "test url", alias)
-        val dockerClient = dockerClientFactory.getDockerClient()
+        val dockerClient = dockerClientFactory.dockerClient
         dockerClient.createServiceCmd(ServiceSpec().withName(entity.appId)
                 .withTaskTemplate(TaskSpec()
                         .withContainerSpec(ContainerSpec()
-                                .withImage("${applicationTemplateVO.name}:${applicationTemplateVO.baseBranch}_${version}")
-                                //.withImage("${applicationTemplateVO.name}:latest")
+                                //.withImage("${applicationTemplateVO.name}:${version}")
+                                .withImage("${applicationTemplateVO.name}:latest")
                                 .withEnv(applicationTemplateVO.env.map { "${it.name}: ${it.value}" })
                         )
                 )
