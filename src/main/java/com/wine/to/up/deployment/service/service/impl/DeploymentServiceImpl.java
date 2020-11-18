@@ -1,9 +1,9 @@
 package com.wine.to.up.deployment.service.service.impl;
 
-import com.wine.to.up.deployment.service.dao.SettingsRepository;
 import com.wine.to.up.deployment.service.service.ApplicationInstanceService;
 import com.wine.to.up.deployment.service.service.ApplicationService;
 import com.wine.to.up.deployment.service.service.DeploymentService;
+import com.wine.to.up.deployment.service.service.SettingsService;
 import com.wine.to.up.deployment.service.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,19 +16,15 @@ public class DeploymentServiceImpl implements DeploymentService {
 
     private final ApplicationInstanceService applicationInstanceService;
     private final ApplicationService applicationService;
-    private SettingsRepository settingsRepository;
-
-    @Autowired
-    public void setDockerSettingsRepository(SettingsRepository settingsRepository) {
-        this.settingsRepository = settingsRepository;
-    }
+    private final SettingsService settingsService;
 
     @Autowired
     public DeploymentServiceImpl(
-            ApplicationInstanceService applicationInstanceService, ApplicationService applicationService
-    ) {
+            ApplicationInstanceService applicationInstanceService, ApplicationService applicationService,
+            final SettingsService settingsService) {
         this.applicationInstanceService = applicationInstanceService;
         this.applicationService = applicationService;
+        this.settingsService = settingsService;
     }
 
 
@@ -69,10 +65,11 @@ public class DeploymentServiceImpl implements DeploymentService {
 
     @Override
     public SettingsVO setSettings(SettingsVO setting) {
-        SettingsVO settingsVO = SettingsVO.builder()
-                .dockerAddress(setting.getDockerAddress())
-                .registry(setting.getRegistry())
-                .build();
-        return settingsVO;
+        return settingsService.setSettings(setting);
+    }
+
+    @Override
+    public SettingsVO getSettings() {
+        return settingsService.getSettings();
     }
 }

@@ -22,7 +22,6 @@ public class DeploymentController {
         this.deploymentService = deploymentService;
     }
 
-
     @GetMapping("/applicationInstances/getInstances/byName/{templateName}")
     public List<ApplicationInstanceVO> multipleInstancesByApplicationName(
             @PathVariable String templateName) {
@@ -70,6 +69,11 @@ public class DeploymentController {
     @PostMapping("/settings/set")
     public SettingsVO setSettings(@RequestBody SettingsVO settings) {
         return deploymentService.setSettings(settings);
+    }
+
+    @GetMapping("/settings/get")
+    public SettingsVO getSettings() {
+        return deploymentService.getSettings();
     }
 
 }
