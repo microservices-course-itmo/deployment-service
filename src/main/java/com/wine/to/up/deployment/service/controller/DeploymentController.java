@@ -66,5 +66,10 @@ public class DeploymentController {
     public ApplicationInstanceVO deployApplicationInstance(@RequestBody ApplicationDeployRequest applicationDeployRequest) {
         return deploymentService.deployApplicationInstance(applicationDeployRequest);
     }
+
+    @GetMapping("/application/get/names")
+    public List<String> getAllNames() {
+        return deploymentService.getAllNames();
+    }
 }
 

@@ -21,4 +21,6 @@ public interface DeploymentService {
      ApplicationTemplateVO createOrUpdateApplicationTemplate(ApplicationTemplateVO applicationTemplateVO);
 
      ApplicationInstanceVO deployApplicationInstance(ApplicationDeployRequest applicationDeployRequest);
+
+     public List<String> getAllNames();
 }
