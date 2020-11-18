@@ -11,5 +11,5 @@ public interface ApplicationService {
 
     ApplicationTemplateVO createOrUpdateApplication(ApplicationTemplateVO applicationTemplateVO);
 
-    public List<String> getAllNames();
+    List<String> getAllNames();
 }

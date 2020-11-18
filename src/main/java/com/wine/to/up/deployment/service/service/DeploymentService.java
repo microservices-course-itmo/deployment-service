@@ -22,5 +22,5 @@ public interface DeploymentService {
 
      ApplicationInstanceVO deployApplicationInstance(ApplicationDeployRequest applicationDeployRequest);
 
-     public List<String> getAllNames();
+     List<String> getAllNames();
 }
