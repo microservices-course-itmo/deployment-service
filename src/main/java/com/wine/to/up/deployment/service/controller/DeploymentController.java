@@ -67,7 +67,7 @@ public class DeploymentController {
         return deploymentService.deployApplicationInstance(applicationDeployRequest);
     }
 
-    @GetMapping("/application/get/names")
+    @GetMapping("/application/names")
     public List<String> getAllNames() {
         return deploymentService.getAllNames();
     }
