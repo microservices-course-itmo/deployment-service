@@ -5,6 +5,7 @@ import com.wine.to.up.deployment.service.entity.ApplicationInstance
 import com.wine.to.up.deployment.service.enums.ApplicationInstanceStatus
 import com.wine.to.up.deployment.service.service.ApplicationInstanceService
 import com.wine.to.up.deployment.service.service.SequenceGeneratorService
+import com.wine.to.up.deployment.service.service.ServiceVersionProvider
 import com.wine.to.up.deployment.service.vo.ApplicationDeployRequestWrapper
 import com.wine.to.up.deployment.service.vo.ApplicationInstanceVO
 import org.springframework.stereotype.Service
@@ -13,13 +14,14 @@ import javax.ws.rs.NotFoundException
 @Service("applicationInstanceService")
 class ApplicationInstanceServiceImpl(
         val applicationInstanceRepository: ApplicationInstanceRepository,
-        val sequenceGeneratorService: SequenceGeneratorService
+        val sequenceGeneratorService: SequenceGeneratorService,
+        val serviceVersionProvider: ServiceVersionProvider
 ) : ApplicationInstanceService {
 
     override fun deployInstance(applicationDeployRequestWrapper: ApplicationDeployRequestWrapper): ApplicationInstanceVO {
         val applicationTemplateVO = applicationDeployRequestWrapper.applicationTemplateVO
         val alias = applicationDeployRequestWrapper.alias
-        val version = applicationDeployRequestWrapper.version
+        val version = serviceVersionProvider.findFullTagName(applicationDeployRequestWrapper.version, applicationTemplateVO)
         val id = sequenceGeneratorService.generateSequence(ApplicationInstance.SEQUENCE_NAME)
         val entity = ApplicationInstance(id, applicationTemplateVO.name, "${applicationTemplateVO.name}_${id}", applicationTemplateVO.id,
                 version, System.currentTimeMillis(), "system", ApplicationInstanceStatus.STARTING, "test url", alias)
