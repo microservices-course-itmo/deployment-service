@@ -21,6 +21,8 @@ public interface DeploymentService {
 
      ApplicationInstanceVO deployApplicationInstance(ApplicationDeployRequest applicationDeployRequest);
 
+     List<String> getAllNames();
+
      SettingsVO setSettings(SettingsVO settings);
 
      SettingsVO getSettings();

@@ -66,6 +66,11 @@ public class DeploymentController {
         return deploymentService.deployApplicationInstance(applicationDeployRequest);
     }
 
+    @GetMapping("/application/names")
+    public List<String> getAllNames() {
+        return deploymentService.getAllNames();
+    }
+  
     @PostMapping("/settings/set")
     public SettingsVO setSettings(@RequestBody SettingsVO settings) {
         return deploymentService.setSettings(settings);

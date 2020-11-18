@@ -10,9 +10,11 @@ import com.wine.to.up.deployment.service.vo.ApplicationInstanceVO;
 import com.wine.to.up.deployment.service.vo.ApplicationTemplateVO;
 import com.wine.to.up.deployment.service.vo.LogVO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.ws.rs.NotFoundException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -26,6 +28,9 @@ public class ApplicationServiceImpl implements ApplicationService {
     private SequenceGeneratorService sequenceGeneratorService;
 
     private LogService logService;
+
+    @Autowired
+    private MongoTemplate mongoTemplate;
 
     @Autowired
     public void setLogService(final LogService logService) {
@@ -75,13 +80,23 @@ public class ApplicationServiceImpl implements ApplicationService {
     }
 
     @Override
+    public List<String> getAllNames() {
+        List<String> names = new ArrayList<>();
+
+        for (String name : mongoTemplate.getCollection("templates").distinct("name", String.class)) {
+            names.add(name);
+        }
+        return names;
+    }
+
+
+    @Override
     public ApplicationTemplateVO createOrUpdateApplication(ApplicationTemplateVO applicationTemplateVO) {
         final boolean updatingEntity = applicationTemplateRepository.countByName(applicationTemplateVO.getName()) > 0;
         ApplicationTemplate applicationTemplate = new ApplicationTemplate(applicationTemplateVO.getTemplateVersion(),
                 applicationTemplateVO.getCreatedBy(), applicationTemplateVO.getName(), applicationTemplateVO.getPorts(),
                 applicationTemplateVO.getVolumes(), applicationTemplateVO.getEnv(), applicationTemplateVO.getDescription(),
                 applicationTemplateVO.getBaseBranch() != null ? applicationTemplateVO.getBaseBranch() : "dev");
-
 
 
         var id = sequenceGeneratorService.generateSequence(ApplicationTemplate.SEQUENCE_NAME);
@@ -94,7 +109,7 @@ public class ApplicationServiceImpl implements ApplicationService {
             log = logService.writeLog("system", "Приложение создано", applicationTemplateVO.getName(), id);
         }
 
-        applicationTemplate.setTemplateVersion(sequenceGeneratorService.generateSequence("appliactionTemplate_"+applicationTemplate.getId()));
+        applicationTemplate.setTemplateVersion(sequenceGeneratorService.generateSequence("appliactionTemplate_" + applicationTemplate.getId()));
         return entityToView(applicationTemplateRepository.save(applicationTemplate), Collections.emptyList(), Collections.singletonList(log));
     }
 
