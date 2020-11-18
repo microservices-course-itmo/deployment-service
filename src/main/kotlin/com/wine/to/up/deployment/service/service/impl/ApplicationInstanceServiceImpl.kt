@@ -28,7 +28,6 @@ class ApplicationInstanceServiceImpl(
         val applicationTemplateVO = applicationDeployRequestWrapper.applicationTemplateVO
         val alias = applicationDeployRequestWrapper.alias
         val version = serviceVersionProvider.findFullTagName(applicationDeployRequestWrapper.version, applicationDeployRequestWrapper.applicationTemplateVO)
-        logger.info("Received version: ${version}")
         val id = sequenceGeneratorService.generateSequence(ApplicationInstance.SEQUENCE_NAME)
         val entity = ApplicationInstance(id, applicationTemplateVO.name, "${applicationTemplateVO.name}_${id}", applicationTemplateVO.id,
                 version, System.currentTimeMillis(), "system", ApplicationInstanceStatus.STARTING, "test url", alias)
@@ -36,8 +35,8 @@ class ApplicationInstanceServiceImpl(
         dockerClient.createServiceCmd(ServiceSpec().withName(entity.appId)
                 .withTaskTemplate(TaskSpec()
                         .withContainerSpec(ContainerSpec()
-                                //.withImage("${applicationTemplateVO.name}:${version}")
-                                .withImage("${applicationTemplateVO.name}:latest")
+                                .withImage("${applicationTemplateVO.name}:${version}")
+                                //.withImage("${applicationTemplateVO.name}:latest")
                                 .withEnv(applicationTemplateVO.env.map { "${it.name}: ${it.value}" })
                         )
                 )
