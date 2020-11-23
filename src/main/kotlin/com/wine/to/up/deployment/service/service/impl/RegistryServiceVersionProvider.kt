@@ -54,7 +54,7 @@ class RegistryServiceVersionProvider(
     private fun getTagsList(applicationName: String): List<String> {
         val settings = settingsService.settings
         val url = "${settings.registry}/v2/${applicationName}/tags/list"
-        val registryAnswer = MOCK_REGISTRY_RESPONSE//restTemplate.getForObject(url, String::class.java)
+        val registryAnswer = restTemplate.getForObject(url, String::class.java)
         val mapper = ObjectMapper()
         val map: Map<String, Any> = mapper.readValue(registryAnswer,
                 TypeFactory.defaultInstance().constructMapType(HashMap::class.java, String::class.java, Any::class.java)
