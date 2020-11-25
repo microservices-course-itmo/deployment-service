@@ -7,6 +7,7 @@ import com.wine.to.up.deployment.service.enums.ApplicationInstanceStatus
 import com.wine.to.up.deployment.service.service.ApplicationInstanceService
 import com.wine.to.up.deployment.service.service.DockerClientFactory
 import com.wine.to.up.deployment.service.service.SequenceGeneratorService
+import com.wine.to.up.deployment.service.service.SettingsService
 import com.wine.to.up.deployment.service.service.ServiceVersionProvider
 import com.wine.to.up.deployment.service.vo.ApplicationDeployRequestWrapper
 import com.wine.to.up.deployment.service.vo.ApplicationInstanceVO
@@ -19,6 +20,7 @@ class ApplicationInstanceServiceImpl(
         val applicationInstanceRepository: ApplicationInstanceRepository,
         val dockerClientFactory: DockerClientFactory,
         val sequenceGeneratorService: SequenceGeneratorService,
+        val settingsService: SettingsService
         val serviceVersionProvider: ServiceVersionProvider
 ) : ApplicationInstanceService {
 
@@ -35,7 +37,7 @@ class ApplicationInstanceServiceImpl(
         dockerClient.createServiceCmd(ServiceSpec().withName(entity.appId)
                 .withTaskTemplate(TaskSpec()
                         .withContainerSpec(ContainerSpec()
-                                .withImage("${applicationTemplateVO.name}:${version}")
+                                .withImage("${getRegistryAddress()}/${applicationTemplateVO.name}:${version}")
                                 //.withImage("${applicationTemplateVO.name}:latest")
                                 .withEnv(applicationTemplateVO.env.map { "${it.name}: ${it.value}" })
                         )
@@ -75,6 +77,11 @@ class ApplicationInstanceServiceImpl(
                     .url(it.url)
                     .build()
         }
+    }
+
+    private fun getRegistryAddress(): String {
+        val registry = settingsService.settings.registry
+        return registry.split("://")[1]
     }
 
     override fun getInstancesByTemplateName(templateName: String): List<ApplicationInstanceVO> {

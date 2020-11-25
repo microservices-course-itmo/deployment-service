@@ -5,6 +5,7 @@ import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode
 @JsonInclude(JsonInclude.Include.NON_NULL)
+
 public class SettingsVO {
     private final String dockerAddress;
     private final String registry;
