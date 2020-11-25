@@ -20,7 +20,7 @@ class ApplicationInstanceServiceImpl(
         val applicationInstanceRepository: ApplicationInstanceRepository,
         val dockerClientFactory: DockerClientFactory,
         val sequenceGeneratorService: SequenceGeneratorService,
-        val settingsService: SettingsService
+        val settingsService: SettingsService,
         val serviceVersionProvider: ServiceVersionProvider
 ) : ApplicationInstanceService {
 
