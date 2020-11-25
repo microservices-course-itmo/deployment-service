@@ -74,7 +74,7 @@ class ApplicationInstanceServiceImpl(
         }
     }
 
-    override fun getRegistryAddress(): String {
+    private fun getRegistryAddress(): String {
         val registry = settingsService.settings.registry
         return registry.split("://")[1]
     }
