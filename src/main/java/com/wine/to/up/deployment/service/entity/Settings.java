@@ -10,13 +10,26 @@ public class Settings {
     private String id = SINGLETON_ID;
     private String dockerAddress;
     private String registry;
+    private String unproxiedRegistry;
 
-    public Settings() {
-    }
-
-    public Settings(String dockerAddress, String registry) {
+    public Settings(final String id, final String dockerAddress, final String registry, final String unproxiedRegistry) {
+        this.id = id;
         this.dockerAddress = dockerAddress;
         this.registry = registry;
+        this.unproxiedRegistry = unproxiedRegistry;
+    }
+
+    public Settings(final String dockerAddress, final String registry, final String unproxiedRegistry) {
+        this.dockerAddress = dockerAddress;
+        this.registry = registry;
+        this.unproxiedRegistry = unproxiedRegistry;
+    }
+
+    public String getUnproxiedRegistry() {
+        return unproxiedRegistry;
+    }
+
+    public Settings() {
     }
 
     @Id

@@ -5,14 +5,15 @@ import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode
 @JsonInclude(JsonInclude.Include.NON_NULL)
-
 public class SettingsVO {
     private final String dockerAddress;
-    private final String registry;
+    private final String versionRegistry;
+    private final String imageRegistry;
 
-    public SettingsVO(String dockerAddress, String registry) {
+    private SettingsVO(String dockerAddress, String versionRegistry, final String imageRegistry) {
         this.dockerAddress = dockerAddress;
-        this.registry = registry;
+        this.versionRegistry = versionRegistry;
+        this.imageRegistry = imageRegistry;
     }
 
     public static SettingsVOBuilder builder() {
@@ -23,13 +24,18 @@ public class SettingsVO {
         return this.dockerAddress;
     }
 
-    public String getRegistry() {
-        return this.registry;
+    public String getVersionRegistry() {
+        return this.versionRegistry;
+    }
+
+    public String getImageRegistry() {
+        return imageRegistry;
     }
 
     public static class SettingsVOBuilder {
         private String dockerAddress;
-        private String registry;
+        private String versionRegistry;
+        private String imageRegistry;
 
         SettingsVOBuilder() {
         }
@@ -39,17 +45,19 @@ public class SettingsVO {
             return this;
         }
 
-        public SettingsVOBuilder registry(String registry) {
-            this.registry = registry;
+        public SettingsVOBuilder versionRegistry(String versionregistry) {
+            this.versionRegistry = versionregistry;
+            return this;
+        }
+
+        public SettingsVOBuilder imageRegistry(String imageRegistry) {
+            this.imageRegistry = imageRegistry;
             return this;
         }
 
         public SettingsVO build() {
-            return new SettingsVO(dockerAddress, registry);
+            return new SettingsVO(dockerAddress, versionRegistry, imageRegistry);
         }
 
-        public String toString() {
-            return "SettingsVO.SettingsVOBuilder(dockerAddress=" + this.dockerAddress + ", registry=" + this.registry + ")";
-        }
     }
 }

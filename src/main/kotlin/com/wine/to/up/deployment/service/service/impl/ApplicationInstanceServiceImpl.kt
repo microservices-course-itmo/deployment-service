@@ -83,8 +83,7 @@ class ApplicationInstanceServiceImpl(
     }
 
     private fun getRegistryAddress(): String {
-        val registry = settingsService.settings.registry
-        return registry.split("://")[1]
+        return settingsService.settings.imageRegistry
     }
 
     override fun getInstancesByTemplateName(templateName: String): List<ApplicationInstanceVO> {

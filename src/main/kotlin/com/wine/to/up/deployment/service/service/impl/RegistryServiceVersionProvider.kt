@@ -53,7 +53,7 @@ class RegistryServiceVersionProvider(
 
     private fun getTagsList(applicationName: String): List<String> {
         val settings = settingsService.settings
-        val url = "${settings.registry}/v2/${applicationName}/tags/list"
+        val url = "${settings.versionRegistry}/v2/${applicationName}/tags/list"
         val registryAnswer = restTemplate.getForObject(url, String::class.java)
         val mapper = ObjectMapper()
         val map: Map<String, Any> = mapper.readValue(registryAnswer,

@@ -22,7 +22,7 @@ public class SettingsServiceImpl implements SettingsService {
 
     @Override
     public SettingsVO setSettings(SettingsVO settings) {
-        final Settings settingsEntity = new Settings(settings.getDockerAddress(), settings.getRegistry());
+        final Settings settingsEntity = new Settings(settings.getDockerAddress(), settings.getVersionRegistry(), settings.getImageRegistry());
         return entityToView(
                 settingsRepository.save(settingsEntity)
         );
@@ -32,13 +32,14 @@ public class SettingsServiceImpl implements SettingsService {
     public SettingsVO getSettings() {
         return entityToView(settingsRepository
                 .findById(Settings.SINGLETON_ID)
-                .orElse(new Settings("unix:///var/run/docker.sock", "registry:5000")));
+                .orElse(new Settings("unix:///var/run/docker.sock", "registry:5000", "0.0.0.0:25001")));
     }
 
     private SettingsVO entityToView(Settings entity) {
         return SettingsVO.builder()
                 .dockerAddress(entity.getDockerAddress())
-                .registry(entity.getRegistry())
+                .versionRegistry(entity.getRegistry())
+                .imageRegistry(entity.getUnproxiedRegistry())
                 .build();
     }
 }
