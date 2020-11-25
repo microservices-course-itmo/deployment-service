@@ -8,8 +8,10 @@ import com.wine.to.up.deployment.service.service.ApplicationInstanceService
 import com.wine.to.up.deployment.service.service.DockerClientFactory
 import com.wine.to.up.deployment.service.service.SequenceGeneratorService
 import com.wine.to.up.deployment.service.service.SettingsService
+import com.wine.to.up.deployment.service.service.ServiceVersionProvider
 import com.wine.to.up.deployment.service.vo.ApplicationDeployRequestWrapper
 import com.wine.to.up.deployment.service.vo.ApplicationInstanceVO
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import javax.ws.rs.NotFoundException
 
@@ -19,20 +21,23 @@ class ApplicationInstanceServiceImpl(
         val dockerClientFactory: DockerClientFactory,
         val sequenceGeneratorService: SequenceGeneratorService,
         val settingsService: SettingsService
+        val serviceVersionProvider: ServiceVersionProvider
 ) : ApplicationInstanceService {
+
+    private val logger = LoggerFactory.getLogger(this::class.java)
 
     override fun deployInstance(applicationDeployRequestWrapper: ApplicationDeployRequestWrapper): ApplicationInstanceVO {
         val applicationTemplateVO = applicationDeployRequestWrapper.applicationTemplateVO
         val alias = applicationDeployRequestWrapper.alias
-        val version = applicationDeployRequestWrapper.version
+        val version = serviceVersionProvider.findFullTagName(applicationDeployRequestWrapper.version, applicationDeployRequestWrapper.applicationTemplateVO)
         val id = sequenceGeneratorService.generateSequence(ApplicationInstance.SEQUENCE_NAME)
         val entity = ApplicationInstance(id, applicationTemplateVO.name, "${applicationTemplateVO.name}_${id}", applicationTemplateVO.id,
                 version, System.currentTimeMillis(), "system", ApplicationInstanceStatus.STARTING, "test url", alias)
-        val dockerClient = dockerClientFactory.getDockerClient()
+        val dockerClient = dockerClientFactory.dockerClient
         dockerClient.createServiceCmd(ServiceSpec().withName(entity.appId)
                 .withTaskTemplate(TaskSpec()
                         .withContainerSpec(ContainerSpec()
-                                .withImage("${getRegistryAddress()}/${applicationTemplateVO.name}:${applicationTemplateVO.baseBranch}_${version}")
+                                .withImage("${getRegistryAddress()}/${applicationTemplateVO.name}:${version}")
                                 //.withImage("${applicationTemplateVO.name}:latest")
                                 .withEnv(applicationTemplateVO.env.map { "${it.name}: ${it.value}" })
                         )

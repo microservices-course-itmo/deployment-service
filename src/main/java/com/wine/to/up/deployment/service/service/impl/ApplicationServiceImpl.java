@@ -2,10 +2,7 @@ package com.wine.to.up.deployment.service.service.impl;
 
 import com.wine.to.up.deployment.service.dao.ApplicationTemplateRepository;
 import com.wine.to.up.deployment.service.entity.ApplicationTemplate;
-import com.wine.to.up.deployment.service.service.ApplicationInstanceService;
-import com.wine.to.up.deployment.service.service.ApplicationService;
-import com.wine.to.up.deployment.service.service.LogService;
-import com.wine.to.up.deployment.service.service.SequenceGeneratorService;
+import com.wine.to.up.deployment.service.service.*;
 import com.wine.to.up.deployment.service.vo.ApplicationInstanceVO;
 import com.wine.to.up.deployment.service.vo.ApplicationTemplateVO;
 import com.wine.to.up.deployment.service.vo.LogVO;
@@ -28,6 +25,13 @@ public class ApplicationServiceImpl implements ApplicationService {
     private SequenceGeneratorService sequenceGeneratorService;
 
     private LogService logService;
+
+    private ServiceVersionProvider serviceVersionProvider;
+
+    @Autowired
+    public void setServiceVersionProvider(final ServiceVersionProvider serviceVersionProvider) {
+        this.serviceVersionProvider = serviceVersionProvider;
+    }
 
     @Autowired
     private MongoTemplate mongoTemplate;
@@ -57,12 +61,13 @@ public class ApplicationServiceImpl implements ApplicationService {
         ApplicationTemplate applicationTemplate = applicationTemplateRepository
                 .findFirstByNameOrderByIdDesc(name)
                 .orElseThrow(NotFoundException::new);
+        var versions = serviceVersionProvider.findAllVersions(applicationTemplate);
 
         var instances = applicationInstanceService.getInstancesByTemplateName(name);
         //TODO limit should be applied automatically
         var logs = logService.logsByTemplate(applicationTemplate, 30);
 
-        return entityToView(applicationTemplate, instances, logs);
+        return entityToView(applicationTemplate, instances, logs, versions);
 
     }
 
@@ -72,11 +77,12 @@ public class ApplicationServiceImpl implements ApplicationService {
                 .findById(id)
                 .orElseThrow(NotFoundException::new);
 
+        var versions = serviceVersionProvider.findAllVersions(applicationTemplate);
         var instances = applicationInstanceService.getInstancesByTemplateId(applicationTemplate.getId());
         //TODO limit should be applied automatically
         var logs = logService.logsByTemplate(applicationTemplate, 30);
 
-        return entityToView(applicationTemplate, instances, logs);
+        return entityToView(applicationTemplate, instances, logs, versions);
     }
 
     @Override
@@ -100,6 +106,7 @@ public class ApplicationServiceImpl implements ApplicationService {
 
 
         var id = sequenceGeneratorService.generateSequence(ApplicationTemplate.SEQUENCE_NAME);
+        var versions = serviceVersionProvider.findAllVersions(applicationTemplate);
         applicationTemplate.setId(id);
 
         final LogVO log;
@@ -110,10 +117,10 @@ public class ApplicationServiceImpl implements ApplicationService {
         }
 
         applicationTemplate.setTemplateVersion(sequenceGeneratorService.generateSequence("appliactionTemplate_" + applicationTemplate.getId()));
-        return entityToView(applicationTemplateRepository.save(applicationTemplate), Collections.emptyList(), Collections.singletonList(log));
+        return entityToView(applicationTemplateRepository.save(applicationTemplate), Collections.emptyList(), Collections.singletonList(log), versions);
     }
 
-    public ApplicationTemplateVO entityToView(ApplicationTemplate entity, List<ApplicationInstanceVO> instances, List<LogVO> logs) {
+    public ApplicationTemplateVO entityToView(ApplicationTemplate entity, List<ApplicationInstanceVO> instances, List<LogVO> logs, List<String> versions) {
         return ApplicationTemplateVO.builder()
                 .alias("Alias")
                 .dateCreated(entity.getDateCreated())
@@ -122,7 +129,7 @@ public class ApplicationServiceImpl implements ApplicationService {
                 .instances(instances)
                 .logs(logs)
                 .templateVersion(entity.getTemplateVersion())
-                .versions(Collections.emptyList())
+                .versions(versions)
                 .ports(entity.getPortMappings())
                 .id(entity.getId())
                 .name(entity.getName())

@@ -32,7 +32,7 @@ public class SettingsServiceImpl implements SettingsService {
     public SettingsVO getSettings() {
         return entityToView(settingsRepository
                 .findById(Settings.SINGLETON_ID)
-                .orElse(new Settings()));
+                .orElse(new Settings("unix:///var/run/docker.sock", "registry:5000")));
     }
 
     private SettingsVO entityToView(Settings entity) {
