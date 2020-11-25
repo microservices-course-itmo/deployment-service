@@ -11,4 +11,5 @@ interface ApplicationInstanceService {
     fun getInstanceById(instanceId: Long): ApplicationInstanceVO
     fun deployInstance(applicationDeployRequestWrapper: ApplicationDeployRequestWrapper): ApplicationInstanceVO
     fun entitiesToVies(entities: List<ApplicationInstance>, forceStatus: ApplicationInstanceStatus? = null): List<ApplicationInstanceVO>
+    fun getRegistryAddress() : String
 }

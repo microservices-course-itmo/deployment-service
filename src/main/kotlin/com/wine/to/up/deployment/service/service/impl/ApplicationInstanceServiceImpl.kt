@@ -7,6 +7,7 @@ import com.wine.to.up.deployment.service.enums.ApplicationInstanceStatus
 import com.wine.to.up.deployment.service.service.ApplicationInstanceService
 import com.wine.to.up.deployment.service.service.DockerClientFactory
 import com.wine.to.up.deployment.service.service.SequenceGeneratorService
+import com.wine.to.up.deployment.service.service.SettingsService
 import com.wine.to.up.deployment.service.vo.ApplicationDeployRequestWrapper
 import com.wine.to.up.deployment.service.vo.ApplicationInstanceVO
 import org.springframework.stereotype.Service
@@ -16,7 +17,8 @@ import javax.ws.rs.NotFoundException
 class ApplicationInstanceServiceImpl(
         val applicationInstanceRepository: ApplicationInstanceRepository,
         val dockerClientFactory: DockerClientFactory,
-        val sequenceGeneratorService: SequenceGeneratorService
+        val sequenceGeneratorService: SequenceGeneratorService,
+        val settingsService: SettingsService
 ) : ApplicationInstanceService {
 
     override fun deployInstance(applicationDeployRequestWrapper: ApplicationDeployRequestWrapper): ApplicationInstanceVO {
@@ -30,7 +32,7 @@ class ApplicationInstanceServiceImpl(
         dockerClient.createServiceCmd(ServiceSpec().withName(entity.appId)
                 .withTaskTemplate(TaskSpec()
                         .withContainerSpec(ContainerSpec()
-                                .withImage("${applicationTemplateVO.name}:${applicationTemplateVO.baseBranch}_${version}")
+                                .withImage("${getRegistryAddress()}/${applicationTemplateVO.name}:${applicationTemplateVO.baseBranch}_${version}")
                                 //.withImage("${applicationTemplateVO.name}:latest")
                                 .withEnv(applicationTemplateVO.env.map { "${it.name}: ${it.value}" })
                         )
@@ -70,6 +72,11 @@ class ApplicationInstanceServiceImpl(
                     .url(it.url)
                     .build()
         }
+    }
+
+    override fun getRegistryAddress(): String {
+        val registry = settingsService.settings.registry
+        return registry.split("://")[1]
     }
 
     override fun getInstancesByTemplateName(templateName: String): List<ApplicationInstanceVO> {
