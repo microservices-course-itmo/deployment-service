@@ -4,11 +4,7 @@ import com.github.dockerjava.api.model.*
 import com.wine.to.up.deployment.service.dao.ApplicationInstanceRepository
 import com.wine.to.up.deployment.service.entity.ApplicationInstance
 import com.wine.to.up.deployment.service.enums.ApplicationInstanceStatus
-import com.wine.to.up.deployment.service.service.ApplicationInstanceService
-import com.wine.to.up.deployment.service.service.DockerClientFactory
-import com.wine.to.up.deployment.service.service.SequenceGeneratorService
-import com.wine.to.up.deployment.service.service.SettingsService
-import com.wine.to.up.deployment.service.service.ServiceVersionProvider
+import com.wine.to.up.deployment.service.service.*
 import com.wine.to.up.deployment.service.vo.ApplicationDeployRequestWrapper
 import com.wine.to.up.deployment.service.vo.ApplicationInstanceVO
 import org.slf4j.LoggerFactory
@@ -56,12 +52,19 @@ class ApplicationInstanceServiceImpl(
             } else {
                 dockerClientFactory.getDockerClient()
             }
-            val dockerService = dockerClient.inspectServiceCmd(it.appId).exec()
-            val dockerTasks = dockerClient.listTasksCmd().withNameFilter(dockerService.spec?.name).exec()
+            val dockerService = try {
+                dockerClient.inspectServiceCmd(it.appId).exec()
+            } catch (e: com.github.dockerjava.api.exception.NotFoundException) {
+                null
+            }
+            val dockerTasks = dockerClient?.listTasksCmd()?.withNameFilter(dockerService?.spec?.name)?.exec()
+                    ?: emptyList()
             val status = if (forceStatus != null) {
                 forceStatus
             } else if (dockerTasks.any { task -> task.status.state.value == "running" }) {
                 ApplicationInstanceStatus.RUNNING
+            } else if (dockerTasks.isEmpty()) {
+                ApplicationInstanceStatus.REMOVED
             } else {
                 ApplicationInstanceStatus.STOPPED
             }
