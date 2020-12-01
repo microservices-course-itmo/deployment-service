@@ -27,7 +27,7 @@ class ApplicationInstanceServiceImpl(
         val alias = applicationDeployRequestWrapper.alias
         val version = serviceVersionProvider.findFullTagName(applicationDeployRequestWrapper.version, applicationDeployRequestWrapper.applicationTemplateVO)
         val id = sequenceGeneratorService.generateSequence(ApplicationInstance.SEQUENCE_NAME)
-        val entity = ApplicationInstance(id, applicationTemplateVO.name, "${applicationTemplateVO.name}_${id}", applicationTemplateVO.id,
+        val entity = ApplicationInstance(id, applicationTemplateVO.name, "${applicationTemplateVO.name}", applicationTemplateVO.id,
                 version, System.currentTimeMillis(), "system", ApplicationInstanceStatus.STARTING, "test url", alias)
         val dockerClient = dockerClientFactory.dockerClient
         dockerClient.createServiceCmd(ServiceSpec().withName(entity.appId)
