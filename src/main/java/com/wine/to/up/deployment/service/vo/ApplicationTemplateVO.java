@@ -1,7 +1,7 @@
 package com.wine.to.up.deployment.service.vo;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.wine.to.up.deployment.service.entity.Environment;
+import com.wine.to.up.deployment.service.entity.EnvironmentVariable;
 import lombok.EqualsAndHashCode;
 
 import java.util.List;
@@ -15,7 +15,7 @@ public class ApplicationTemplateVO {
     private final String description;
     private final Long templateVersion;
     private final String alias;
-    private final List<Environment> env;
+    private final List<EnvironmentVariable> environmentVariables;
     private final List<String> volumes;
     private final Map<String, String> ports;
     private final List<String> versions;
@@ -25,13 +25,13 @@ public class ApplicationTemplateVO {
     private final Long dateCreated;
     private final String baseBranch;
 
-    private ApplicationTemplateVO(Long id, String name, String description, Long templateVersion, String alias, List<Environment> env, List<String> volumes, Map<String, String> ports, List<String> versions, List<ApplicationInstanceVO> instances, List<LogVO> logs, String createdBy, Long dateCreated, String baseBranch) {
+    private ApplicationTemplateVO(Long id, String name, String description, Long templateVersion, String alias, List<EnvironmentVariable> environmentVariables, List<String> volumes, Map<String, String> ports, List<String> versions, List<ApplicationInstanceVO> instances, List<LogVO> logs, String createdBy, Long dateCreated, String baseBranch) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.templateVersion = templateVersion;
         this.alias = alias;
-        this.env = env;
+        this.environmentVariables = environmentVariables;
         this.volumes = volumes;
         this.ports = ports;
         this.versions = versions;
@@ -70,8 +70,8 @@ public class ApplicationTemplateVO {
         return this.alias;
     }
 
-    public List<Environment> getEnv() {
-        return this.env;
+    public List<EnvironmentVariable> getEnvironmentVariables() {
+        return this.environmentVariables;
     }
 
     public List<String> getVolumes() {
@@ -102,13 +102,18 @@ public class ApplicationTemplateVO {
         return this.dateCreated;
     }
 
+    public List<EnvironmentVariable> addEnvironmentVariable(EnvironmentVariable environmentVariable) {
+        this.environmentVariables.add(environmentVariable);
+        return environmentVariables;
+    }
+
     public static class ApplicationTemplateVOBuilder {
         private Long id;
         private String name;
         private String description;
         private Long templateVersion;
         private String alias;
-        private List<Environment> env;
+        private List<EnvironmentVariable> environmentVariables;
         private List<String> volumes;
         private Map<String, String> ports;
         private List<String> versions;
@@ -151,8 +156,8 @@ public class ApplicationTemplateVO {
             return this;
         }
 
-        public ApplicationTemplateVOBuilder env(List<Environment> env) {
-            this.env = env;
+        public ApplicationTemplateVOBuilder environmentVariables(List<EnvironmentVariable> environmentVariables) {
+            this.environmentVariables = environmentVariables;
             return this;
         }
 
@@ -192,11 +197,17 @@ public class ApplicationTemplateVO {
         }
 
         public ApplicationTemplateVO build() {
-            return new ApplicationTemplateVO(id, name, description, templateVersion, alias, env, volumes, ports, versions, instances, logs, createdBy, dateCreated, baseBranch);
+            return new ApplicationTemplateVO(id, name, description, templateVersion, alias, environmentVariables,
+                    volumes, ports, versions, instances, logs, createdBy, dateCreated, baseBranch);
         }
 
         public String toString() {
-            return "ApplicationTemplateVO.ApplicationTemplateVOBuilder(id=" + this.id + ", name=" + this.name + ", description=" + this.description + ", lastRelease=" + this.templateVersion + ", alias=" + this.alias + ", env=" + this.env + ", volumes=" + this.volumes + ", ports=" + this.ports + ", versions=" + this.versions + ", instances=" + this.instances + ", logs=" + this.logs + ", createdBy=" + this.createdBy + ", dateCreated=" + this.dateCreated + ", baseBranch=" + this.baseBranch + ")";
+            return "ApplicationTemplateVO.ApplicationTemplateVOBuilder(id=" + this.id + ", name=" + this.name
+                    + ", description=" + this.description + ", lastRelease=" + this.templateVersion
+                    + ", alias=" + this.alias + ", env=" + this.environmentVariables + ", volumes=" + this.volumes
+                    + ", ports=" + this.ports + ", versions=" + this.versions + ", instances=" + this.instances
+                    + ", logs=" + this.logs + ", createdBy=" + this.createdBy + ", dateCreated="
+                    + this.dateCreated + ", baseBranch=" + this.baseBranch + ")";
         }
     }
 }

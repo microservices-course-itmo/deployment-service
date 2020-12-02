@@ -27,12 +27,14 @@ public class ApplicationTemplate {
     private String description;
     private Map<String, String> portMappings;
     private List<String> volumes;
-    private List<Environment> environmentVariables;
+    private List<EnvironmentVariable> environmentVariables;
     private String baseBranch;
     private Long dateCreated;
     private Long memoryLimits = 3000000000L;
 
-    public ApplicationTemplate(Long templateVersion, String createdBy, String name, Map<String, String> portMappings, List<String> volumes, List<Environment> environmentVariables, String description, String baseBranch) {
+    public ApplicationTemplate(Long templateVersion, String createdBy, String name, Map<String, String> portMappings,
+                               List<String> volumes, List<EnvironmentVariable> environmentVariables, String description,
+                               String baseBranch) {
         this.templateVersion = templateVersion;
         this.createdBy = createdBy;
         this.name = name;
@@ -72,7 +74,7 @@ public class ApplicationTemplate {
         return this.volumes;
     }
 
-    public List<Environment> getEnvironmentVariables() {
+    public List<EnvironmentVariable> getEnvironmentVariables() {
         return this.environmentVariables;
     }
 

@@ -39,7 +39,7 @@ class ApplicationInstanceServiceImpl(
                         .withContainerSpec(ContainerSpec()
                                 .withImage("${getRegistryAddress()}/${applicationTemplateVO.name}:${version}")
                                 //.withImage("${applicationTemplateVO.name}:latest")
-                                .withEnv(applicationTemplateVO.env.map { "${it.name}=${it.value}" })
+                                .withEnv(applicationTemplateVO.environmentVariables.map { "${it.name}=${it.value}" })
                         )
                 )
                 .withEndpointSpec(EndpointSpec()
