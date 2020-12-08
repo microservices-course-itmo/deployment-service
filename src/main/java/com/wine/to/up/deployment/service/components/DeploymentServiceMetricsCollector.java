@@ -13,7 +13,7 @@ public class DeploymentServiceMetricsCollector extends CommonMetricsCollector {
     }
 
     public DeploymentServiceMetricsCollector(String serviceName) {
-        super(serviceName);
+        super();
     }
 
 }

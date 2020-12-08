@@ -1,5 +1,7 @@
 package com.wine.to.up.deployment.service.controller;
 
+import com.github.dockerjava.api.model.Service;
+import com.wine.to.up.deployment.service.service.ApplicationImportService;
 import com.wine.to.up.deployment.service.service.DeploymentService;
 import com.wine.to.up.deployment.service.vo.ApplicationDeployRequest;
 import com.wine.to.up.deployment.service.vo.ApplicationInstanceVO;
@@ -16,6 +18,12 @@ import java.util.List;
 public class DeploymentController {
 
     private DeploymentService deploymentService;
+    private ApplicationImportService applicationImportService;
+
+    @Autowired
+    public void setApplicationImportService(ApplicationImportService applicationImportService) {
+        this.applicationImportService = applicationImportService;
+    }
 
     @Autowired
     public void setDeploymentService(final DeploymentService deploymentService) {
@@ -79,6 +87,11 @@ public class DeploymentController {
     @GetMapping("/settings/get")
     public SettingsVO getSettings() {
         return deploymentService.getSettings();
+    }
+
+    @GetMapping("/applicationInstances/getInstances")
+    public List<String> getInstances() {
+        return applicationImportService.importInstances();
     }
 
 }

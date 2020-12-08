@@ -100,7 +100,7 @@
         <dependency>
             <groupId>com.wine.to.up</groupId>
             <artifactId>service-common-lib</artifactId>
-            <version>${service.commonlib.version}</version>
+            <version>0.2.1-SNAPSHOT</version>
         </dependency>
     </dependencies>
 
