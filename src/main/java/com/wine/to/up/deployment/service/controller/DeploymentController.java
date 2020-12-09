@@ -1,6 +1,5 @@
 package com.wine.to.up.deployment.service.controller;
 
-import com.github.dockerjava.api.model.Service;
 import com.wine.to.up.deployment.service.service.ApplicationImportService;
 import com.wine.to.up.deployment.service.service.DeploymentService;
 import com.wine.to.up.deployment.service.vo.ApplicationDeployRequest;
@@ -89,9 +88,10 @@ public class DeploymentController {
         return deploymentService.getSettings();
     }
 
-    @GetMapping("/applicationInstances/getInstances")
-    public List<String> getInstances() {
-        return applicationImportService.importInstances();
+    @GetMapping("/applicationInstances/import")
+    public ResponseEntity<?> getInstances() {
+        return ResponseEntity.ok(applicationImportService.importInstances());
+
     }
 
 }
