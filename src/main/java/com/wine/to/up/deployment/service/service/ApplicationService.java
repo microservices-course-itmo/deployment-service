@@ -12,4 +12,6 @@ public interface ApplicationService {
     ApplicationTemplateVO createOrUpdateApplication(ApplicationTemplateVO applicationTemplateVO);
 
     List<String> getAllNames();
+
+    void removeEntity(String name);
 }

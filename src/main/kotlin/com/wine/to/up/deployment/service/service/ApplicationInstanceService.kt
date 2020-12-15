@@ -11,4 +11,7 @@ interface ApplicationInstanceService {
     fun getInstanceById(instanceId: Long): ApplicationInstanceVO
     fun deployInstance(applicationDeployRequestWrapper: ApplicationDeployRequestWrapper): ApplicationInstanceVO
     fun entitiesToVies(entities: List<ApplicationInstance>, forceStatus: ApplicationInstanceStatus? = null): List<ApplicationInstanceVO>
+    fun removeEntitiesByIds(ids: List<Long>)
+    fun removeEntities(entities: List<ApplicationInstance>)
+    fun viewsToEntities(views: List<ApplicationInstanceVO>): List<ApplicationInstance>
 }

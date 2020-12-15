@@ -86,6 +86,34 @@ class ApplicationInstanceServiceImpl(
         }
     }
 
+    override fun viewsToEntities(views: List<ApplicationInstanceVO>): List<ApplicationInstance> {
+        return views.map {
+            ApplicationInstance(
+                    it.id,
+                    it.templateId.toString(), //TODO remove from here
+                    it.appId,
+                    it.templateId,
+                    it.version,
+                    it.dateCreated,
+                    it.createdBy,
+                    it.status,
+                    it.url,
+                    it.alias
+            )
+        }
+    }
+
+    override fun removeEntitiesByIds(ids: List<Long>) {
+        removeEntities(ids.map { applicationInstanceRepository.findById(it).orElseThrow() }) // TODO Response status exception here
+    }
+
+    override fun removeEntities(entities: List<ApplicationInstance>) {
+        entities.forEach {
+            dockerClientFactory.dockerClient.removeServiceCmd(it.appId)
+            applicationInstanceRepository.deleteById(it.id)
+        }
+    }
+
     private fun getRegistryAddress(): String {
         return settingsService.settings.imageRegistry
     }
