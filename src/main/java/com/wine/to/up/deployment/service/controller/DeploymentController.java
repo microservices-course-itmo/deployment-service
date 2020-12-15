@@ -78,7 +78,7 @@ public class DeploymentController {
         return deploymentService.createOrUpdateApplicationTemplate(applicationTemplateVO);
     }
 
-    @DeleteMapping("/application/get/byName/{name}")
+    @DeleteMapping("/application/delete/byName/{name}")
     public void deleteApplicationTemplate(@PathVariable String name) {
         applicationTemplateService.removeEntity(name);
     }
