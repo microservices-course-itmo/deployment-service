@@ -5,6 +5,6 @@ import com.github.dockerjava.api.model.Service;
 import java.util.List;
 
 public interface ApplicationImportService {
-    List<String> importInstances();
+    void importInstances();
 
 }

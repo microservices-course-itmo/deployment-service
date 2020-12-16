@@ -17,10 +17,9 @@ public class DockerClientFactory {
     }
 
     public DockerClient getDockerClient() {
-        return  DockerClientBuilder.getInstance().build();
-        /*return DockerClientBuilder.getInstance(DefaultDockerClientConfig.createDefaultConfigBuilder()
+        return DockerClientBuilder.getInstance(DefaultDockerClientConfig.createDefaultConfigBuilder()
                 .withDockerHost(settingsService.getSettings().getDockerAddress())
                 .build()
-        ).build();*/
+        ).build();
     }
 }

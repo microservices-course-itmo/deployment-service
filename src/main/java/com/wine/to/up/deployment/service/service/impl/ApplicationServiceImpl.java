@@ -116,7 +116,7 @@ public class ApplicationServiceImpl implements ApplicationService {
             log = logService.writeLog("system", "Приложение создано", applicationTemplateVO.getName(), id);
         }
 
-        applicationTemplate.setTemplateVersion(sequenceGeneratorService.generateSequence("applicationTemplate_" + applicationTemplate.getId()));
+        applicationTemplate.setTemplateVersion(sequenceGeneratorService.generateSequence("applicationTemplate_" + applicationTemplate.getName()));
         return entityToView(applicationTemplateRepository.save(applicationTemplate), Collections.emptyList(), Collections.singletonList(log), versions);
     }
 

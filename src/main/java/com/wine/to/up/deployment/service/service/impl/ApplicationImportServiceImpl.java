@@ -13,9 +13,11 @@ import com.wine.to.up.deployment.service.vo.ApplicationTemplateVO;
 
 import javax.ws.rs.NotFoundException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @org.springframework.stereotype.Service
 public class ApplicationImportServiceImpl implements ApplicationImportService {
+
     private final ApplicationTemplateRepository applicationTemplateRepository;
     private final ApplicationInstanceService applicationInstanceService;
     private final SettingsService settingsService;
@@ -37,34 +39,42 @@ public class ApplicationImportServiceImpl implements ApplicationImportService {
         this.applicationService = applicationService;
     }
 
+    @Override
+    public void importInstances() {
+        List<Service> instances = getInstances();
+        List<ApplicationTemplateVO> templatesLastVersions = getLastVersionsOfTemplates();
+        Set<String> recreatedTemplatesNames = new HashSet<>();
+
+        for (Service instance : instances) {
+            String image = instance.getSpec().getTaskTemplate().getContainerSpec().getImage();
+
+            if (isMicroService(image)) {
+                String templateName = getTemplateName(image);
+                if (!(isApplicationTemplateExists(templateName)) || !(isApplicationInstanceExists(instance.getSpec().getName()))) {
+                    createApplicationTemplate(instance, templateName);
+                    createApplicationInstance(instance, templateName);
+                    recreatedTemplatesNames.add(templateName);
+                }
+            }
+        }
+        setLastTemplates(recreatedTemplatesNames, templatesLastVersions);
+    }
+
     private List<Service> getInstances() {
         return applicationInstanceService.getInstances();
     }
 
-    @Override
-    public List<String> importInstances() {
-        List<Service> instances = getInstances();
-        List<String> list = new ArrayList<>();
-        for (Service instance : instances) {
-            String templateName = getTemplateName(instance.getSpec().getName());
+    private List<ApplicationTemplateVO> getLastVersionsOfTemplates() {
+        return applicationService.getAllNames()
+                .stream()
+                .map(applicationService::getApplicationTemplate)
+                .collect(Collectors.toList());
+    }
 
-            String image = instance.getSpec().getTaskTemplate().getContainerSpec().getImage();
-
-            if (isMicroService(image)) {
-                if (!(isApplicationTemplateExists(templateName))) {
-                    createApplicationTemplate(instance, templateName);
-                    createApplicationInstance(instance, templateName);
-                    list.add(templateName + " New Template");
-                }
-                else {
-                    if (!(isApplicationInstanceExists(instance.getSpec().getName()))) {
-                        createApplicationInstance(instance, templateName);
-                        list.add(templateName + " New Instance");
-                    }
-                }
-            }
-        }
-        return list;
+    private void setLastTemplates(Set<String> recreatedTemplatesNames, List<ApplicationTemplateVO> templates) {
+        templates.stream()
+                .filter(it -> recreatedTemplatesNames.contains(it.getName()))
+                .forEach(applicationService::createOrUpdateApplication);
     }
 
     private boolean isMicroService(String image) {
@@ -72,9 +82,7 @@ public class ApplicationImportServiceImpl implements ApplicationImportService {
             return false;
         if (image.indexOf('/') != -1) {
             String address = image.substring(0, image.indexOf('/'));
-            return address.equals("registry:5000")
-                    || address.equals("0.0.0.0:25001")
-                    || address.equals(settingsService.getSettings().getImageRegistry());
+            return address.equals(settingsService.getSettings().getImageRegistry());
         }
         return false;
     }
@@ -139,11 +147,9 @@ public class ApplicationImportServiceImpl implements ApplicationImportService {
     }
 
     private String getTemplateName(String instanceName) {
-        if (instanceName.indexOf('_') != -1) {
-            return instanceName.substring(0, instanceName.indexOf('_'));
-        }
-        return instanceName;
+        return instanceName.split("/")[1].split(":")[0];
     }
+
     private Map<String, String> getPorts(List<PortConfig> portConfigList) {
         if (portConfigList == null)
             return Collections.emptyMap();
