@@ -5,6 +5,7 @@ import com.github.dockerjava.api.model.Service;
 import com.github.dockerjava.api.model.ServiceModeConfig;
 import com.github.dockerjava.api.model.ServiceReplicatedModeOptions;
 import com.github.dockerjava.api.model.ServiceSpec;
+import com.wine.to.up.deployment.service.service.ApplicationInstanceManager;
 import com.wine.to.up.deployment.service.service.DockerClientFactory;
 import com.wine.to.up.deployment.service.vo.ApplicationInstanceVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.Objects;
 
 @org.springframework.stereotype.Service
-public class ApplicationInstanceManagerImpl {
+public class ApplicationInstanceManagerImpl implements ApplicationInstanceManager {
 
     private DockerClientFactory dockerClientFactory;
 
@@ -41,7 +42,10 @@ public class ApplicationInstanceManagerImpl {
 
     public void stopApp(ApplicationInstanceVO applicationInstanceVO){
         DockerClient dockerClient = dockerClientFactory.getDockerClient();
-        dockerClient.removeServiceCmd(applicationInstanceVO.getAppId());
+        Service dockerService = dockerClient.inspectServiceCmd(applicationInstanceVO.getAppId()).exec();
+        ServiceSpec serviceSpec = new ServiceSpec();
+        ServiceSpec betterView = dockerService.getSpec();
+        Objects.requireNonNull(betterView.getMode().getReplicated()).withReplicas(0);
     }
 
     public void restartApp(ApplicationInstanceVO applicationInstanceVO) {
