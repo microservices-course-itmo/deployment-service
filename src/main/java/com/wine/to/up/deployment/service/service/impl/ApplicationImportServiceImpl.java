@@ -6,7 +6,7 @@ import com.wine.to.up.deployment.service.dao.ApplicationInstanceRepository;
 import com.wine.to.up.deployment.service.dao.ApplicationTemplateRepository;
 import com.wine.to.up.deployment.service.entity.ApplicationInstance;
 import com.wine.to.up.deployment.service.entity.ApplicationTemplate;
-import com.wine.to.up.deployment.service.entity.Environment;
+import com.wine.to.up.deployment.service.entity.EnvironmentVariable;
 import com.wine.to.up.deployment.service.enums.ApplicationInstanceStatus;
 import com.wine.to.up.deployment.service.service.*;
 import com.wine.to.up.deployment.service.vo.ApplicationTemplateVO;
@@ -101,7 +101,7 @@ public class ApplicationImportServiceImpl implements ApplicationImportService {
                 .getEndpointSpec()
                 .getPorts());
 
-        List<Environment> environmentVariables = getEnvironmentVariables(instance
+        List<EnvironmentVariable> environmentVariables = getEnvironmentVariables(instance
                 .getSpec()
                 .getTaskTemplate()
                 .getContainerSpec()
@@ -111,7 +111,7 @@ public class ApplicationImportServiceImpl implements ApplicationImportService {
                 .alias("")
                 .createdBy("system")
                 .description("Imported " + templateName)
-                .env(environmentVariables)
+                .environmentVariables(environmentVariables)
                 .ports(ports)
                 .volumes(Collections.emptyList())
                 .name(templateName)
@@ -160,13 +160,13 @@ public class ApplicationImportServiceImpl implements ApplicationImportService {
         return ports;
     }
 
-    private List<Environment> getEnvironmentVariables(List<String> envVars) {
+    private List<EnvironmentVariable> getEnvironmentVariables(List<String> envVars) {
         if (envVars == null)
             return Collections.emptyList();
-        List<Environment> environmentVariables = new ArrayList<>();
+        List<EnvironmentVariable> environmentVariables = new ArrayList<>();
         for (String envVar : envVars) {
             int delimiterPosition = envVar.indexOf('=');
-            environmentVariables.add(new Environment(envVar.substring(0, delimiterPosition),
+            environmentVariables.add(new EnvironmentVariable(envVar.substring(0, delimiterPosition),
                     envVar.substring(delimiterPosition + 1)));
         }
         return environmentVariables;
