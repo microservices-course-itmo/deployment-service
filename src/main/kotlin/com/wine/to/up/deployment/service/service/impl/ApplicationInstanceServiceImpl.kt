@@ -11,7 +11,6 @@ import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import java.util.*
 import javax.ws.rs.NotFoundException
-import kotlin.collections.ArrayList
 
 @Service("applicationInstanceService")
 class ApplicationInstanceServiceImpl(
@@ -45,7 +44,7 @@ class ApplicationInstanceServiceImpl(
                         .withContainerSpec(ContainerSpec()
                                 .withImage("${getRegistryAddress()}/${applicationTemplateVO.name}:${version}")
                                 //.withImage("${applicationTemplateVO.name}:latest")
-                                .withEnv(applicationTemplateVO.environmentVariables.map { "${it.name}=${it.value}" })
+                                .withEnv(applicationTemplateVO.env.map { "${it.name}=${it.value}" })
                         )
                 )
                 .withEndpointSpec(EndpointSpec()

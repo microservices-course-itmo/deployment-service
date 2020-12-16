@@ -166,8 +166,10 @@ public class ApplicationImportServiceImpl implements ApplicationImportService {
         List<EnvironmentVariable> environmentVariables = new ArrayList<>();
         for (String envVar : envVars) {
             int delimiterPosition = envVar.indexOf('=');
-            environmentVariables.add(new EnvironmentVariable(envVar.substring(0, delimiterPosition),
-                    envVar.substring(delimiterPosition + 1)));
+            if (delimiterPosition != -1) {
+                environmentVariables.add(new EnvironmentVariable(envVar.substring(0, delimiterPosition),
+                        envVar.substring(delimiterPosition + 1)));
+            }
         }
         return environmentVariables;
     }
