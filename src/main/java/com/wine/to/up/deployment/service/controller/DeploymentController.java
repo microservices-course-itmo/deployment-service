@@ -119,8 +119,8 @@ public class DeploymentController {
 
     @GetMapping("/applicationInstances/import")
     public ResponseEntity<?> getInstances() {
-        return ResponseEntity.ok(applicationImportService.importInstances());
-
+        applicationImportService.importInstances();
+        return ResponseEntity.ok().build();
     }
 
 }
