@@ -2,6 +2,8 @@ package com.wine.to.up.deployment.service.service.impl;
 
 import com.wine.to.up.deployment.service.dao.ApplicationTemplateRepository;
 import com.wine.to.up.deployment.service.entity.ApplicationTemplate;
+import com.wine.to.up.deployment.service.entity.EnvironmentVariable;
+import com.wine.to.up.deployment.service.enums.StandardEnvironmentVariable;
 import com.wine.to.up.deployment.service.service.*;
 import com.wine.to.up.deployment.service.vo.ApplicationInstanceVO;
 import com.wine.to.up.deployment.service.vo.ApplicationTemplateVO;
@@ -14,6 +16,7 @@ import javax.ws.rs.NotFoundException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ApplicationServiceImpl implements ApplicationService {
@@ -95,13 +98,29 @@ public class ApplicationServiceImpl implements ApplicationService {
         return names;
     }
 
+    @Override
+    public void removeEntity(String name) {
+        final var entities = applicationTemplateRepository.findAllByName(name);
+        final var instances = applicationInstanceService.getInstancesByTemplateName(name);
+        applicationInstanceService.removeEntities(
+                applicationInstanceService.viewsToEntities(instances)
+        );
+        entities.forEach((it) -> {
+            applicationTemplateRepository.deleteById(it.getId());
+        });
+    }
+
 
     @Override
     public ApplicationTemplateVO createOrUpdateApplication(ApplicationTemplateVO applicationTemplateVO) {
         final boolean updatingEntity = applicationTemplateRepository.countByName(applicationTemplateVO.getName()) > 0;
+
+        populateStandardEnvVars(applicationTemplateVO);
+
         ApplicationTemplate applicationTemplate = new ApplicationTemplate(applicationTemplateVO.getTemplateVersion(),
                 applicationTemplateVO.getCreatedBy(), applicationTemplateVO.getName(), applicationTemplateVO.getPorts(),
-                applicationTemplateVO.getVolumes(), applicationTemplateVO.getEnv(), applicationTemplateVO.getDescription(),
+                applicationTemplateVO.getVolumes(), applicationTemplateVO.getEnvironmentVariables(),
+                applicationTemplateVO.getDescription(),
                 applicationTemplateVO.getBaseBranch() != null ? applicationTemplateVO.getBaseBranch() : "dev");
 
 
@@ -125,7 +144,7 @@ public class ApplicationServiceImpl implements ApplicationService {
                 .alias("Alias")
                 .dateCreated(entity.getDateCreated())
                 .description(entity.getDescription())
-                .env(entity.getEnvironmentVariables())
+                .environmentVariables(entity.getEnvironmentVariables())
                 .instances(instances)
                 .logs(logs)
                 .templateVersion(entity.getTemplateVersion())
@@ -138,4 +157,16 @@ public class ApplicationServiceImpl implements ApplicationService {
                 .baseBranch(entity.getBaseBranch())
                 .build();
     }
+
+    private void populateStandardEnvVars(ApplicationTemplateVO applicationTemplateVO) {
+        List<String> varNamesInTemplate = applicationTemplateVO.getEnvironmentVariables().stream()
+                .map(EnvironmentVariable::getName).collect(Collectors.toList());
+
+        for (StandardEnvironmentVariable  standardVar: StandardEnvironmentVariable.values()) {
+            if (!varNamesInTemplate.contains(standardVar.getEnvironmentVariable().getName())) {
+                applicationTemplateVO.addEnvironmentVariable(standardVar.getEnvironmentVariable());
+            }
+        }
+    }
+
 }

@@ -1,6 +1,8 @@
 package com.wine.to.up.deployment.service.controller;
 
 import com.wine.to.up.deployment.service.service.ApplicationImportService;
+import com.wine.to.up.deployment.service.service.ApplicationInstanceService;
+import com.wine.to.up.deployment.service.service.ApplicationService;
 import com.wine.to.up.deployment.service.service.DeploymentService;
 import com.wine.to.up.deployment.service.vo.ApplicationDeployRequest;
 import com.wine.to.up.deployment.service.vo.ApplicationInstanceVO;
@@ -11,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.ws.rs.NotFoundException;
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -24,9 +27,23 @@ public class DeploymentController {
         this.applicationImportService = applicationImportService;
     }
 
+    private ApplicationInstanceService applicationInstanceService;
+
+    private ApplicationService applicationTemplateService;
+
     @Autowired
     public void setDeploymentService(final DeploymentService deploymentService) {
         this.deploymentService = deploymentService;
+    }
+
+    @Autowired
+    public void setApplicationInstanceService(final ApplicationInstanceService applicationInstanceService) {
+        this.applicationInstanceService = applicationInstanceService;
+    }
+
+    @Autowired
+    public void setApplicationTemplateService(final ApplicationService applicationTemplateService) {
+        this.applicationTemplateService = applicationTemplateService;
     }
 
     @GetMapping("/applicationInstances/getInstances/byName/{templateName}")
@@ -68,16 +85,26 @@ public class DeploymentController {
         return deploymentService.createOrUpdateApplicationTemplate(applicationTemplateVO);
     }
 
+    @DeleteMapping("/application/delete/byName/{name}")
+    public void deleteApplicationTemplate(@PathVariable String name) {
+        applicationTemplateService.removeEntity(name);
+    }
+
     @PostMapping("/applicationInstance/deploy")
     public ApplicationInstanceVO deployApplicationInstance(@RequestBody ApplicationDeployRequest applicationDeployRequest) {
         return deploymentService.deployApplicationInstance(applicationDeployRequest);
+    }
+
+    @DeleteMapping("/application/delete/byId/{id}")
+    public void deleteApplicationInstance(@PathVariable Long id) {
+        applicationInstanceService.removeEntitiesByIds(Collections.singletonList(id));
     }
 
     @GetMapping("/application/names")
     public List<String> getAllNames() {
         return deploymentService.getAllNames();
     }
-  
+
     @PostMapping("/settings/set")
     public SettingsVO setSettings(@RequestBody SettingsVO settings) {
         return deploymentService.setSettings(settings);

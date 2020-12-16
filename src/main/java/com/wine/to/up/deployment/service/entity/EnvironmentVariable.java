@@ -1,15 +1,15 @@
 package com.wine.to.up.deployment.service.entity;
 
-public class Environment {
+public class EnvironmentVariable {
     private String name;
     private String value;
 
-    public Environment(String name, String value) {
+    public EnvironmentVariable(String name, String value) {
         this.name = name;
         this.value = value;
     }
 
-    public Environment() {
+    public EnvironmentVariable() {
     }
 
     public String getName() {
