@@ -119,7 +119,7 @@ public class ApplicationServiceImpl implements ApplicationService {
 
         ApplicationTemplate applicationTemplate = new ApplicationTemplate(applicationTemplateVO.getTemplateVersion(),
                 applicationTemplateVO.getCreatedBy(), applicationTemplateVO.getName(), applicationTemplateVO.getPorts(),
-                applicationTemplateVO.getVolumes(), applicationTemplateVO.getEnvironmentVariables(),
+                applicationTemplateVO.getVolumes(), applicationTemplateVO.getEnv(),
                 applicationTemplateVO.getDescription(),
                 applicationTemplateVO.getBaseBranch() != null ? applicationTemplateVO.getBaseBranch() : "dev");
 
@@ -135,7 +135,7 @@ public class ApplicationServiceImpl implements ApplicationService {
             log = logService.writeLog("system", "Приложение создано", applicationTemplateVO.getName(), id);
         }
 
-        applicationTemplate.setTemplateVersion(sequenceGeneratorService.generateSequence("appliactionTemplate_" + applicationTemplate.getId()));
+        applicationTemplate.setTemplateVersion(sequenceGeneratorService.generateSequence("applicationTemplate_" + applicationTemplate.getName()));
         return entityToView(applicationTemplateRepository.save(applicationTemplate), Collections.emptyList(), Collections.singletonList(log), versions);
     }
 
@@ -159,7 +159,7 @@ public class ApplicationServiceImpl implements ApplicationService {
     }
 
     private void populateStandardEnvVars(ApplicationTemplateVO applicationTemplateVO) {
-        List<String> varNamesInTemplate = applicationTemplateVO.getEnvironmentVariables().stream()
+        List<String> varNamesInTemplate = applicationTemplateVO.getEnv().stream()
                 .map(EnvironmentVariable::getName).collect(Collectors.toList());
 
         for (StandardEnvironmentVariable  standardVar: StandardEnvironmentVariable.values()) {

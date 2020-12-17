@@ -1,5 +1,6 @@
 package com.wine.to.up.deployment.service.service
 
+import com.github.dockerjava.api.model.Service
 import com.wine.to.up.deployment.service.entity.ApplicationInstance
 import com.wine.to.up.deployment.service.enums.ApplicationInstanceStatus
 import com.wine.to.up.deployment.service.vo.ApplicationDeployRequestWrapper
@@ -11,6 +12,7 @@ interface ApplicationInstanceService {
     fun getInstanceById(instanceId: Long): ApplicationInstanceVO
     fun deployInstance(applicationDeployRequestWrapper: ApplicationDeployRequestWrapper): ApplicationInstanceVO
     fun entitiesToVies(entities: List<ApplicationInstance>, forceStatus: ApplicationInstanceStatus? = null): List<ApplicationInstanceVO>
+    fun getInstances() : List<Service>
     fun removeEntitiesByIds(ids: List<Long>)
     fun removeEntities(entities: List<ApplicationInstance>)
     fun viewsToEntities(views: List<ApplicationInstanceVO>): List<ApplicationInstance>
