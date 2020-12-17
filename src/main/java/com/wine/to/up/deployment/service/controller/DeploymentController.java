@@ -1,6 +1,8 @@
 package com.wine.to.up.deployment.service.controller;
 
 import com.wine.to.up.deployment.service.service.ApplicationImportService;
+import com.wine.to.up.deployment.service.service.ApplicationInstanceManager;
+import com.wine.to.up.deployment.service.service.impl.ApplicationInstanceManagerImpl;
 import com.wine.to.up.deployment.service.service.ApplicationInstanceService;
 import com.wine.to.up.deployment.service.service.ApplicationService;
 import com.wine.to.up.deployment.service.service.DeploymentService;
@@ -28,6 +30,7 @@ public class DeploymentController {
     }
 
     private ApplicationInstanceService applicationInstanceService;
+    private ApplicationInstanceManager applicationInstanceManager;
 
     private ApplicationService applicationTemplateService;
 
@@ -100,6 +103,22 @@ public class DeploymentController {
         applicationInstanceService.removeEntitiesByIds(Collections.singletonList(id));
     }
 
+    @PostMapping("/applicationInstance/stop/{id}")
+    public void stopApplicationInstance(@PathVariable Long id)   {
+        applicationInstanceManager.stopApp(this.deploymentService.getSingleInstanceById(id));
+    }
+
+    @PostMapping("/applicationInstance/start/{id}")
+    public void startApplicationInstance(@PathVariable Long id)   {
+        applicationInstanceManager.startApp(this.deploymentService.getSingleInstanceById(id));
+
+    }
+
+    @PostMapping("/applicationInstance/restart/{id}")
+    public void restartApplicationInstance(@PathVariable Long id)   {
+        applicationInstanceManager.restartApp(this.deploymentService.getSingleInstanceById(id));
+
+    }
     @GetMapping("/application/names")
     public List<String> getAllNames() {
         return deploymentService.getAllNames();
