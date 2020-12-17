@@ -22,6 +22,7 @@ public class ApplicationInstanceManagerImpl implements ApplicationInstanceManage
         this.dockerClientFactory = dockerClientFactory;
     }
 
+    @Override
     public void startApp(ApplicationInstanceVO applicationInstanceVO) {
         DockerClient dockerClient = dockerClientFactory.getDockerClient();
         Service dockerService = dockerClient.inspectServiceCmd(applicationInstanceVO.getAppId()).exec();
@@ -40,14 +41,22 @@ public class ApplicationInstanceManagerImpl implements ApplicationInstanceManage
         }
     }
 
+    @Override
     public void stopApp(ApplicationInstanceVO applicationInstanceVO){
         DockerClient dockerClient = dockerClientFactory.getDockerClient();
         Service dockerService = dockerClient.inspectServiceCmd(applicationInstanceVO.getAppId()).exec();
-        ServiceSpec serviceSpec = new ServiceSpec();
         ServiceSpec betterView = dockerService.getSpec();
+        ServiceModeConfig serviceModeConfig = betterView.getMode();
+        ServiceReplicatedModeOptions serviceReplicatedModeOptions = Objects.requireNonNull(betterView.getMode().getReplicated()).withReplicas(1);
+        serviceModeConfig = serviceModeConfig.withReplicated(serviceReplicatedModeOptions);
+        ServiceSpec serviceSpec = new ServiceSpec().withMode(serviceModeConfig);
         Objects.requireNonNull(betterView.getMode().getReplicated()).withReplicas(0);
+        if (dockerService.getVersion() != null) {
+            dockerClient.updateServiceCmd(dockerService.getId(), serviceSpec).withVersion(dockerService.getVersion().getIndex()).exec();
+        }
     }
 
+    @Override
     public void restartApp(ApplicationInstanceVO applicationInstanceVO) {
         stopApp(applicationInstanceVO);
         startApp(applicationInstanceVO);

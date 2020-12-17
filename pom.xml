@@ -96,11 +96,11 @@
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-stdlib-jdk8</artifactId>
         </dependency>
-        <!-- Required: commonlib. Includes metrics, kafka etc-->
+        
         <dependency>
             <groupId>com.wine.to.up</groupId>
             <artifactId>service-common-lib</artifactId>
-            <version>${service.commonlib.version}</version>
+            <version>0.2.1-SNAPSHOT</version>
         </dependency>
     </dependencies>
 

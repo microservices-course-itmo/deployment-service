@@ -96,18 +96,18 @@ public class DeploymentController {
         applicationInstanceService.removeEntitiesByIds(Collections.singletonList(id));
     }
 
-    @PostMapping("/application/stop/{id}")
+    @PostMapping("/applicationInstance/stop/{id}")
     public void stopApplicationInstance(@PathVariable Long id)   {
         applicationInstanceManager.stopApp(this.deploymentService.getSingleInstanceById(id));
     }
 
-    @PostMapping("/application/start/{id}")
+    @PostMapping("/applicationInstance/start/{id}")
     public void startApplicationInstance(@PathVariable Long id)   {
         applicationInstanceManager.startApp(this.deploymentService.getSingleInstanceById(id));
 
     }
 
-    @PostMapping("/application/restart/{id}")
+    @PostMapping("/applicationInstance/restart/{id}")
     public void restartApplicationInstance(@PathVariable Long id)   {
         applicationInstanceManager.restartApp(this.deploymentService.getSingleInstanceById(id));
 
