@@ -12,4 +12,6 @@ public interface ApplicationInstanceRepository extends MongoRepository<Applicati
     List<ApplicationInstance> findByTemplateName(String templateName);
 
     List<ApplicationInstance> findByTemplateId(Long templateId);
+
+    Integer countByAppId(String appId);
 }

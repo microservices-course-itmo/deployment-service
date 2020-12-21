@@ -39,7 +39,7 @@ class ApplicationInstanceServiceImpl(
                         .withContainerSpec(ContainerSpec()
                                 .withImage("${getRegistryAddress()}/${applicationTemplateVO.name}:${version}")
                                 //.withImage("${applicationTemplateVO.name}:latest")
-                                .withEnv(applicationTemplateVO.environmentVariables.map { "${it.name}=${it.value}" })
+                                .withEnv(applicationTemplateVO.env.map { "${it.name}=${it.value}" })
                         )
                 )
                 .withEndpointSpec(EndpointSpec()
@@ -131,5 +131,10 @@ class ApplicationInstanceServiceImpl(
     override fun getInstanceById(instanceId: Long): ApplicationInstanceVO {
         return entitiesToVies(listOf(applicationInstanceRepository.findById(instanceId)
                 .orElseThrow { NotFoundException() })).first()
+    }
+
+    override fun getInstances(): List<com.github.dockerjava.api.model.Service> {
+
+        return dockerClientFactory.dockerClient.listServicesCmd().exec().toList()
     }
 }
