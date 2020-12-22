@@ -78,7 +78,7 @@ public class DeploymentController {
         return deploymentService.createOrUpdateApplicationTemplate(applicationTemplateVO);
     }
 
-    @DeleteMapping("/application/get/byName/{name}")
+    @DeleteMapping("/application/delete/byName/{name}")
     public void deleteApplicationTemplate(@PathVariable String name) {
         applicationTemplateService.removeEntity(name);
     }
@@ -88,7 +88,7 @@ public class DeploymentController {
         return deploymentService.deployApplicationInstance(applicationDeployRequest);
     }
 
-    @DeleteMapping("/application/delete/byId/{id}")
+    @DeleteMapping("/applicationInstance/delete/byId/{id}")
     public void deleteApplicationInstance(@PathVariable Long id) {
         applicationInstanceService.removeEntitiesByIds(Collections.singletonList(id));
     }
