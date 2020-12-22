@@ -9,6 +9,7 @@ import com.wine.to.up.deployment.service.vo.ApplicationInstanceVO;
 import com.wine.to.up.deployment.service.vo.ApplicationTemplateVO;
 import com.wine.to.up.deployment.service.vo.SettingsVO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,6 +17,7 @@ import javax.ws.rs.NotFoundException;
 import java.util.Collections;
 import java.util.List;
 
+@CrossOrigin
 @RestController
 public class DeploymentController {
 
@@ -47,78 +49,80 @@ public class DeploymentController {
     }
 
     @GetMapping("/applicationInstances/getInstances/byName/{templateName}")
-    public List<ApplicationInstanceVO> multipleInstancesByApplicationName(
+    public ResponseEntity<List<ApplicationInstanceVO>> multipleInstancesByApplicationName(
             @PathVariable String templateName) {
-        return this.deploymentService.getInstancesByAppName(templateName);
+        return ResponseEntity.ok().header(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "*").body(this.deploymentService.getInstancesByAppName(templateName));
     }
 
     @GetMapping("/applicationInstances/getSingleInstance/{id}")
     public ResponseEntity<ApplicationInstanceVO> singleInstanceByApplicationId(
             @PathVariable Long id) {
         try {
-            return ResponseEntity.ok(this.deploymentService.getSingleInstanceById(id));
+            return ResponseEntity.ok().header(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "*").body(this.deploymentService.getSingleInstanceById(id));
         } catch (NotFoundException e) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.notFound().header(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "*").build();
         }
     }
 
     @GetMapping("/application/get/byName/{name}")
     public ResponseEntity<ApplicationTemplateVO> getApplication(@PathVariable String name) {
         try {
-            return ResponseEntity.ok(deploymentService.getApplicationByName(name));
+            return ResponseEntity.ok().header(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "*").body(deploymentService.getApplicationByName(name));
         } catch (NotFoundException e) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.notFound().header(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "*").build();
         }
     }
 
     @GetMapping("/application/get/byId/{id}")
     public ResponseEntity<ApplicationTemplateVO> getApplication(@PathVariable Long id) {
         try {
-            return ResponseEntity.ok(deploymentService.getApplicationById(id));
+            return ResponseEntity.ok().header(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "*").body(deploymentService.getApplicationById(id));
         } catch (NotFoundException e) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.notFound().header(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "*").build();
         }
     }
 
     @PostMapping("/application/createOrUpdate")
-    public ApplicationTemplateVO createOrUpdateApplicationTemplate(@RequestBody ApplicationTemplateVO applicationTemplateVO) {
-        return deploymentService.createOrUpdateApplicationTemplate(applicationTemplateVO);
+    public ResponseEntity<ApplicationTemplateVO> createOrUpdateApplicationTemplate(@RequestBody ApplicationTemplateVO applicationTemplateVO) {
+        return ResponseEntity.ok().header(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "*").body(deploymentService.createOrUpdateApplicationTemplate(applicationTemplateVO));
     }
 
     @DeleteMapping("/application/delete/byName/{name}")
-    public void deleteApplicationTemplate(@PathVariable String name) {
+    public ResponseEntity<String> deleteApplicationTemplate(@PathVariable String name) {
         applicationTemplateService.removeEntity(name);
+        return ResponseEntity.ok().header(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "*").build();
     }
 
     @PostMapping("/applicationInstance/deploy")
-    public ApplicationInstanceVO deployApplicationInstance(@RequestBody ApplicationDeployRequest applicationDeployRequest) {
-        return deploymentService.deployApplicationInstance(applicationDeployRequest);
+    public ResponseEntity<ApplicationInstanceVO> deployApplicationInstance(@RequestBody ApplicationDeployRequest applicationDeployRequest) {
+        return ResponseEntity.ok().header(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "*").body(deploymentService.deployApplicationInstance(applicationDeployRequest));
     }
 
     @DeleteMapping("/application/delete/byId/{id}")
-    public void deleteApplicationInstance(@PathVariable Long id) {
+    public ResponseEntity<String> deleteApplicationInstance(@PathVariable Long id) {
         applicationInstanceService.removeEntitiesByIds(Collections.singletonList(id));
+        return ResponseEntity.ok().header(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "*").build();
     }
 
     @GetMapping("/application/names")
-    public List<String> getAllNames() {
-        return deploymentService.getAllNames();
+    public ResponseEntity<List<String>> getAllNames() {
+        return ResponseEntity.ok().header(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "*").body(deploymentService.getAllNames());
     }
 
     @PostMapping("/settings/set")
-    public SettingsVO setSettings(@RequestBody SettingsVO settings) {
-        return deploymentService.setSettings(settings);
+    public ResponseEntity<SettingsVO> setSettings(@RequestBody SettingsVO settings) {
+        return ResponseEntity.ok().header(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "*").body(deploymentService.setSettings(settings));
     }
 
     @GetMapping("/settings/get")
-    public SettingsVO getSettings() {
-        return deploymentService.getSettings();
+    public ResponseEntity<SettingsVO> getSettings() {
+        return ResponseEntity.ok().header(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "*").body(deploymentService.getSettings());
     }
 
     @GetMapping("/applicationInstances/import")
     public ResponseEntity<?> getInstances() {
         applicationImportService.importInstances();
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok().header(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "*").build();
     }
 
 }
