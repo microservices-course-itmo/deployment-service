@@ -95,6 +95,18 @@ public class ApplicationServiceImpl implements ApplicationService {
         return names;
     }
 
+    @Override
+    public void removeEntity(String name) {
+        final var entities = applicationTemplateRepository.findAllByName(name);
+        final var instances = applicationInstanceService.getInstancesByTemplateName(name);
+        applicationInstanceService.removeEntities(
+                applicationInstanceService.viewsToEntities(instances)
+        );
+        entities.forEach((it) -> {
+            applicationTemplateRepository.deleteById(it.getId());
+        });
+    }
+
 
     @Override
     public ApplicationTemplateVO createOrUpdateApplication(ApplicationTemplateVO applicationTemplateVO) {
