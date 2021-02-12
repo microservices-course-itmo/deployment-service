@@ -10,7 +10,6 @@ import com.wine.to.up.deployment.service.vo.ApplicationDeployRequestWrapper
 import com.wine.to.up.deployment.service.vo.ApplicationInstanceVO
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
-import java.util.*
 import javax.ws.rs.NotFoundException
 
 @Service("applicationInstanceService")
@@ -42,8 +41,6 @@ class ApplicationInstanceServiceImpl(
         removeFromDockerByAppId(dockerClient, entity.appId)
 
         dockerClient.createServiceCmd(ServiceSpec()
-                .withNetworks(Collections.singletonList(NetworkAttachmentConfig()
-                        .withTarget("default_network")))
                 .withName(entity.appId)
                 .withTaskTemplate(TaskSpec()
                         .withContainerSpec(ContainerSpec()
