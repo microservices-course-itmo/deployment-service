@@ -15,6 +15,7 @@ import javax.ws.rs.NotFoundException;
 import java.util.Collections;
 import java.util.List;
 
+@CrossOrigin
 @RestController
 public class DeploymentController {
 
