@@ -6,7 +6,7 @@
         <server>
             <username>reader</username>
             <password>readerpass</password>
-            <id>central</id>
+            <id>artifactory-central</id>
         </server>
         <server>
             <username>reader</username>
@@ -21,7 +21,7 @@
                     <snapshots>
                         <enabled>false</enabled>
                     </snapshots>
-                    <id>central</id>
+                    <id>artifactory-central</id>
                     <name>libs-release</name>
                     <url>http://77.234.215.138:18082/artifactory/libs-release</url>
                 </repository>
@@ -37,7 +37,7 @@
                     <snapshots>
                         <enabled>false</enabled>
                     </snapshots>
-                    <id>central</id>
+                    <id>artifactory-central</id>
                     <name>libs-release</name>
                     <url>http://77.234.215.138:18082/artifactory/libs-release</url>
                 </pluginRepository>
