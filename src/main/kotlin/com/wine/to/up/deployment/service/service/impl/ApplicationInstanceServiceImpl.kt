@@ -48,9 +48,9 @@ class ApplicationInstanceServiceImpl(
                         )
                 )
                 .withEndpointSpec(EndpointSpec()
-                        .withPorts(applicationTemplateVO.ports.map {
+                        .withPorts(applicationTemplateVO.ports?.map {
                             PortConfig().withPublishedPort(it.key.toInt()).withTargetPort(it.value.toInt())
-                        }))).exec()
+                        } ?: listOf()))).exec()
         return entitiesToVies(listOf(applicationInstanceRepository.save(entity)), ApplicationInstanceStatus.STARTING).first()
     }
 
