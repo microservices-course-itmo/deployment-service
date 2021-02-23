@@ -28,10 +28,10 @@ class ApplicationInstanceServiceImpl(
         val alias = applicationDeployRequestWrapper.alias
         val version = serviceVersionProvider.findFullTagName(applicationDeployRequestWrapper.version, applicationDeployRequestWrapper.applicationTemplateVO)
         val id = sequenceGeneratorService.generateSequence(ApplicationInstance.SEQUENCE_NAME)
-        val appId = if (applicationTemplateVO.alias.isNullOrBlank()) {
+        val appId = if (applicationDeployRequestWrapper.alias.isNullOrBlank()) {
             "${applicationTemplateVO.name}_${id}"
         } else {
-            applicationTemplateVO.alias
+            applicationDeployRequestWrapper.alias
         }
         val entity = ApplicationInstance(id, applicationTemplateVO.name, appId, applicationTemplateVO.id,
                 version, System.currentTimeMillis(), "system", ApplicationInstanceStatus.STARTING, "test url", alias)

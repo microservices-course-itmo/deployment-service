@@ -141,7 +141,6 @@ public class ApplicationServiceImpl implements ApplicationService {
 
     public ApplicationTemplateVO entityToView(ApplicationTemplate entity, List<ApplicationInstanceVO> instances, List<LogVO> logs, List<String> versions) {
         return ApplicationTemplateVO.builder()
-                .alias("Alias")
                 .dateCreated(entity.getDateCreated())
                 .description(entity.getDescription())
                 .environmentVariables(entity.getEnvironmentVariables())
