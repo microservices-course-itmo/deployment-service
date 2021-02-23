@@ -34,7 +34,7 @@ class ApplicationInstanceServiceImpl(
             applicationDeployRequestWrapper.alias
         }
         val entity = ApplicationInstance(id, applicationTemplateVO.name, appId, applicationTemplateVO.id,
-                version, System.currentTimeMillis(), "system", ApplicationInstanceStatus.STARTING, "test url", alias)
+                version, System.currentTimeMillis(), "system", ApplicationInstanceStatus.STARTING, "test url", appId)
         val dockerClient = dockerClientFactory.dockerClient
         dockerClient.createServiceCmd(ServiceSpec()
                 .withNetworks(Collections.singletonList(NetworkAttachmentConfig()
