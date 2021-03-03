@@ -1,7 +1,6 @@
 package com.wine.to.up.deployment.service.vo;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.wine.to.up.commonlib.security.User;
 import com.wine.to.up.deployment.service.entity.EnvironmentVariable;
 import lombok.EqualsAndHashCode;
 
