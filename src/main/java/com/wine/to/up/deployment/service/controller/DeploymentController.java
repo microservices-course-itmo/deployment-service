@@ -39,13 +39,13 @@ public class DeploymentController {
         this.applicationTemplateService = applicationTemplateService;
     }
 
-    @GetMapping("/applicationInstances/name/{templateName}")
+    @GetMapping("/applicationInstance/name/{templateName}")
     public List<ApplicationInstanceVO> multipleInstancesByApplicationName(
             @PathVariable String templateName) {
         return this.deploymentService.getInstancesByAppName(templateName);
     }
 
-    @GetMapping("/applicationInstances/{id}")
+    @GetMapping("/applicationInstance/{id}")
     public ResponseEntity<ApplicationInstanceVO> singleInstanceByApplicationId(
             @PathVariable Long id) {
         try {
@@ -83,17 +83,17 @@ public class DeploymentController {
         applicationTemplateService.removeEntity(name);
     }
 
-    @PostMapping("/applicationInstance")
+    @PostMapping("/applicationInstance/deploy")
     public ApplicationInstanceVO deployApplicationInstance(@RequestBody ApplicationDeployRequest applicationDeployRequest) {
         return deploymentService.deployApplicationInstance(applicationDeployRequest);
     }
 
-    @DeleteMapping("/application/{id}")
+    @DeleteMapping("/applicationInstance/{id}")
     public void deleteApplicationInstance(@PathVariable Long id) {
         applicationInstanceService.removeEntitiesByIds(Collections.singletonList(id));
     }
 
-    @GetMapping("/application")
+    @GetMapping("/application/names")
     public List<String> getAllNames() {
         return deploymentService.getAllNames();
     }
