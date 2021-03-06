@@ -1,0 +1,69 @@
+{
+  "id": 5,
+  "name": "deployment-service",
+  "description": "Deployer for other apps",
+  "templateVersion": 1,
+  "alias": "Alias",
+  "environmentVariables": [
+    {
+      "name": "S_POSTGRES_HOST",
+      "value": "postgres"
+    },
+    {
+      "name": "S_MONGO_HOST",
+      "value": "mongo"
+    },
+    {
+      "name": "S_KAFKA_BOOTSTRAP_HOST",
+      "value": "kafka:9092"
+    },
+    {
+      "name": "S_LOGSTASH_HOST",
+      "value": "logstash:4560"
+    },
+    {
+      "name": "S_MONGO_DB",
+      "value": "DeploymentService"
+    },
+    {
+      "name": "S_MONGO_USER",
+      "value": "DeploymentService"
+    },
+    {
+      "name": "S_MONGO_PASSWORD",
+      "value": "deployment-mongo"
+    },
+    {
+      "name": "S_SERVICE_APP_HOST",
+      "value": "deployment-service"
+    }
+  ],
+  "versions": [
+    "sprint-1",
+    "local-version",
+    "without-docker"
+  ],
+  "instances": [
+    {
+      "id": 4,
+      "appId": "Alias",
+      "templateId": 5,
+      "version": "local-version_0.1.0",
+      "dateCreated": 1614008747867,
+      "createdBy": "system",
+      "url": "test url",
+      "status": "STOPPED"
+    }
+  ],
+  "logs": [
+    {
+      "date": 1614008226558,
+      "user": "system",
+      "message": "Приложение создано",
+      "templateName": "deployment-service",
+      "templateId": 5
+    }
+  ],
+  "dateCreated": 1614008226363,
+  "baseBranch": "dev"
+}
