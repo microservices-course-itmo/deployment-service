@@ -28,8 +28,13 @@ class ApplicationInstanceServiceImpl(
         val alias = applicationDeployRequestWrapper.alias
         val version = serviceVersionProvider.findFullTagName(applicationDeployRequestWrapper.version, applicationDeployRequestWrapper.applicationTemplateVO)
         val id = sequenceGeneratorService.generateSequence(ApplicationInstance.SEQUENCE_NAME)
-        val entity = ApplicationInstance(id, applicationTemplateVO.name, "${applicationTemplateVO.name}_${id}", applicationTemplateVO.id,
-                version, System.currentTimeMillis(), "system", ApplicationInstanceStatus.STARTING, "test url", alias)
+        val appId = if (applicationDeployRequestWrapper.alias.isNullOrBlank()) {
+            "${applicationTemplateVO.name}_${id}"
+        } else {
+            applicationDeployRequestWrapper.alias
+        }
+        val entity = ApplicationInstance(id, applicationTemplateVO.name, appId, applicationTemplateVO.id,
+                version, System.currentTimeMillis(), "system", ApplicationInstanceStatus.STARTING, "test url", appId)
         val dockerClient = dockerClientFactory.dockerClient
         dockerClient.createServiceCmd(ServiceSpec()
                 .withNetworks(Collections.singletonList(NetworkAttachmentConfig()
@@ -43,9 +48,9 @@ class ApplicationInstanceServiceImpl(
                         )
                 )
                 .withEndpointSpec(EndpointSpec()
-                        .withPorts(applicationTemplateVO.ports.map {
+                        .withPorts(applicationTemplateVO.ports?.map {
                             PortConfig().withPublishedPort(it.key.toInt()).withTargetPort(it.value.toInt())
-                        }))).exec()
+                        } ?: listOf()))).exec()
         return entitiesToVies(listOf(applicationInstanceRepository.save(entity)), ApplicationInstanceStatus.STARTING).first()
     }
 

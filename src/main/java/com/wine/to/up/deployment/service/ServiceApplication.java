@@ -8,7 +8,6 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @SpringBootApplication
 @ComponentScan("com.wine.to.up")
-@EnableSwagger2
 public class ServiceApplication {
 
     public static void main(String[] args) {
