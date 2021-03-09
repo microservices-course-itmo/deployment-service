@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import java.util.*
 import javax.ws.rs.NotFoundException
+import kotlin.collections.ArrayList
 
 @Service("applicationInstanceService")
 class ApplicationInstanceServiceImpl(
@@ -37,8 +38,8 @@ class ApplicationInstanceServiceImpl(
                 version, System.currentTimeMillis(), "system", ApplicationInstanceStatus.STARTING, "test url", appId)
         val dockerClient = dockerClientFactory.dockerClient
         dockerClient.createServiceCmd(ServiceSpec()
-                .withNetworks(Collections.singletonList(NetworkAttachmentConfig()
-                        .withTarget("default_network")))
+                /*.withNetworks(Collections.singletonList(NetworkAttachmentConfig()
+                        .withTarget("default_network")))*/
                 .withName(entity.appId)
                 .withTaskTemplate(TaskSpec()
                         .withContainerSpec(ContainerSpec()
@@ -136,5 +137,10 @@ class ApplicationInstanceServiceImpl(
     override fun getInstanceById(instanceId: Long): ApplicationInstanceVO {
         return entitiesToVies(listOf(applicationInstanceRepository.findById(instanceId)
                 .orElseThrow { NotFoundException() })).first()
+    }
+
+    override fun getInstances(): List<com.github.dockerjava.api.model.Service> {
+
+        return dockerClientFactory.dockerClient.listServicesCmd().exec().toList()
     }
 }
