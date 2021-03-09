@@ -121,7 +121,7 @@ public class ApplicationServiceImpl implements ApplicationService {
 
         ApplicationTemplate applicationTemplate = new ApplicationTemplate(applicationTemplateVO.getTemplateVersion(),
                 applicationTemplateVO.getCreatedBy(), applicationTemplateVO.getName(), applicationTemplateVO.getPorts(),
-                applicationTemplateVO.getVolumes(), applicationTemplateVO.getEnv(),
+                applicationTemplateVO.getVolumes(), applicationTemplateVO.getEnvironmentVariables(),
                 applicationTemplateVO.getDescription(),
                 applicationTemplateVO.getBaseBranch() != null ? applicationTemplateVO.getBaseBranch() : "dev");
 
@@ -163,7 +163,7 @@ public class ApplicationServiceImpl implements ApplicationService {
     }
 
     private void populateStandardEnvVars(ApplicationTemplateVO applicationTemplateVO) {
-        List<String> varNamesInTemplate = applicationTemplateVO.getEnv().stream()
+        List<String> varNamesInTemplate = applicationTemplateVO.getEnvironmentVariables().stream()
                 .map(EnvironmentVariable::getName).collect(Collectors.toList());
 
         for (StandardEnvironmentVariable  standardVar: StandardEnvironmentVariable.values()) {

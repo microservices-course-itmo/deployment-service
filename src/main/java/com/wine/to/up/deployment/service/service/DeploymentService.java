@@ -1,11 +1,9 @@
 package com.wine.to.up.deployment.service.service;
 
-import com.github.dockerjava.api.model.Service;
 import com.wine.to.up.deployment.service.vo.ApplicationDeployRequest;
 import com.wine.to.up.deployment.service.vo.ApplicationInstanceVO;
 import com.wine.to.up.deployment.service.vo.ApplicationTemplateVO;
 import com.wine.to.up.deployment.service.vo.SettingsVO;
-import kotlin.jvm.internal.markers.KMutableList;
 
 import java.util.List;
 

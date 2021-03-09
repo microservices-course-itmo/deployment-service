@@ -15,7 +15,7 @@ public class ApplicationTemplateVO {
     private final String description;
     private final Long templateVersion;
     private final String alias;
-    private final List<EnvironmentVariable> env;
+    private final List<EnvironmentVariable> environmentVariables;
     private final List<String> volumes;
     private final Map<String, String> ports;
     private final List<String> versions;
@@ -25,13 +25,13 @@ public class ApplicationTemplateVO {
     private final Long dateCreated;
     private final String baseBranch;
 
-    private ApplicationTemplateVO(Long id, String name, String description, Long templateVersion, String alias, List<EnvironmentVariable> env, List<String> volumes, Map<String, String> ports, List<String> versions, List<ApplicationInstanceVO> instances, List<LogVO> logs, String createdBy, Long dateCreated, String baseBranch) {
+    private ApplicationTemplateVO(Long id, String name, String description, Long templateVersion, String alias, List<EnvironmentVariable> environmentVariables, List<String> volumes, Map<String, String> ports, List<String> versions, List<ApplicationInstanceVO> instances, List<LogVO> logs, String createdBy, Long dateCreated, String baseBranch) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.templateVersion = templateVersion;
         this.alias = alias;
-        this.env = env;
+        this.environmentVariables = environmentVariables;
         this.volumes = volumes;
         this.ports = ports;
         this.versions = versions;
@@ -70,8 +70,8 @@ public class ApplicationTemplateVO {
         return this.alias;
     }
 
-    public List<EnvironmentVariable> getEnv() {
-        return this.env;
+    public List<EnvironmentVariable> getEnvironmentVariables() {
+        return this.environmentVariables;
     }
 
     public List<String> getVolumes() {
@@ -103,8 +103,8 @@ public class ApplicationTemplateVO {
     }
 
     public List<EnvironmentVariable> addEnvironmentVariable(EnvironmentVariable environmentVariable) {
-        this.env.add(environmentVariable);
-        return env;
+        this.environmentVariables.add(environmentVariable);
+        return environmentVariables;
     }
 
     public static class ApplicationTemplateVOBuilder {

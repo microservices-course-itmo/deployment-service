@@ -44,7 +44,7 @@ class ApplicationInstanceServiceImpl(
                         .withContainerSpec(ContainerSpec()
                                 .withImage("${getRegistryAddress()}/${applicationTemplateVO.name}:${version}")
                                 //.withImage("${applicationTemplateVO.name}:latest")
-                                .withEnv(applicationTemplateVO.env.map { "${it.name}=${it.value}" })
+                                .withEnv(applicationTemplateVO.environmentVariables.map { "${it.name}=${it.value}" })
                         )
                 )
                 .withEndpointSpec(EndpointSpec()
@@ -59,7 +59,7 @@ class ApplicationInstanceServiceImpl(
             val dockerClient = if (entities.isEmpty()) {
                 return emptyList()
             } else {
-                dockerClientFactory.getDockerClient()
+                dockerClientFactory.dockerClient
             }
             val dockerService = try {
                 dockerClient.inspectServiceCmd(it.appId).exec()
