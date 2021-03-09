@@ -59,7 +59,7 @@ class ApplicationInstanceServiceImpl(
             val dockerClient = if (entities.isEmpty()) {
                 return emptyList()
             } else {
-                dockerClientFactory.getDockerClient()
+                dockerClientFactory.dockerClient
             }
             val dockerService = try {
                 dockerClient.inspectServiceCmd(it.appId).exec()
@@ -136,5 +136,10 @@ class ApplicationInstanceServiceImpl(
     override fun getInstanceById(instanceId: Long): ApplicationInstanceVO {
         return entitiesToVies(listOf(applicationInstanceRepository.findById(instanceId)
                 .orElseThrow { NotFoundException() })).first()
+    }
+
+    override fun getInstances(): List<com.github.dockerjava.api.model.Service> {
+
+        return dockerClientFactory.dockerClient.listServicesCmd().exec().toList()
     }
 }
