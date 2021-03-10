@@ -24,16 +24,61 @@ public class ApplicationInstance {
     private String url;
 
     public ApplicationInstance(final Long id, final String templateName, final String appId, final Long templateId, final String version, final Long dateCreated, final String userCreated, final ApplicationInstanceStatus status, final String url, final String alias) {
-        this.id = id;
-        this.appId = appId;
-        this.templateName = templateName;
-        this.templateId = templateId;
-        this.version = version;
-        this.dateCreated = dateCreated;
-        this.userCreated = userCreated;
-        this.status = status;
-        this.url = url;
-        this.alias = alias;
+        if (id != null) {
+            this.id = id;
+        } else {
+            this.id = 1337L;
+        }
+        if (appId != null) {
+            this.appId = appId;
+        } else {
+            this.appId = "testNotNullId";
+        }
+        if (templateName != null) {
+            this.templateName = templateName;
+        } else {
+            this.templateName = "testNotNullTemplateName";
+        }
+        if (templateId != null) {
+            this.templateId = templateId;
+        } else {
+            this.templateId = 1337L;
+        }
+        if (version != null) {
+            this.version = version;
+        } else {
+            this.version = "testNotNull";
+        }
+
+        if (dateCreated != null) {
+            this.dateCreated = dateCreated;
+        } else {
+            this.dateCreated = 1337L;
+        }
+
+        if (userCreated != null) {
+            this.userCreated = userCreated;
+        } else {
+            this.userCreated = "testNotNull";
+        }
+
+        if (status != null) {
+            this.status = status;
+        } else {
+            this.status = ApplicationInstanceStatus.STOPPED;
+        }
+
+        if (url != null) {
+            this.url = url;
+        } else {
+            this.url = "testNonNullUrl";
+        }
+
+        if (alias != null) {
+            this.alias = alias;
+        } else {
+            this.alias = "testNonNullAlias";
+        }
     }
 
     public ApplicationInstance() {

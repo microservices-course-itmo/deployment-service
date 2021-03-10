@@ -98,9 +98,9 @@
         </dependency>
         <!-- Required: commonlib. Includes metrics, kafka etc-->
         <dependency>
-            <groupId>com.wine.to.up</groupId>
-            <artifactId>service-common-lib</artifactId>
-            <version>${service.commonlib.version}</version>
+            <groupId>com.github.docker-java</groupId>
+            <artifactId>docker-java-api</artifactId>
+            <version>3.2.4</version>
         </dependency>
     </dependencies>
 

@@ -68,7 +68,7 @@ class ApplicationInstanceServiceImpl(
             } catch (e: com.github.dockerjava.api.exception.NotFoundException) {
                 null
             }
-            val dockerTasks = dockerClient?.listTasksCmd()?.withNameFilter(dockerService?.spec?.name)?.exec()
+            val dockerTasks = dockerClient.listTasksCmd()?.withNameFilter(dockerService?.spec?.name)?.exec()
                     ?: emptyList()
             val status = if (forceStatus != null) {
                 forceStatus
@@ -159,3 +159,4 @@ class ApplicationInstanceServiceImpl(
         }
     }
 }
+
