@@ -10,6 +10,7 @@ import com.wine.to.up.deployment.service.vo.ApplicationTemplateVO;
 import com.wine.to.up.deployment.service.vo.SettingsVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.ws.rs.NotFoundException;
@@ -17,7 +18,7 @@ import java.util.Collections;
 import java.util.List;
 
 @RestController
-//@PreAuthorize("isAuthenticated()")
+@PreAuthorize("isAuthenticated()")
 public class DeploymentController {
 
     private DeploymentService deploymentService;
@@ -96,8 +97,13 @@ public class DeploymentController {
         return deploymentService.deployApplicationInstance(applicationDeployRequest);
     }
 
+    @DeleteMapping("/applicationInstance/{id}")
+    public ApplicationInstanceVO deleteApplicationInstance(@PathVariable Long id) {
+        return deploymentService.removeApplicationInstanceById(id);
+    }
+
     @DeleteMapping("/application/delete/byId/{id}")
-    public void deleteApplicationInstance(@PathVariable Long id) {
+    public void deleteApplication(@PathVariable Long id) {
         applicationInstanceService.removeEntitiesByIds(Collections.singletonList(id));
     }
 
