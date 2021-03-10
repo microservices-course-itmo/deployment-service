@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.wine.to.up.deployment.service.enums.ApplicationInstanceStatus;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class ApplicationInstanceVO   {
+public class ApplicationInstanceVO {
 
     private final Long id;
 
@@ -46,7 +46,11 @@ public class ApplicationInstanceVO   {
     }
 
     public String getAppId() {
-        return this.appId;
+        if (this.appId != null) {
+            return this.appId;
+        } else {
+            return "";
+        }
     }
 
     public Long getTemplateId() {
@@ -54,7 +58,11 @@ public class ApplicationInstanceVO   {
     }
 
     public String getVersion() {
-        return this.version;
+        if (this.version != null) {
+            return this.version;
+        } else {
+            return "";
+        }
     }
 
     public Long getDateCreated() {
@@ -62,19 +70,35 @@ public class ApplicationInstanceVO   {
     }
 
     public String getCreatedBy() {
-        return this.createdBy;
+        if (this.createdBy!= null) {
+            return this.createdBy;
+        } else {
+            return "";
+        }
     }
 
     public String getAlias() {
-        return this.alias;
+        if (this.alias != null) {
+            return this.alias;
+        } else {
+            return "";
+        }
     }
 
     public String getUrl() {
-        return this.url;
+        if (this.url != null) {
+            return this.url;
+        } else {
+            return "";
+        }
     }
 
     public ApplicationInstanceStatus getStatus() {
-        return this.status;
+        if (this.status != null) {
+            return this.status;
+        } else {
+            return ApplicationInstanceStatus.STOPPED;
+        }
     }
 
     public String toString() {

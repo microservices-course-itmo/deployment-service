@@ -2,8 +2,12 @@ package com.wine.to.up.deployment.service.vo;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.wine.to.up.deployment.service.entity.EnvironmentVariable;
+
 import lombok.EqualsAndHashCode;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -47,7 +51,11 @@ public class ApplicationTemplateVO {
     }
 
     public String getBaseBranch() {
-        return baseBranch;
+        if (baseBranch != null) {
+            return baseBranch;
+        } else {
+            return "";
+        }
     }
 
     public Long getId() {
@@ -55,11 +63,19 @@ public class ApplicationTemplateVO {
     }
 
     public String getName() {
-        return this.name;
+        if (this.name != null) {
+            return this.name;
+        } else {
+            return "";
+        }
     }
 
     public String getDescription() {
-        return this.description;
+        if (this.description != null) {
+            return this.description;
+        } else {
+            return "";
+        }
     }
 
     public Long getTemplateVersion() {
@@ -67,35 +83,67 @@ public class ApplicationTemplateVO {
     }
 
     public String getAlias() {
-        return this.alias;
+        if (this.alias != null) {
+            return this.alias;
+        } else {
+            return "";
+        }
     }
 
     public List<EnvironmentVariable> getEnvironmentVariables() {
-        return this.environmentVariables;
+        if (this.environmentVariables != null) {
+            return this.environmentVariables;
+        } else {
+            return new ArrayList<>();
+        }
     }
 
     public List<String> getVolumes() {
-        return this.volumes;
+        if (this.volumes != null) {
+            return this.volumes;
+        } else {
+            return new ArrayList<>();
+        }
     }
 
     public Map<String, String> getPorts() {
-        return this.ports;
+        if (this.ports != null) {
+            return this.ports;
+        } else {
+            return new HashMap<>();
+        }
     }
 
     public List<String> getVersions() {
-        return this.versions;
+        if (this.versions != null) {
+            return this.versions;
+        } else {
+            return new ArrayList<>();
+        }
     }
 
     public List<ApplicationInstanceVO> getInstances() {
-        return this.instances;
+        if (this.instances != null) {
+            return this.instances;
+        } else {
+            return new ArrayList<>();
+        }
     }
 
     public List<LogVO> getLogs() {
-        return this.logs;
+        if (this.logs != null) {
+            return this.logs;
+        } else {
+            return new ArrayList<>();
+        }
     }
 
     public String getCreatedBy() {
-        return this.createdBy;
+        if (this.createdBy != null) {
+            return this.createdBy;
+        } else {
+            return "";
+        }
     }
 
     public Long getDateCreated() {
