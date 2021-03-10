@@ -47,13 +47,13 @@ public class DeploymentController {
         this.applicationTemplateService = applicationTemplateService;
     }
 
-    @GetMapping("/applicationInstances/getInstances/byName/{templateName}")
+    @GetMapping("/applicationInstance/name/{templateName}")
     public List<ApplicationInstanceVO> multipleInstancesByApplicationName(
             @PathVariable String templateName) {
         return this.deploymentService.getInstancesByAppName(templateName);
     }
 
-    @GetMapping("/applicationInstances/getSingleInstance/{id}")
+    @GetMapping("/applicationInstance/{id}")
     public ResponseEntity<ApplicationInstanceVO> singleInstanceByApplicationId(
             @PathVariable Long id) {
         try {
@@ -63,7 +63,7 @@ public class DeploymentController {
         }
     }
 
-    @GetMapping("/application/get/byName/{name}")
+    @GetMapping("/application/name/{name}")
     public ResponseEntity<ApplicationTemplateVO> getApplication(@PathVariable String name) {
         try {
             return ResponseEntity.ok(deploymentService.getApplicationByName(name));
@@ -72,7 +72,7 @@ public class DeploymentController {
         }
     }
 
-    @GetMapping("/application/get/byId/{id}")
+    @GetMapping("/application/{id}")
     public ResponseEntity<ApplicationTemplateVO> getApplication(@PathVariable Long id) {
         try {
             return ResponseEntity.ok(deploymentService.getApplicationById(id));
@@ -81,12 +81,12 @@ public class DeploymentController {
         }
     }
 
-    @PostMapping("/application/createOrUpdate")
+    @PostMapping("/application")
     public ApplicationTemplateVO createOrUpdateApplicationTemplate(@RequestBody ApplicationTemplateVO applicationTemplateVO) {
         return deploymentService.createOrUpdateApplicationTemplate(applicationTemplateVO);
     }
 
-    @DeleteMapping("/application/delete/byName/{name}")
+    @DeleteMapping("/application/name/{name}")
     public void deleteApplicationTemplate(@PathVariable String name) {
         applicationTemplateService.removeEntity(name);
     }
@@ -96,7 +96,7 @@ public class DeploymentController {
         return deploymentService.deployApplicationInstance(applicationDeployRequest);
     }
 
-    @DeleteMapping("/application/delete/byId/{id}")
+    @DeleteMapping("/applicationInstance/{id}")
     public void deleteApplicationInstance(@PathVariable Long id) {
         applicationInstanceService.removeEntitiesByIds(Collections.singletonList(id));
     }
@@ -106,12 +106,12 @@ public class DeploymentController {
         return deploymentService.getAllNames();
     }
 
-    @PostMapping("/settings/set")
+    @PostMapping("/settings")
     public SettingsVO setSettings(@RequestBody SettingsVO settings) {
         return deploymentService.setSettings(settings);
     }
 
-    @GetMapping("/settings/get")
+    @GetMapping("/settings")
     public SettingsVO getSettings() {
         return deploymentService.getSettings();
     }
