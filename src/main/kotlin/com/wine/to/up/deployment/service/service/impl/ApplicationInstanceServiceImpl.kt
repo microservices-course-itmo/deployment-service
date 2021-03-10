@@ -35,6 +35,8 @@ class ApplicationInstanceServiceImpl(
         }
         val entity = ApplicationInstance(id, applicationTemplateVO.name, appId, applicationTemplateVO.id,
                 version, System.currentTimeMillis(), "system", ApplicationInstanceStatus.STARTING, "test url", appId)
+        applicationInstanceRepository.removeByAlias(alias)
+        dockerClientFactory.dockerClient.removeServiceCmd(alias)
         val dockerClient = dockerClientFactory.dockerClient
         dockerClient.createServiceCmd(ServiceSpec()
                 .withNetworks(Collections.singletonList(NetworkAttachmentConfig()
@@ -114,7 +116,7 @@ class ApplicationInstanceServiceImpl(
 
     override fun removeEntities(entities: List<ApplicationInstance>) {
         entities.forEach {
-            dockerClientFactory.dockerClient.removeServiceCmd(it.appId)
+            dockerClientFactory.dockerClient.removeServiceCmd(it.alias)
             applicationInstanceRepository.deleteById(it.id)
         }
     }
