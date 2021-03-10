@@ -32,12 +32,12 @@ public class ApplicationInstance {
         if (appId != null) {
             this.appId = appId;
         } else {
-            this.appId = "testNotNullId";
+            this.appId = "";
         }
         if (templateName != null) {
             this.templateName = templateName;
         } else {
-            this.templateName = "testNotNullTemplateName";
+            this.templateName = "";
         }
         if (templateId != null) {
             this.templateId = templateId;
@@ -47,7 +47,7 @@ public class ApplicationInstance {
         if (version != null) {
             this.version = version;
         } else {
-            this.version = "testNotNull";
+            this.version = "";
         }
 
         if (dateCreated != null) {
@@ -59,7 +59,7 @@ public class ApplicationInstance {
         if (userCreated != null) {
             this.userCreated = userCreated;
         } else {
-            this.userCreated = "testNotNull";
+            this.userCreated = "";
         }
 
         if (status != null) {
@@ -71,13 +71,13 @@ public class ApplicationInstance {
         if (url != null) {
             this.url = url;
         } else {
-            this.url = "testNonNullUrl";
+            this.url = "";
         }
 
         if (alias != null) {
             this.alias = alias;
         } else {
-            this.alias = "testNonNullAlias";
+            this.alias = "";
         }
     }
 

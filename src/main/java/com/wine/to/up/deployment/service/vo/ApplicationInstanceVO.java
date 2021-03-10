@@ -34,7 +34,7 @@ public class ApplicationInstanceVO {
         if (appId != null) {
             this.appId = appId;
         } else {
-            this.appId = "NonNullAppId";
+            this.appId = "";
         }
         if (templateId != null) {
             this.templateId = templateId;
@@ -44,7 +44,7 @@ public class ApplicationInstanceVO {
         if (version != null) {
             this.version = version;
         } else {
-            this.version = "NonNullVersion";
+            this.version = "";
         }
         if (dateCreated != null) {
             this.dateCreated = dateCreated;
@@ -54,17 +54,17 @@ public class ApplicationInstanceVO {
         if (createdBy != null) {
             this.createdBy = createdBy;
         } else {
-            this.createdBy = "NonNullCreatedBy";
+            this.createdBy = "";
         }
         if (alias != null) {
             this.alias = alias;
         } else {
-            this.alias = "NonNullAlias";
+            this.alias = "";
         }
         if (url != null) {
             this.url = url;
         } else {
-            this.url = "NonNullUrl";
+            this.url = "";
         }
         if (status != null) {
             this.status = status;

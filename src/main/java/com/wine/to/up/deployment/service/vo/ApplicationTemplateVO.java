@@ -5,7 +5,9 @@ import com.wine.to.up.deployment.service.entity.EnvironmentVariable;
 
 import lombok.EqualsAndHashCode;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -36,12 +38,12 @@ public class ApplicationTemplateVO {
         if (name != null) {
             this.name = name;
         } else {
-            this.name = "testNonNullName";
+            this.name = "";
         }
         if (description != null) {
             this.description = description;
         } else {
-            this.description = "testNonNullDescription";
+            this.description = "";
         }
         if (templateVersion != null) {
             this.templateVersion = templateVersion;
@@ -51,43 +53,43 @@ public class ApplicationTemplateVO {
         if (alias != null) {
             this.alias = alias;
         } else {
-            this.alias = "testNonNullAlias";
+            this.alias = "";
         }
         if (environmentVariables != null) {
             this.environmentVariables = environmentVariables;
         } else {
-            this.environmentVariables = Collections.emptyList();
+            this.environmentVariables = new ArrayList<>();
         }
         if (volumes != null) {
             this.volumes = volumes;
         } else {
-            this.volumes = Collections.emptyList();
+            this.volumes = new ArrayList<>();
         }
         if (ports != null) {
             this.ports = ports;
         } else {
-            this.ports = Collections.emptyMap();
+            this.ports = new HashMap<>();
         }
         if (versions != null) {
             this.versions = versions;
         } else {
-            this.versions = Collections.emptyList();
+            this.versions = new ArrayList<>();
         }
         if (instances != null) {
             this.instances = instances;
         } else {
-            this.instances = Collections.emptyList();
+            this.instances = new ArrayList<>();
         }
         if (logs != null) {
             this.logs = logs;
         } else {
-            this.logs = Collections.emptyList();
+            this.logs = new ArrayList<>();
         }
 
         if (createdBy != null) {
             this.createdBy = createdBy;
         } else {
-            this.createdBy = "NonNullCreatedBy";
+            this.createdBy = "";
         }
 
         if (dateCreated != null) {
@@ -99,7 +101,7 @@ public class ApplicationTemplateVO {
         if (baseBranch != null) {
             this.baseBranch = baseBranch;
         } else {
-            this.baseBranch = "NonNullBaseBranch";
+            this.baseBranch = "";
         }
     }
 
