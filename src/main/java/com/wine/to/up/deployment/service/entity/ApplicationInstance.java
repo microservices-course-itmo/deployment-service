@@ -24,61 +24,16 @@ public class ApplicationInstance {
     private String url;
 
     public ApplicationInstance(final Long id, final String templateName, final String appId, final Long templateId, final String version, final Long dateCreated, final String userCreated, final ApplicationInstanceStatus status, final String url, final String alias) {
-        if (id != null) {
-            this.id = id;
-        } else {
-            this.id = 1337L;
-        }
-        if (appId != null) {
-            this.appId = appId;
-        } else {
-            this.appId = "";
-        }
-        if (templateName != null) {
-            this.templateName = templateName;
-        } else {
-            this.templateName = "";
-        }
-        if (templateId != null) {
-            this.templateId = templateId;
-        } else {
-            this.templateId = 1337L;
-        }
-        if (version != null) {
-            this.version = version;
-        } else {
-            this.version = "";
-        }
-
-        if (dateCreated != null) {
-            this.dateCreated = dateCreated;
-        } else {
-            this.dateCreated = 1337L;
-        }
-
-        if (userCreated != null) {
-            this.userCreated = userCreated;
-        } else {
-            this.userCreated = "";
-        }
-
-        if (status != null) {
-            this.status = status;
-        } else {
-            this.status = ApplicationInstanceStatus.STOPPED;
-        }
-
-        if (url != null) {
-            this.url = url;
-        } else {
-            this.url = "";
-        }
-
-        if (alias != null) {
-            this.alias = alias;
-        } else {
-            this.alias = "";
-        }
+        this.id = id;
+        this.appId = appId;
+        this.templateName = templateName;
+        this.templateId = templateId;
+        this.version = version;
+        this.dateCreated = dateCreated;
+        this.userCreated = userCreated;
+        this.status = status;
+        this.url = url;
+        this.alias = alias;
     }
 
     public ApplicationInstance() {
@@ -86,7 +41,11 @@ public class ApplicationInstance {
     }
 
     public Long getId() {
-        return this.id;
+        if (id != null) {
+            return this.id;
+        } else {
+            return 1337L;
+        }
     }
 
     public void setId(Long id) {
@@ -94,7 +53,11 @@ public class ApplicationInstance {
     }
 
     public String getAppId() {
-        return this.appId;
+        if (appId != null) {
+            return this.appId;
+        } else {
+            return "";
+        }
     }
 
     public void setAppId(String appId) {
@@ -102,7 +65,11 @@ public class ApplicationInstance {
     }
 
     public String getTemplateName() {
-        return this.templateName;
+        if (templateName != null) {
+            return this.templateName;
+        } else {
+            return "";
+        }
     }
 
     public void setTemplateName(String templateName) {
@@ -110,7 +77,11 @@ public class ApplicationInstance {
     }
 
     public Long getTemplateId() {
-        return this.templateId;
+        if (templateId != null) {
+            return  this.templateId;
+        } else {
+            return 1337L;
+        }
     }
 
     public void setTemplateId(Long templateId) {
@@ -118,7 +89,11 @@ public class ApplicationInstance {
     }
 
     public String getVersion() {
-        return this.version;
+        if (version != null) {
+            return  this.version;
+        } else {
+            return "";
+        }
     }
 
     public void setVersion(String version) {
@@ -126,7 +101,11 @@ public class ApplicationInstance {
     }
 
     public Long getDateCreated() {
-        return this.dateCreated;
+        if (dateCreated != null) {
+            return  this.dateCreated;
+        } else {
+            return 1337L;
+        }
     }
 
     public void setDateCreated(Long dateCreated) {
@@ -134,7 +113,11 @@ public class ApplicationInstance {
     }
 
     public String getUserCreated() {
-        return this.userCreated;
+        if (userCreated!= null) {
+            return  this.userCreated;
+        } else {
+            return "";
+        }
     }
 
     public void setUserCreated(String userCreated) {
@@ -142,7 +125,11 @@ public class ApplicationInstance {
     }
 
     public ApplicationInstanceStatus getStatus() {
-        return this.status;
+        if (status!= null) {
+            return  this.status;
+        } else {
+            return ApplicationInstanceStatus.STOPPED;
+        }
     }
 
     public void setStatus(ApplicationInstanceStatus status) {
@@ -150,11 +137,19 @@ public class ApplicationInstance {
     }
 
     public String getAlias() {
-        return this.alias;
+        if (alias!= null) {
+            return  this.alias;
+        } else {
+            return "";
+        }
     }
 
     public String getUrl() {
-        return this.url;
+        if (url!= null) {
+            return  this.url;
+        } else {
+            return "";
+        }
     }
 
     public void setAlias(String alias) {
