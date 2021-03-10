@@ -37,8 +37,6 @@ class ApplicationInstanceServiceImpl(
                 version, System.currentTimeMillis(), "system", ApplicationInstanceStatus.STARTING, "test url", appId)
         val dockerClient = dockerClientFactory.dockerClient
         dockerClient.createServiceCmd(ServiceSpec()
-                .withNetworks(Collections.singletonList(NetworkAttachmentConfig()
-                        .withTarget("default_network")))
                 .withName(entity.appId)
                 .withTaskTemplate(TaskSpec()
                         .withContainerSpec(ContainerSpec()
