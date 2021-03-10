@@ -2,8 +2,12 @@ package com.wine.to.up.deployment.service.vo;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.wine.to.up.deployment.service.entity.EnvironmentVariable;
+
 import lombok.EqualsAndHashCode;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -26,20 +30,79 @@ public class ApplicationTemplateVO {
     private final String baseBranch;
 
     private ApplicationTemplateVO(Long id, String name, String description, Long templateVersion, String alias, List<EnvironmentVariable> environmentVariables, List<String> volumes, Map<String, String> ports, List<String> versions, List<ApplicationInstanceVO> instances, List<LogVO> logs, String createdBy, Long dateCreated, String baseBranch) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.templateVersion = templateVersion;
-        this.alias = alias;
-        this.environmentVariables = environmentVariables;
-        this.volumes = volumes;
-        this.ports = ports;
-        this.versions = versions;
-        this.instances = instances;
-        this.logs = logs;
-        this.createdBy = createdBy;
-        this.dateCreated = dateCreated;
-        this.baseBranch = baseBranch;
+        if (id != null) {
+            this.id = id;
+        } else {
+            this.id = 1337L;
+        }
+        if (name != null) {
+            this.name = name;
+        } else {
+            this.name = "";
+        }
+        if (description != null) {
+            this.description = description;
+        } else {
+            this.description = "";
+        }
+        if (templateVersion != null) {
+            this.templateVersion = templateVersion;
+        } else {
+            this.templateVersion = 1337L;
+        }
+        if (alias != null) {
+            this.alias = alias;
+        } else {
+            this.alias = "";
+        }
+        if (environmentVariables != null) {
+            this.environmentVariables = environmentVariables;
+        } else {
+            this.environmentVariables = new ArrayList<>();
+        }
+        if (volumes != null) {
+            this.volumes = volumes;
+        } else {
+            this.volumes = new ArrayList<>();
+        }
+        if (ports != null) {
+            this.ports = ports;
+        } else {
+            this.ports = new HashMap<>();
+        }
+        if (versions != null) {
+            this.versions = versions;
+        } else {
+            this.versions = new ArrayList<>();
+        }
+        if (instances != null) {
+            this.instances = instances;
+        } else {
+            this.instances = new ArrayList<>();
+        }
+        if (logs != null) {
+            this.logs = logs;
+        } else {
+            this.logs = new ArrayList<>();
+        }
+
+        if (createdBy != null) {
+            this.createdBy = createdBy;
+        } else {
+            this.createdBy = "";
+        }
+
+        if (dateCreated != null) {
+            this.dateCreated = dateCreated;
+        } else {
+            this.dateCreated = 1337L;
+        }
+
+        if (baseBranch != null) {
+            this.baseBranch = baseBranch;
+        } else {
+            this.baseBranch = "";
+        }
     }
 
     public static ApplicationTemplateVOBuilder builder() {

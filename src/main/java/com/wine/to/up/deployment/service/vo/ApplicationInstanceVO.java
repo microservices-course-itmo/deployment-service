@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.wine.to.up.deployment.service.enums.ApplicationInstanceStatus;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class ApplicationInstanceVO   {
+public class ApplicationInstanceVO {
 
     private final Long id;
 
@@ -26,15 +26,51 @@ public class ApplicationInstanceVO   {
     private final ApplicationInstanceStatus status;
 
     ApplicationInstanceVO(Long id, String appId, Long templateId, String version, Long dateCreated, String createdBy, String alias, String url, ApplicationInstanceStatus status) {
-        this.id = id;
-        this.appId = appId;
-        this.templateId = templateId;
-        this.version = version;
-        this.dateCreated = dateCreated;
-        this.createdBy = createdBy;
-        this.alias = alias;
-        this.url = url;
-        this.status = status;
+        if (id != null) {
+            this.id = id;
+        } else {
+            this.id = 1337L;
+        }
+        if (appId != null) {
+            this.appId = appId;
+        } else {
+            this.appId = "";
+        }
+        if (templateId != null) {
+            this.templateId = templateId;
+        } else {
+            this.templateId = 1337L;
+        }
+        if (version != null) {
+            this.version = version;
+        } else {
+            this.version = "";
+        }
+        if (dateCreated != null) {
+            this.dateCreated = dateCreated;
+        } else {
+            this.dateCreated = 1337L;
+        }
+        if (createdBy != null) {
+            this.createdBy = createdBy;
+        } else {
+            this.createdBy = "";
+        }
+        if (alias != null) {
+            this.alias = alias;
+        } else {
+            this.alias = "";
+        }
+        if (url != null) {
+            this.url = url;
+        } else {
+            this.url = "";
+        }
+        if (status != null) {
+            this.status = status;
+        } else {
+            this.status = ApplicationInstanceStatus.STOPPED;
+        }
     }
 
     public static ApplicationInstanceVOBuilder builder() {
