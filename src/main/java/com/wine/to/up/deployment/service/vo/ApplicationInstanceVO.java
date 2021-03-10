@@ -26,51 +26,15 @@ public class ApplicationInstanceVO {
     private final ApplicationInstanceStatus status;
 
     ApplicationInstanceVO(Long id, String appId, Long templateId, String version, Long dateCreated, String createdBy, String alias, String url, ApplicationInstanceStatus status) {
-        if (id != null) {
-            this.id = id;
-        } else {
-            this.id = 1337L;
-        }
-        if (appId != null) {
-            this.appId = appId;
-        } else {
-            this.appId = "";
-        }
-        if (templateId != null) {
-            this.templateId = templateId;
-        } else {
-            this.templateId = 1337L;
-        }
-        if (version != null) {
-            this.version = version;
-        } else {
-            this.version = "";
-        }
-        if (dateCreated != null) {
-            this.dateCreated = dateCreated;
-        } else {
-            this.dateCreated = 1337L;
-        }
-        if (createdBy != null) {
-            this.createdBy = createdBy;
-        } else {
-            this.createdBy = "";
-        }
-        if (alias != null) {
-            this.alias = alias;
-        } else {
-            this.alias = "";
-        }
-        if (url != null) {
-            this.url = url;
-        } else {
-            this.url = "";
-        }
-        if (status != null) {
-            this.status = status;
-        } else {
-            this.status = ApplicationInstanceStatus.STOPPED;
-        }
+        this.id = id;
+        this.appId = appId;
+        this.templateId = templateId;
+        this.version = version;
+        this.dateCreated = dateCreated;
+        this.createdBy = createdBy;
+        this.alias = alias;
+        this.url = url;
+        this.status = status;
     }
 
     public static ApplicationInstanceVOBuilder builder() {
@@ -82,7 +46,11 @@ public class ApplicationInstanceVO {
     }
 
     public String getAppId() {
-        return this.appId;
+        if (this.appId != null) {
+            return this.appId;
+        } else {
+            return "";
+        }
     }
 
     public Long getTemplateId() {
@@ -90,7 +58,11 @@ public class ApplicationInstanceVO {
     }
 
     public String getVersion() {
-        return this.version;
+        if (this.version != null) {
+            return this.version;
+        } else {
+            return "";
+        }
     }
 
     public Long getDateCreated() {
@@ -98,19 +70,35 @@ public class ApplicationInstanceVO {
     }
 
     public String getCreatedBy() {
-        return this.createdBy;
+        if (this.createdBy!= null) {
+            return this.createdBy;
+        } else {
+            return "";
+        }
     }
 
     public String getAlias() {
-        return this.alias;
+        if (this.alias != null) {
+            return this.alias;
+        } else {
+            return "";
+        }
     }
 
     public String getUrl() {
-        return this.url;
+        if (this.url != null) {
+            return this.url;
+        } else {
+            return "";
+        }
     }
 
     public ApplicationInstanceStatus getStatus() {
-        return this.status;
+        if (this.status != null) {
+            return this.status;
+        } else {
+            return ApplicationInstanceStatus.STOPPED;
+        }
     }
 
     public String toString() {

@@ -30,79 +30,20 @@ public class ApplicationTemplateVO {
     private final String baseBranch;
 
     private ApplicationTemplateVO(Long id, String name, String description, Long templateVersion, String alias, List<EnvironmentVariable> environmentVariables, List<String> volumes, Map<String, String> ports, List<String> versions, List<ApplicationInstanceVO> instances, List<LogVO> logs, String createdBy, Long dateCreated, String baseBranch) {
-        if (id != null) {
-            this.id = id;
-        } else {
-            this.id = 1337L;
-        }
-        if (name != null) {
-            this.name = name;
-        } else {
-            this.name = "";
-        }
-        if (description != null) {
-            this.description = description;
-        } else {
-            this.description = "";
-        }
-        if (templateVersion != null) {
-            this.templateVersion = templateVersion;
-        } else {
-            this.templateVersion = 1337L;
-        }
-        if (alias != null) {
-            this.alias = alias;
-        } else {
-            this.alias = "";
-        }
-        if (environmentVariables != null) {
-            this.environmentVariables = environmentVariables;
-        } else {
-            this.environmentVariables = new ArrayList<>();
-        }
-        if (volumes != null) {
-            this.volumes = volumes;
-        } else {
-            this.volumes = new ArrayList<>();
-        }
-        if (ports != null) {
-            this.ports = ports;
-        } else {
-            this.ports = new HashMap<>();
-        }
-        if (versions != null) {
-            this.versions = versions;
-        } else {
-            this.versions = new ArrayList<>();
-        }
-        if (instances != null) {
-            this.instances = instances;
-        } else {
-            this.instances = new ArrayList<>();
-        }
-        if (logs != null) {
-            this.logs = logs;
-        } else {
-            this.logs = new ArrayList<>();
-        }
-
-        if (createdBy != null) {
-            this.createdBy = createdBy;
-        } else {
-            this.createdBy = "";
-        }
-
-        if (dateCreated != null) {
-            this.dateCreated = dateCreated;
-        } else {
-            this.dateCreated = 1337L;
-        }
-
-        if (baseBranch != null) {
-            this.baseBranch = baseBranch;
-        } else {
-            this.baseBranch = "";
-        }
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.templateVersion = templateVersion;
+        this.alias = alias;
+        this.environmentVariables = environmentVariables;
+        this.volumes = volumes;
+        this.ports = ports;
+        this.versions = versions;
+        this.instances = instances;
+        this.logs = logs;
+        this.createdBy = createdBy;
+        this.dateCreated = dateCreated;
+        this.baseBranch = baseBranch;
     }
 
     public static ApplicationTemplateVOBuilder builder() {
@@ -110,7 +51,11 @@ public class ApplicationTemplateVO {
     }
 
     public String getBaseBranch() {
-        return baseBranch;
+        if (baseBranch != null) {
+            return baseBranch;
+        } else {
+            return "";
+        }
     }
 
     public Long getId() {
@@ -118,11 +63,19 @@ public class ApplicationTemplateVO {
     }
 
     public String getName() {
-        return this.name;
+        if (this.name != null) {
+            return this.name;
+        } else {
+            return "";
+        }
     }
 
     public String getDescription() {
-        return this.description;
+        if (this.description != null) {
+            return this.description;
+        } else {
+            return "";
+        }
     }
 
     public Long getTemplateVersion() {
@@ -130,35 +83,67 @@ public class ApplicationTemplateVO {
     }
 
     public String getAlias() {
-        return this.alias;
+        if (this.alias != null) {
+            return this.alias;
+        } else {
+            return "";
+        }
     }
 
     public List<EnvironmentVariable> getEnvironmentVariables() {
-        return this.environmentVariables;
+        if (this.environmentVariables != null) {
+            return this.environmentVariables;
+        } else {
+            return new ArrayList<>();
+        }
     }
 
     public List<String> getVolumes() {
-        return this.volumes;
+        if (this.volumes != null) {
+            return this.volumes;
+        } else {
+            return new ArrayList<>();
+        }
     }
 
     public Map<String, String> getPorts() {
-        return this.ports;
+        if (this.ports != null) {
+            return this.ports;
+        } else {
+            return new HashMap<>();
+        }
     }
 
     public List<String> getVersions() {
-        return this.versions;
+        if (this.versions != null) {
+            return this.versions;
+        } else {
+            return new ArrayList<>();
+        }
     }
 
     public List<ApplicationInstanceVO> getInstances() {
-        return this.instances;
+        if (this.instances != null) {
+            return this.instances;
+        } else {
+            return new ArrayList<>();
+        }
     }
 
     public List<LogVO> getLogs() {
-        return this.logs;
+        if (this.logs != null) {
+            return this.logs;
+        } else {
+            return new ArrayList<>();
+        }
     }
 
     public String getCreatedBy() {
-        return this.createdBy;
+        if (this.createdBy != null) {
+            return this.createdBy;
+        } else {
+            return "";
+        }
     }
 
     public Long getDateCreated() {

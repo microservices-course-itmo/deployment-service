@@ -41,11 +41,7 @@ public class ApplicationInstance {
     }
 
     public Long getId() {
-        if (id != null) {
-            return this.id;
-        } else {
-            return 1337L;
-        }
+        return this.id;
     }
 
     public void setId(Long id) {
@@ -77,11 +73,7 @@ public class ApplicationInstance {
     }
 
     public Long getTemplateId() {
-        if (templateId != null) {
-            return  this.templateId;
-        } else {
-            return 1337L;
-        }
+        return this.templateId;
     }
 
     public void setTemplateId(Long templateId) {
@@ -90,7 +82,7 @@ public class ApplicationInstance {
 
     public String getVersion() {
         if (version != null) {
-            return  this.version;
+            return this.version;
         } else {
             return "";
         }
@@ -101,11 +93,7 @@ public class ApplicationInstance {
     }
 
     public Long getDateCreated() {
-        if (dateCreated != null) {
-            return  this.dateCreated;
-        } else {
-            return 1337L;
-        }
+        return this.dateCreated;
     }
 
     public void setDateCreated(Long dateCreated) {
@@ -113,8 +101,8 @@ public class ApplicationInstance {
     }
 
     public String getUserCreated() {
-        if (userCreated!= null) {
-            return  this.userCreated;
+        if (userCreated != null) {
+            return this.userCreated;
         } else {
             return "";
         }
@@ -125,8 +113,8 @@ public class ApplicationInstance {
     }
 
     public ApplicationInstanceStatus getStatus() {
-        if (status!= null) {
-            return  this.status;
+        if (status != null) {
+            return this.status;
         } else {
             return ApplicationInstanceStatus.STOPPED;
         }
@@ -137,16 +125,16 @@ public class ApplicationInstance {
     }
 
     public String getAlias() {
-        if (alias!= null) {
-            return  this.alias;
+        if (alias != null) {
+            return this.alias;
         } else {
             return "";
         }
     }
 
     public String getUrl() {
-        if (url!= null) {
-            return  this.url;
+        if (url != null) {
+            return this.url;
         } else {
             return "";
         }
