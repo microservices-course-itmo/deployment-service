@@ -1,5 +1,6 @@
 package com.wine.to.up.deployment.service.service.impl;
 
+import com.wine.to.up.commonlib.security.AuthenticationProvider;
 import com.wine.to.up.deployment.service.dao.ApplicationTemplateRepository;
 import com.wine.to.up.deployment.service.entity.ApplicationTemplate;
 import com.wine.to.up.deployment.service.entity.EnvironmentVariable;
@@ -8,6 +9,7 @@ import com.wine.to.up.deployment.service.service.*;
 import com.wine.to.up.deployment.service.vo.ApplicationInstanceVO;
 import com.wine.to.up.deployment.service.vo.ApplicationTemplateVO;
 import com.wine.to.up.deployment.service.vo.LogVO;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
@@ -123,6 +125,9 @@ public class ApplicationServiceImpl implements ApplicationService {
                 applicationTemplateVO.getDescription(),
                 applicationTemplateVO.getBaseBranch() != null ? applicationTemplateVO.getBaseBranch() : "dev");
 
+        if (StringUtils.isEmpty(applicationTemplate.getCreatedBy())) {
+            applicationTemplate.setCreatedBy(AuthenticationProvider.getUser().getId().toString());
+        }
 
         var id = sequenceGeneratorService.generateSequence(ApplicationTemplate.SEQUENCE_NAME);
         var versions = serviceVersionProvider.findAllVersions(applicationTemplate);
@@ -135,13 +140,12 @@ public class ApplicationServiceImpl implements ApplicationService {
             log = logService.writeLog("system", "Приложение создано", applicationTemplateVO.getName(), id);
         }
 
-        applicationTemplate.setTemplateVersion(sequenceGeneratorService.generateSequence("appliactionTemplate_" + applicationTemplate.getId()));
+        applicationTemplate.setTemplateVersion(sequenceGeneratorService.generateSequence("applicationTemplate_" + applicationTemplate.getName()));
         return entityToView(applicationTemplateRepository.save(applicationTemplate), Collections.emptyList(), Collections.singletonList(log), versions);
     }
 
     public ApplicationTemplateVO entityToView(ApplicationTemplate entity, List<ApplicationInstanceVO> instances, List<LogVO> logs, List<String> versions) {
         return ApplicationTemplateVO.builder()
-                .alias("Alias")
                 .dateCreated(entity.getDateCreated())
                 .description(entity.getDescription())
                 .environmentVariables(entity.getEnvironmentVariables())

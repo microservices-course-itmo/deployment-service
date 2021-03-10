@@ -1,5 +1,6 @@
 package com.wine.to.up.deployment.service.controller;
 
+import com.wine.to.up.deployment.service.service.ApplicationImportService;
 import com.wine.to.up.deployment.service.service.ApplicationInstanceService;
 import com.wine.to.up.deployment.service.service.ApplicationService;
 import com.wine.to.up.deployment.service.service.DeploymentService;
@@ -17,9 +18,16 @@ import java.util.List;
 
 @CrossOrigin
 @RestController
+//@PreAuthorize("isAuthenticated()")
 public class DeploymentController {
 
     private DeploymentService deploymentService;
+    private ApplicationImportService applicationImportService;
+
+    @Autowired
+    public void setApplicationImportService(ApplicationImportService applicationImportService) {
+        this.applicationImportService = applicationImportService;
+    }
 
     private ApplicationInstanceService applicationInstanceService;
 
@@ -107,6 +115,12 @@ public class DeploymentController {
     @GetMapping("/settings/get")
     public SettingsVO getSettings() {
         return deploymentService.getSettings();
+    }
+
+    @GetMapping("/applicationInstances/import")
+    public ResponseEntity<?> getInstances() {
+        applicationImportService.importInstances();
+        return ResponseEntity.ok().build();
     }
 
 }

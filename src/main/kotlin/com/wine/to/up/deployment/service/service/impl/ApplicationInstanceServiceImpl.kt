@@ -9,6 +9,7 @@ import com.wine.to.up.deployment.service.vo.ApplicationDeployRequestWrapper
 import com.wine.to.up.deployment.service.vo.ApplicationInstanceVO
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
+import java.util.*
 import javax.ws.rs.NotFoundException
 
 @Service("applicationInstanceService")
@@ -27,15 +28,17 @@ class ApplicationInstanceServiceImpl(
         val alias = applicationDeployRequestWrapper.alias
         val version = serviceVersionProvider.findFullTagName(applicationDeployRequestWrapper.version, applicationDeployRequestWrapper.applicationTemplateVO)
         val id = sequenceGeneratorService.generateSequence(ApplicationInstance.SEQUENCE_NAME)
-        val appId = if (applicationTemplateVO.alias.isNullOrBlank()) {
+        val appId = if (applicationDeployRequestWrapper.alias.isNullOrBlank()) {
             "${applicationTemplateVO.name}_${id}"
         } else {
-            applicationTemplateVO.alias
+            applicationDeployRequestWrapper.alias
         }
         val entity = ApplicationInstance(id, applicationTemplateVO.name, appId, applicationTemplateVO.id,
-                version, System.currentTimeMillis(), "system", ApplicationInstanceStatus.STARTING, "test url", alias)
+                version, System.currentTimeMillis(), "system", ApplicationInstanceStatus.STARTING, "test url", appId)
         val dockerClient = dockerClientFactory.dockerClient
         dockerClient.createServiceCmd(ServiceSpec()
+                .withNetworks(Collections.singletonList(NetworkAttachmentConfig()
+                        .withTarget("default_network")))
                 .withName(entity.appId)
                 .withTaskTemplate(TaskSpec()
                         .withContainerSpec(ContainerSpec()
@@ -45,9 +48,9 @@ class ApplicationInstanceServiceImpl(
                         )
                 )
                 .withEndpointSpec(EndpointSpec()
-                        .withPorts(applicationTemplateVO.ports.map {
+                        .withPorts(applicationTemplateVO.ports?.map {
                             PortConfig().withPublishedPort(it.key.toInt()).withTargetPort(it.value.toInt())
-                        }))).exec()
+                        } ?: listOf()))).exec()
         return entitiesToVies(listOf(applicationInstanceRepository.save(entity)), ApplicationInstanceStatus.STARTING).first()
     }
 
@@ -56,7 +59,7 @@ class ApplicationInstanceServiceImpl(
             val dockerClient = if (entities.isEmpty()) {
                 return emptyList()
             } else {
-                dockerClientFactory.getDockerClient()
+                dockerClientFactory.dockerClient
             }
             val dockerService = try {
                 dockerClient.inspectServiceCmd(it.appId).exec()
@@ -133,5 +136,10 @@ class ApplicationInstanceServiceImpl(
     override fun getInstanceById(instanceId: Long): ApplicationInstanceVO {
         return entitiesToVies(listOf(applicationInstanceRepository.findById(instanceId)
                 .orElseThrow { NotFoundException() })).first()
+    }
+
+    override fun getInstances(): List<com.github.dockerjava.api.model.Service> {
+
+        return dockerClientFactory.dockerClient.listServicesCmd().exec().toList()
     }
 }
