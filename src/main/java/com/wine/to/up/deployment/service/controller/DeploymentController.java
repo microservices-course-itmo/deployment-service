@@ -119,6 +119,7 @@ public class    DeploymentController {
     @DeleteMapping("/applicationInstance/{id}")
     public ApplicationInstanceVO deleteApplicationInstance(@PathVariable final Long id) {
         return deploymentService.removeApplicationInstanceById(id);
+    }
 
     @DeleteMapping("/application/delete/byId/{id}")
     public void deleteApplicationInstance(@PathVariable Long id) {
