@@ -122,7 +122,7 @@ public class    DeploymentController {
     }
 
     @DeleteMapping("/application/delete/byId/{id}")
-    public void deleteApplicationInstance(@PathVariable Long id) {
+    public void deleteApplication(@PathVariable final Long id) {
         applicationInstanceService.removeEntitiesByIds(Collections.singletonList(id));
     }
 
