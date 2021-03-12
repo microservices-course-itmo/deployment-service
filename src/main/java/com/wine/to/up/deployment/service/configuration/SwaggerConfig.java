@@ -19,9 +19,8 @@ import java.util.Arrays;
 import java.util.Collections;
 
 @Configuration
-@EnableSwagger2
-public class SwaggerConfig /*extends WebMvcConfigurationSupport*/ {
-    /*@Bean
+public class SwaggerConfig extends WebMvcConfigurationSupport {
+    @Bean
     @Profile("!docker")
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
@@ -73,5 +72,5 @@ public class SwaggerConfig /*extends WebMvcConfigurationSupport*/ {
 
     private ApiKey apiKey() {
         return new ApiKey("jwtToken", "Authorization", "header");
-    }*/
+    }
 }

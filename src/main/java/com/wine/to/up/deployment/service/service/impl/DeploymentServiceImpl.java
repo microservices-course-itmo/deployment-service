@@ -48,6 +48,11 @@ public class DeploymentServiceImpl implements DeploymentService {
     }
 
     @Override
+    public ApplicationInstanceVO removeApplicationInstanceById(Long id) {
+        return applicationInstanceService.removeEntityById(id);
+    }
+
+    @Override
     public ApplicationTemplateVO getApplicationById(Long id) {
         return applicationService.getApplicationTemplate(id);
     }

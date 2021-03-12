@@ -15,6 +15,8 @@ public interface DeploymentService {
 
      ApplicationTemplateVO getApplicationByName(String name);
 
+     ApplicationInstanceVO removeApplicationInstanceById(Long id);
+
      ApplicationTemplateVO getApplicationById(Long id);
 
      ApplicationTemplateVO createOrUpdateApplicationTemplate(ApplicationTemplateVO applicationTemplateVO);

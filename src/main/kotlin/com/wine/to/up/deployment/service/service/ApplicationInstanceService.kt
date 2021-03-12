@@ -14,6 +14,7 @@ interface ApplicationInstanceService {
     fun entitiesToVies(entities: List<ApplicationInstance>, forceStatus: ApplicationInstanceStatus? = null): List<ApplicationInstanceVO>
     fun removeEntitiesByIds(ids: List<Long>)
     fun removeEntities(entities: List<ApplicationInstance>)
+    fun removeEntityById(id: Long): ApplicationInstanceVO
     fun viewsToEntities(views: List<ApplicationInstanceVO>): List<ApplicationInstance>
     fun getInstances() : List<Service>
 }

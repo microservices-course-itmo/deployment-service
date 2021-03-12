@@ -1,5 +1,6 @@
 package com.wine.to.up.deployment.service.service.impl
 
+import com.github.dockerjava.api.DockerClient
 import com.github.dockerjava.api.model.*
 import com.wine.to.up.deployment.service.dao.ApplicationInstanceRepository
 import com.wine.to.up.deployment.service.entity.ApplicationInstance
@@ -36,6 +37,10 @@ class ApplicationInstanceServiceImpl(
         val entity = ApplicationInstance(id, applicationTemplateVO.name, appId, applicationTemplateVO.id,
                 version, System.currentTimeMillis(), "system", ApplicationInstanceStatus.STARTING, "test url", appId)
         val dockerClient = dockerClientFactory.dockerClient
+
+        applicationInstanceRepository.removeAllByAppId(entity.appId)
+        removeFromDockerByAppId(dockerClient, entity.appId)
+
         dockerClient.createServiceCmd(ServiceSpec()
                 .withName(entity.appId)
                 .withTaskTemplate(TaskSpec()
@@ -112,9 +117,15 @@ class ApplicationInstanceServiceImpl(
 
     override fun removeEntities(entities: List<ApplicationInstance>) {
         entities.forEach {
-            dockerClientFactory.dockerClient.removeServiceCmd(it.appId)
+            removeFromDockerByAppId(dockerClientFactory.dockerClient, it.appId)
             applicationInstanceRepository.deleteById(it.id)
         }
+    }
+
+    override fun removeEntityById(id: Long): ApplicationInstanceVO {
+        val entity = applicationInstanceRepository.findById(id).orElseThrow { NotFoundException() }
+        removeEntities(listOf(entity))
+        return entitiesToVies(listOf(entity)).first()
     }
 
     private fun getRegistryAddress(): String {
@@ -139,5 +150,13 @@ class ApplicationInstanceServiceImpl(
     override fun getInstances(): List<com.github.dockerjava.api.model.Service> {
 
         return dockerClientFactory.dockerClient.listServicesCmd().exec().toList()
+    }
+
+    private fun removeFromDockerByAppId(dockerClient: DockerClient, appId: String) {
+        try{
+            dockerClient.removeServiceCmd(appId).exec()
+        } catch (e: com.github.dockerjava.api.exception.NotFoundException) {
+            //do nothing
+        }
     }
 }
