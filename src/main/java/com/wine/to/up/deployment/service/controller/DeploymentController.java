@@ -1,9 +1,6 @@
 package com.wine.to.up.deployment.service.controller;
 
-import com.wine.to.up.deployment.service.service.ApplicationImportService;
-import com.wine.to.up.deployment.service.service.ApplicationInstanceService;
-import com.wine.to.up.deployment.service.service.ApplicationService;
-import com.wine.to.up.deployment.service.service.DeploymentService;
+import com.wine.to.up.deployment.service.service.*;
 import com.wine.to.up.deployment.service.vo.ApplicationDeployRequest;
 import com.wine.to.up.deployment.service.vo.ApplicationInstanceVO;
 import com.wine.to.up.deployment.service.vo.ApplicationTemplateVO;
@@ -33,6 +30,8 @@ public class DeploymentController {
 
     private ApplicationService applicationTemplateService;
 
+    private ApplicationInstanceManager applicationInstanceManager;
+
     @Autowired
     public void setDeploymentService(final DeploymentService deploymentService) {
         this.deploymentService = deploymentService;
@@ -46,6 +45,11 @@ public class DeploymentController {
     @Autowired
     public void setApplicationTemplateService(final ApplicationService applicationTemplateService) {
         this.applicationTemplateService = applicationTemplateService;
+    }
+
+    @Autowired
+    public void setApplicationInstanceManager(final ApplicationInstanceManager applicationInstanceManager) {
+        this.applicationInstanceManager = applicationInstanceManager;
     }
 
     @GetMapping("/applicationInstances/getInstances/byName/{templateName}")
@@ -95,6 +99,21 @@ public class DeploymentController {
     @PostMapping("/applicationInstance/deploy")
     public ApplicationInstanceVO deployApplicationInstance(@RequestBody ApplicationDeployRequest applicationDeployRequest) {
         return deploymentService.deployApplicationInstance(applicationDeployRequest);
+    }
+
+    @PostMapping("/applicationInstance/start/{id}")
+    public void startApplicationInstance(@PathVariable Long id)   {
+        applicationInstanceManager.startApplication(this.deploymentService.getSingleInstanceById(id));
+    }
+
+    @PostMapping("/applicationInstance/stop/{id}")
+    public void stopApplicationInstance(@PathVariable Long id)   {
+        applicationInstanceManager.stopApplication(this.deploymentService.getSingleInstanceById(id));
+    }
+
+    @PostMapping("/applicationInstance/restart/{id}")
+    public void restartApplicationInstance(@PathVariable Long id)   {
+        applicationInstanceManager.restartApplication(this.deploymentService.getSingleInstanceById(id));
     }
 
     @DeleteMapping("/application/delete/byId/{id}")
