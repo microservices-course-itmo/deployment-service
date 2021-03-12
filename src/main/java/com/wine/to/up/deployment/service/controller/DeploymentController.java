@@ -16,7 +16,7 @@ import java.util.List;
 @CrossOrigin
 @RestController
 //@PreAuthorize("isAuthenticated()")
-public class DeploymentController {
+public class    DeploymentController {
 
     private DeploymentService deploymentService;
     private ApplicationImportService applicationImportService;
@@ -115,6 +115,10 @@ public class DeploymentController {
     public void restartApplicationInstance(@PathVariable Long id)   {
         applicationInstanceManager.restartApplication(this.deploymentService.getSingleInstanceById(id));
     }
+
+    @DeleteMapping("/applicationInstance/{id}")
+    public ApplicationInstanceVO deleteApplicationInstance(@PathVariable final Long id) {
+        return deploymentService.removeApplicationInstanceById(id);
 
     @DeleteMapping("/application/delete/byId/{id}")
     public void deleteApplicationInstance(@PathVariable Long id) {
