@@ -1,5 +1,7 @@
 package com.wine.to.up.deployment.service.service.impl
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.type.TypeFactory
 import com.wine.to.up.deployment.service.entity.ApplicationTemplate
 import com.wine.to.up.deployment.service.service.ServiceVersionProvider
 import com.wine.to.up.deployment.service.service.SettingsService
@@ -19,15 +21,44 @@ class RegistryServiceVersionProvider(
     val restTemplate = RestTemplate()
 
     override fun findAllVersions(applicationTemplate: ApplicationTemplate): List<String> {
-        return listOf("latest")
+        val tags = getTagsList(applicationTemplate.name)
+        val baseBranch = applicationTemplate.baseBranch
+        val versions = mutableSetOf<String>()
+        for (tag in tags) {
+            val splitted = tag.split("_")
+            val version = splitted.last()
+            val branchName = splitted.dropLast(1).joinToString("_")
+            if (branchName == baseBranch) {
+                versions.add(version)
+            } else {
+                versions.add(branchName)
+            }
+        }
+        return versions.toList()
     }
 
     override fun findFullTagName(versionOrBranch: String, applicationTemplate: ApplicationTemplateVO): String {
-        return "latest"
+        if (versionOrBranch.matches(Regex("[0-9]\\.[0-9]\\.[0-9]"))) {
+            return "${applicationTemplate.baseBranch}_$versionOrBranch"
+        }
+        val allTags = getTagsList(applicationTemplate.name)
+        val version = allTags.filter {
+            it.startsWith(versionOrBranch)
+        }.map {
+            it.split("_").last()
+        }.max()
+        return "${versionOrBranch}_${version}"
     }
 
     private fun getTagsList(applicationName: String): List<String> {
-        return listOf("latest")
+        val settings = settingsService.settings
+        val url = "${settings.versionRegistry}/v2/${applicationName}/tags/list"
+        val registryAnswer = restTemplate.getForObject(url, String::class.java)
+        val mapper = ObjectMapper()
+        val map: Map<String, Any> = mapper.readValue(registryAnswer,
+                TypeFactory.defaultInstance().constructMapType(HashMap::class.java, String::class.java, Any::class.java)
+        )
+        return map["tags"] as List<String>
     }
 
     companion object {

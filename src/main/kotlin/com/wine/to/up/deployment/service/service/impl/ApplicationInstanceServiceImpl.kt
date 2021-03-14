@@ -42,6 +42,8 @@ class ApplicationInstanceServiceImpl(
         removeFromDockerByAppId(dockerClient, entity.appId)
 
         dockerClient.createServiceCmd(ServiceSpec()
+                .withNetworks(Collections.singletonList(NetworkAttachmentConfig()
+                        .withTarget("default_network")))
                 .withName(entity.appId)
                 .withTaskTemplate(TaskSpec()
                         .withContainerSpec(ContainerSpec()
