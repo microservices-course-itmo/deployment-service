@@ -8,10 +8,8 @@ import com.github.dockerjava.api.model.ServiceSpec;
 import com.wine.to.up.deployment.service.service.ApplicationInstanceManager;
 import com.wine.to.up.deployment.service.service.DockerClientFactory;
 import com.wine.to.up.deployment.service.vo.ApplicationInstanceVO;
-import com.wine.to.up.deployment.service.vo.ApplicationTemplateVO;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
-import java.util.Objects;
 
 @org.springframework.stereotype.Service
 public class ApplicationInstanceManagerImpl implements ApplicationInstanceManager {
@@ -23,41 +21,56 @@ public class ApplicationInstanceManagerImpl implements ApplicationInstanceManage
         this.dockerClientFactory = dockerClientFactory;
     }
 
-    //No error, not working
     public void startApplication(@NotNull ApplicationInstanceVO applicationInstanceVO) {
         DockerClient dockerClient = dockerClientFactory.getDockerClient();
         Service dockerService = dockerClient.inspectServiceCmd(applicationInstanceVO.getAppId()).exec();
-        ServiceSpec serviceSpec = new ServiceSpec();
-        ServiceSpec betterView = dockerService.getSpec();
-        if (betterView != null && betterView.getMode() != null && betterView.getMode().getReplicated() != null) {
-            if (betterView.getMode().getReplicated().getReplicas() == 0) {
-                ServiceModeConfig serviceModeConfig = betterView.getMode();
-                ServiceReplicatedModeOptions serviceReplicatedModeOptions = Objects.requireNonNull(betterView.getMode().getReplicated()).withReplicas(1);
-                serviceModeConfig = serviceModeConfig.withReplicated(serviceReplicatedModeOptions);
-                serviceSpec = serviceSpec.withMode(serviceModeConfig);
-                if (dockerService.getVersion() != null) {
-                    dockerClient.updateServiceCmd(dockerService.getId(), serviceSpec).withVersion(dockerService.getVersion().getIndex()).exec();
-                }
-            }
+        ServiceSpec spec = dockerService.getSpec();
+        ServiceModeConfig serviceModeConfig = spec.getMode();
+
+        if (serviceModeConfig != null) {
+            ServiceReplicatedModeOptions serviceReplicatedModeOptions = serviceModeConfig
+                    .getReplicated()
+                    .withReplicas(1);
+            serviceModeConfig = serviceModeConfig.withReplicated(serviceReplicatedModeOptions);
+            spec = spec.withMode(serviceModeConfig);
+        }
+
+
+        if (dockerService.getVersion() != null) {
+            dockerClient.updateServiceCmd(dockerService.getId(), spec)
+                    .withVersion(dockerService.getVersion().getIndex()).exec();
         }
     }
 
-    //ERROR: BadRequestException: Status 400: mismatched Runtime and *Spec fields
     public void stopApplication(@NotNull ApplicationInstanceVO applicationInstanceVO) {
         DockerClient dockerClient = dockerClientFactory.getDockerClient();
         Service dockerService = dockerClient.inspectServiceCmd(applicationInstanceVO.getAppId()).exec();
-        ServiceSpec betterView = dockerService.getSpec();
-        ServiceModeConfig serviceModeConfig = betterView.getMode();
-        ServiceReplicatedModeOptions serviceReplicatedModeOptions = Objects.requireNonNull(betterView.getMode().getReplicated()).withReplicas(0);
-        serviceModeConfig = serviceModeConfig.withReplicated(serviceReplicatedModeOptions);
-        ServiceSpec serviceSpec = new ServiceSpec().withMode(serviceModeConfig);
+        ServiceSpec spec = dockerService.getSpec();
+        ServiceModeConfig serviceModeConfig = spec.getMode();
+
+        if (serviceModeConfig != null) {
+            ServiceReplicatedModeOptions serviceReplicatedModeOptions = serviceModeConfig
+                    .getReplicated()
+                    .withReplicas(0);
+            serviceModeConfig = serviceModeConfig.withReplicated(serviceReplicatedModeOptions);
+            spec = spec.withMode(serviceModeConfig);
+        }
+
+
         if (dockerService.getVersion() != null) {
-            dockerClient.updateServiceCmd(dockerService.getId(), serviceSpec).withVersion(dockerService.getVersion().getIndex()).exec();
+            dockerClient.updateServiceCmd(dockerService.getId(), spec)
+                    .withVersion(dockerService.getVersion().getIndex()).exec();
         }
     }
 
     public void restartApplication (ApplicationInstanceVO applicationInstanceVO) {
-        stopApplication(applicationInstanceVO);
-        startApplication(applicationInstanceVO);
+        DockerClient dockerClient = dockerClientFactory.getDockerClient();
+        Service dockerService = dockerClient.inspectServiceCmd(applicationInstanceVO.getAppId()).exec();
+        ServiceSpec spec = dockerService.getSpec();
+
+        if (dockerService.getVersion() != null) {
+            dockerClient.updateServiceCmd(dockerService.getId(), spec)
+                    .withVersion(dockerService.getVersion().getIndex()).exec();
+        }
     }
 }
