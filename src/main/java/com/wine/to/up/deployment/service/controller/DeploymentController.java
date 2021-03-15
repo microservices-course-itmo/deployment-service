@@ -8,6 +8,8 @@ import com.wine.to.up.deployment.service.vo.ApplicationDeployRequest;
 import com.wine.to.up.deployment.service.vo.ApplicationInstanceVO;
 import com.wine.to.up.deployment.service.vo.ApplicationTemplateVO;
 import com.wine.to.up.deployment.service.vo.SettingsVO;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.Authorization;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -19,6 +21,7 @@ import java.util.List;
 
 @RestController
 @PreAuthorize("isAuthenticated()")
+@ApiOperation(value = "Main controller", authorizations = {@Authorization(value = "jwtToken")})
 public class DeploymentController {
 
     private DeploymentService deploymentService;
