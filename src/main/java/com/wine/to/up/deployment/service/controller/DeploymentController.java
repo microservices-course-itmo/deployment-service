@@ -11,11 +11,13 @@ import com.wine.to.up.deployment.service.vo.SettingsVO;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.Authorization;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.ws.rs.NotFoundException;
+import javax.ws.rs.ServiceUnavailableException;
 import java.util.Collections;
 import java.util.List;
 
@@ -25,16 +27,17 @@ import java.util.List;
 public class DeploymentController {
 
     private DeploymentService deploymentService;
+
     private ApplicationImportService applicationImportService;
+
+    private ApplicationInstanceService applicationInstanceService;
+
+    private ApplicationService applicationTemplateService;
 
     @Autowired
     public void setApplicationImportService(final ApplicationImportService applicationImportService) {
         this.applicationImportService = applicationImportService;
     }
-
-    private ApplicationInstanceService applicationInstanceService;
-
-    private ApplicationService applicationTemplateService;
 
     @Autowired
     public void setDeploymentService(final DeploymentService deploymentService) {
@@ -63,7 +66,7 @@ public class DeploymentController {
         try {
             return ResponseEntity.ok(this.deploymentService.getSingleInstanceById(id));
         } catch (final NotFoundException e) {
-            return ResponseEntity.notFound().build();
+            return constructErrorResponse(e);
         }
     }
 
@@ -72,7 +75,7 @@ public class DeploymentController {
         try {
             return ResponseEntity.ok(deploymentService.getApplicationByName(name));
         } catch (final NotFoundException e) {
-            return ResponseEntity.notFound().build();
+            return constructErrorResponse(e);
         }
     }
 
@@ -81,7 +84,7 @@ public class DeploymentController {
         try {
             return ResponseEntity.ok(deploymentService.getApplicationById(id));
         } catch (final NotFoundException e) {
-            return ResponseEntity.notFound().build();
+            return constructErrorResponse(e);
         }
     }
 
@@ -100,6 +103,33 @@ public class DeploymentController {
         return deploymentService.deployApplicationInstance(applicationDeployRequest);
     }
 
+    @PostMapping("/applicationInstance/start/{id}")
+    public ResponseEntity<ApplicationInstanceVO> startApplicationInstance(@PathVariable Long id) {
+        try {
+            return ResponseEntity.ok(deploymentService.startApplication(id));
+        } catch (final Throwable ex) {
+            return constructErrorResponse(ex);
+        }
+    }
+
+    @PostMapping("/applicationInstance/stop/{id}")
+    public ResponseEntity<ApplicationInstanceVO> stopApplicationInstance(@PathVariable Long id) {
+        try {
+            return ResponseEntity.ok(deploymentService.stopApplication(id));
+        } catch (final Throwable ex) {
+            return constructErrorResponse(ex);
+        }
+    }
+
+    @PostMapping("/applicationInstance/restart/{id}")
+    public ResponseEntity<ApplicationInstanceVO> restartApplicationInstance(@PathVariable Long id) {
+        try {
+            return ResponseEntity.ok(deploymentService.restartApplication(id));
+        } catch (final Throwable ex) {
+            return constructErrorResponse(ex);
+        }
+    }
+  
     @DeleteMapping("/applicationInstance/{id}")
     public ApplicationInstanceVO deleteApplicationInstance(@PathVariable final Long id) {
         return deploymentService.removeApplicationInstanceById(id);
@@ -129,6 +159,16 @@ public class DeploymentController {
     public ResponseEntity<?> getInstances() {
         applicationImportService.importInstances();
         return ResponseEntity.ok().build();
+    }
+
+    private ResponseEntity constructErrorResponse(Throwable e) {
+        if (e instanceof com.github.dockerjava.api.exception.NotFoundException || e instanceof NotFoundException) {
+            return ResponseEntity.notFound().build();
+        } else if (e instanceof ServiceUnavailableException) {
+            return new ResponseEntity<>(HttpStatus.SERVICE_UNAVAILABLE);
+        } else {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
 }

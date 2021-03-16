@@ -28,4 +28,10 @@ public interface DeploymentService {
      SettingsVO setSettings(SettingsVO settings);
 
      SettingsVO getSettings();
+
+     ApplicationInstanceVO stopApplication(Long id);
+
+     ApplicationInstanceVO startApplication(Long id);
+
+     ApplicationInstanceVO restartApplication(Long id);
 }

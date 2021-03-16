@@ -1,9 +1,6 @@
 package com.wine.to.up.deployment.service.service.impl;
 
-import com.wine.to.up.deployment.service.service.ApplicationInstanceService;
-import com.wine.to.up.deployment.service.service.ApplicationService;
-import com.wine.to.up.deployment.service.service.DeploymentService;
-import com.wine.to.up.deployment.service.service.SettingsService;
+import com.wine.to.up.deployment.service.service.*;
 import com.wine.to.up.deployment.service.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,14 +14,16 @@ public class DeploymentServiceImpl implements DeploymentService {
     private final ApplicationInstanceService applicationInstanceService;
     private final ApplicationService applicationService;
     private final SettingsService settingsService;
+    private final ApplicationInstanceManager applicationInstanceManager;
 
     @Autowired
     public DeploymentServiceImpl(
             ApplicationInstanceService applicationInstanceService, ApplicationService applicationService,
-            final SettingsService settingsService) {
+            final SettingsService settingsService, ApplicationInstanceManager applicationInstanceManager) {
         this.applicationInstanceService = applicationInstanceService;
         this.applicationService = applicationService;
         this.settingsService = settingsService;
+        this.applicationInstanceManager = applicationInstanceManager;
     }
 
     @Override
@@ -39,6 +38,7 @@ public class DeploymentServiceImpl implements DeploymentService {
 
     @Override
     public ApplicationInstanceVO getSingleInstanceById(Long id) {
+
         return applicationInstanceService.getInstanceById(id);
     }
 
@@ -80,5 +80,20 @@ public class DeploymentServiceImpl implements DeploymentService {
     @Override
     public SettingsVO getSettings() {
         return settingsService.getSettings();
+    }
+
+    @Override
+    public ApplicationInstanceVO stopApplication(Long id) {
+        return applicationInstanceManager.stopApplication(getSingleInstanceById(id));
+    }
+
+    @Override
+    public ApplicationInstanceVO startApplication(Long id) {
+        return applicationInstanceManager.startApplication(getSingleInstanceById(id));
+    }
+
+    @Override
+    public ApplicationInstanceVO restartApplication(Long id) {
+        return applicationInstanceManager.restartApplication(getSingleInstanceById(id));
     }
 }
