@@ -62,7 +62,7 @@ public class DeploymentController {
         try {
             return ResponseEntity.ok(this.deploymentService.getSingleInstanceById(id));
         } catch (final NotFoundException e) {
-            return ResponseEntity.notFound().build();
+            return constructErrorResponse(e);
         }
     }
 
@@ -71,7 +71,7 @@ public class DeploymentController {
         try {
             return ResponseEntity.ok(deploymentService.getApplicationByName(name));
         } catch (final NotFoundException e) {
-            return ResponseEntity.notFound().build();
+            return constructErrorResponse(e);
         }
     }
 
@@ -80,7 +80,7 @@ public class DeploymentController {
         try {
             return ResponseEntity.ok(deploymentService.getApplicationById(id));
         } catch (final NotFoundException e) {
-            return ResponseEntity.notFound().build();
+            return constructErrorResponse(e);
         }
     }
 
@@ -103,8 +103,10 @@ public class DeploymentController {
     public ResponseEntity<ApplicationInstanceVO> startApplicationInstance(@PathVariable Long id) {
         try {
             return ResponseEntity.ok(deploymentService.startApplication(id));
-        } catch (final ServiceUnavailableException e) {
-            return new ResponseEntity<>(HttpStatus.SERVICE_UNAVAILABLE);
+        } catch (final ServiceUnavailableException
+                | com.github.dockerjava.api.exception.NotFoundException
+                | NotFoundException ex) {
+            return constructErrorResponse(ex);
         }
     }
 
@@ -112,8 +114,10 @@ public class DeploymentController {
     public ResponseEntity<ApplicationInstanceVO> stopApplicationInstance(@PathVariable Long id) {
         try {
             return ResponseEntity.ok(deploymentService.stopApplication(id));
-        } catch (final ServiceUnavailableException e) {
-            return new ResponseEntity<>(HttpStatus.SERVICE_UNAVAILABLE);
+        } catch (final ServiceUnavailableException
+                | com.github.dockerjava.api.exception.NotFoundException
+                | NotFoundException ex) {
+            return constructErrorResponse(ex);
         }
     }
 
@@ -121,8 +125,10 @@ public class DeploymentController {
     public ResponseEntity<ApplicationInstanceVO> restartApplicationInstance(@PathVariable Long id) {
         try {
             return ResponseEntity.ok(deploymentService.restartApplication(id));
-        } catch (final ServiceUnavailableException e) {
-            return new ResponseEntity<>(HttpStatus.SERVICE_UNAVAILABLE);
+        } catch (final ServiceUnavailableException
+                | com.github.dockerjava.api.exception.NotFoundException
+                | NotFoundException ex) {
+            return constructErrorResponse(ex);
         }
     }
   
@@ -155,6 +161,16 @@ public class DeploymentController {
     public ResponseEntity<?> getInstances() {
         applicationImportService.importInstances();
         return ResponseEntity.ok().build();
+    }
+
+    private ResponseEntity constructErrorResponse(Exception e) {
+        if (e instanceof com.github.dockerjava.api.exception.NotFoundException || e instanceof NotFoundException) {
+            return ResponseEntity.notFound().build();
+        } else if (e instanceof ServiceUnavailableException) {
+            return new ResponseEntity<>(HttpStatus.SERVICE_UNAVAILABLE);
+        } else {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
 }
