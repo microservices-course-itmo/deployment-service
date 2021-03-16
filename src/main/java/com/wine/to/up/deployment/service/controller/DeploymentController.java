@@ -103,9 +103,7 @@ public class DeploymentController {
     public ResponseEntity<ApplicationInstanceVO> startApplicationInstance(@PathVariable Long id) {
         try {
             return ResponseEntity.ok(deploymentService.startApplication(id));
-        } catch (final ServiceUnavailableException
-                | com.github.dockerjava.api.exception.NotFoundException
-                | NotFoundException ex) {
+        } catch (final Throwable ex) {
             return constructErrorResponse(ex);
         }
     }
@@ -114,9 +112,7 @@ public class DeploymentController {
     public ResponseEntity<ApplicationInstanceVO> stopApplicationInstance(@PathVariable Long id) {
         try {
             return ResponseEntity.ok(deploymentService.stopApplication(id));
-        } catch (final ServiceUnavailableException
-                | com.github.dockerjava.api.exception.NotFoundException
-                | NotFoundException ex) {
+        } catch (final Throwable ex) {
             return constructErrorResponse(ex);
         }
     }
@@ -125,9 +121,7 @@ public class DeploymentController {
     public ResponseEntity<ApplicationInstanceVO> restartApplicationInstance(@PathVariable Long id) {
         try {
             return ResponseEntity.ok(deploymentService.restartApplication(id));
-        } catch (final ServiceUnavailableException
-                | com.github.dockerjava.api.exception.NotFoundException
-                | NotFoundException ex) {
+        } catch (final Throwable ex) {
             return constructErrorResponse(ex);
         }
     }
@@ -163,7 +157,7 @@ public class DeploymentController {
         return ResponseEntity.ok().build();
     }
 
-    private ResponseEntity constructErrorResponse(Exception e) {
+    private ResponseEntity constructErrorResponse(Throwable e) {
         if (e instanceof com.github.dockerjava.api.exception.NotFoundException || e instanceof NotFoundException) {
             return ResponseEntity.notFound().build();
         } else if (e instanceof ServiceUnavailableException) {
