@@ -5,11 +5,14 @@ import com.github.dockerjava.api.model.Service;
 import com.github.dockerjava.api.model.ServiceModeConfig;
 import com.github.dockerjava.api.model.ServiceReplicatedModeOptions;
 import com.github.dockerjava.api.model.ServiceSpec;
+import com.wine.to.up.deployment.service.enums.ApplicationInstanceStatus;
 import com.wine.to.up.deployment.service.service.ApplicationInstanceManager;
 import com.wine.to.up.deployment.service.service.DockerClientFactory;
 import com.wine.to.up.deployment.service.vo.ApplicationInstanceVO;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import javax.ws.rs.ServiceUnavailableException;
 
 @org.springframework.stereotype.Service
 public class ApplicationInstanceManagerImpl implements ApplicationInstanceManager {
@@ -21,7 +24,8 @@ public class ApplicationInstanceManagerImpl implements ApplicationInstanceManage
         this.dockerClientFactory = dockerClientFactory;
     }
 
-    public void startApplication(@NotNull ApplicationInstanceVO applicationInstanceVO) {
+    public ApplicationInstanceVO startApplication(@NotNull ApplicationInstanceVO applicationInstanceVO)
+            throws ServiceUnavailableException {
         DockerClient dockerClient = dockerClientFactory.getDockerClient();
         Service dockerService = dockerClient.inspectServiceCmd(applicationInstanceVO.getAppId()).exec();
         ServiceSpec spec = dockerService.getSpec();
@@ -33,16 +37,31 @@ public class ApplicationInstanceManagerImpl implements ApplicationInstanceManage
                     .withReplicas(1);
             serviceModeConfig = serviceModeConfig.withReplicated(serviceReplicatedModeOptions);
             spec = spec.withMode(serviceModeConfig);
+        } else {
+            throw new ServiceUnavailableException();
         }
-
 
         if (dockerService.getVersion() != null) {
             dockerClient.updateServiceCmd(dockerService.getId(), spec)
                     .withVersion(dockerService.getVersion().getIndex()).exec();
+        } else {
+            throw new ServiceUnavailableException();
         }
+
+        return ApplicationInstanceVO.builder()
+                .appId(applicationInstanceVO.getAppId())
+                .createdBy(applicationInstanceVO.getCreatedBy())
+                .id(applicationInstanceVO.getId())
+                .alias(applicationInstanceVO.getAlias())
+                .dateCreated(applicationInstanceVO.getDateCreated())
+                .templateId(applicationInstanceVO.getTemplateId())
+                .version(applicationInstanceVO.getVersion())
+                .status(ApplicationInstanceStatus.STARTING)
+                .build();
     }
 
-    public void stopApplication(@NotNull ApplicationInstanceVO applicationInstanceVO) {
+    public ApplicationInstanceVO stopApplication(@NotNull ApplicationInstanceVO applicationInstanceVO)
+            throws ServiceUnavailableException {
         DockerClient dockerClient = dockerClientFactory.getDockerClient();
         Service dockerService = dockerClient.inspectServiceCmd(applicationInstanceVO.getAppId()).exec();
         ServiceSpec spec = dockerService.getSpec();
@@ -54,23 +73,44 @@ public class ApplicationInstanceManagerImpl implements ApplicationInstanceManage
                     .withReplicas(0);
             serviceModeConfig = serviceModeConfig.withReplicated(serviceReplicatedModeOptions);
             spec = spec.withMode(serviceModeConfig);
+        } else {
+            throw new ServiceUnavailableException();
         }
-
 
         if (dockerService.getVersion() != null) {
             dockerClient.updateServiceCmd(dockerService.getId(), spec)
                     .withVersion(dockerService.getVersion().getIndex()).exec();
+
+        } else {
+            throw new ServiceUnavailableException();
         }
+
+        return ApplicationInstanceVO.builder()
+                .appId(applicationInstanceVO.getAppId())
+                .createdBy(applicationInstanceVO.getCreatedBy())
+                .id(applicationInstanceVO.getId())
+                .alias(applicationInstanceVO.getAlias())
+                .dateCreated(applicationInstanceVO.getDateCreated())
+                .templateId(applicationInstanceVO.getTemplateId())
+                .version(applicationInstanceVO.getVersion())
+                .status(ApplicationInstanceStatus.STOPPED)
+                .build();
     }
 
-    public void restartApplication (ApplicationInstanceVO applicationInstanceVO) {
-        DockerClient dockerClient = dockerClientFactory.getDockerClient();
-        Service dockerService = dockerClient.inspectServiceCmd(applicationInstanceVO.getAppId()).exec();
-        ServiceSpec spec = dockerService.getSpec();
+    public ApplicationInstanceVO restartApplication(@NotNull ApplicationInstanceVO applicationInstanceVO)
+            throws ServiceUnavailableException {
+        stopApplication(applicationInstanceVO);
+        startApplication(applicationInstanceVO);
 
-        if (dockerService.getVersion() != null) {
-            dockerClient.updateServiceCmd(dockerService.getId(), spec)
-                    .withVersion(dockerService.getVersion().getIndex()).exec();
-        }
+        return ApplicationInstanceVO.builder()
+                .appId(applicationInstanceVO.getAppId())
+                .createdBy(applicationInstanceVO.getCreatedBy())
+                .id(applicationInstanceVO.getId())
+                .alias(applicationInstanceVO.getAlias())
+                .dateCreated(applicationInstanceVO.getDateCreated())
+                .templateId(applicationInstanceVO.getTemplateId())
+                .version(applicationInstanceVO.getVersion())
+                .status(ApplicationInstanceStatus.STARTING)
+                .build();
     }
 }

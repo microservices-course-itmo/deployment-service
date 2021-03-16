@@ -1,36 +1,39 @@
 package com.wine.to.up.deployment.service.controller;
 
-import com.wine.to.up.deployment.service.service.*;
+import com.wine.to.up.deployment.service.service.ApplicationImportService;
+import com.wine.to.up.deployment.service.service.ApplicationInstanceService;
+import com.wine.to.up.deployment.service.service.ApplicationService;
+import com.wine.to.up.deployment.service.service.DeploymentService;
 import com.wine.to.up.deployment.service.vo.ApplicationDeployRequest;
 import com.wine.to.up.deployment.service.vo.ApplicationInstanceVO;
 import com.wine.to.up.deployment.service.vo.ApplicationTemplateVO;
 import com.wine.to.up.deployment.service.vo.SettingsVO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.ws.rs.NotFoundException;
+import javax.ws.rs.ServiceUnavailableException;
 import java.util.Collections;
 import java.util.List;
 
-@CrossOrigin
 @RestController
 //@PreAuthorize("isAuthenticated()")
-public class    DeploymentController {
+public class DeploymentController {
 
     private DeploymentService deploymentService;
-    private ApplicationImportService applicationImportService;
 
-    @Autowired
-    public void setApplicationImportService(final ApplicationImportService applicationImportService) {
-        this.applicationImportService = applicationImportService;
-    }
+    private ApplicationImportService applicationImportService;
 
     private ApplicationInstanceService applicationInstanceService;
 
     private ApplicationService applicationTemplateService;
 
-    private ApplicationInstanceManager applicationInstanceManager;
+    @Autowired
+    public void setApplicationImportService(final ApplicationImportService applicationImportService) {
+        this.applicationImportService = applicationImportService;
+    }
 
     @Autowired
     public void setDeploymentService(final DeploymentService deploymentService) {
@@ -45,11 +48,6 @@ public class    DeploymentController {
     @Autowired
     public void setApplicationTemplateService(final ApplicationService applicationTemplateService) {
         this.applicationTemplateService = applicationTemplateService;
-    }
-
-    @Autowired
-    public void setApplicationInstanceManager(final ApplicationInstanceManager applicationInstanceManager) {
-        this.applicationInstanceManager = applicationInstanceManager;
     }
 
     @GetMapping("/applicationInstances/getInstances/byName/{templateName}")
@@ -102,18 +100,30 @@ public class    DeploymentController {
     }
 
     @PostMapping("/applicationInstance/start/{id}")
-    public void startApplicationInstance(@PathVariable Long id)   {
-        applicationInstanceManager.startApplication(this.deploymentService.getSingleInstanceById(id));
+    public ResponseEntity<ApplicationInstanceVO> startApplicationInstance(@PathVariable Long id) {
+        try {
+            return ResponseEntity.ok(deploymentService.startApplication(id));
+        } catch (final ServiceUnavailableException e) {
+            return new ResponseEntity<>(HttpStatus.SERVICE_UNAVAILABLE);
+        }
     }
 
     @PostMapping("/applicationInstance/stop/{id}")
-    public void stopApplicationInstance(@PathVariable Long id)   {
-        applicationInstanceManager.stopApplication(this.deploymentService.getSingleInstanceById(id));
+    public ResponseEntity<ApplicationInstanceVO> stopApplicationInstance(@PathVariable Long id) {
+        try {
+            return ResponseEntity.ok(deploymentService.stopApplication(id));
+        } catch (final ServiceUnavailableException e) {
+            return new ResponseEntity<>(HttpStatus.SERVICE_UNAVAILABLE);
+        }
     }
 
     @PostMapping("/applicationInstance/restart/{id}")
-    public void restartApplicationInstance(@PathVariable Long id)   {
-        applicationInstanceManager.restartApplication(this.deploymentService.getSingleInstanceById(id));
+    public ResponseEntity<ApplicationInstanceVO> restartApplicationInstance(@PathVariable Long id) {
+        try {
+            return ResponseEntity.ok(deploymentService.restartApplication(id));
+        } catch (final ServiceUnavailableException e) {
+            return new ResponseEntity<>(HttpStatus.SERVICE_UNAVAILABLE);
+        }
     }
   
     @DeleteMapping("/applicationInstance/{id}")

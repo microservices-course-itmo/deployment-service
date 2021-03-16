@@ -4,9 +4,9 @@ import com.wine.to.up.deployment.service.vo.ApplicationInstanceVO;
 
 public interface ApplicationInstanceManager {
 
-    void startApplication(ApplicationInstanceVO applicationInstanceVO);
+    ApplicationInstanceVO startApplication(ApplicationInstanceVO applicationInstanceVO);
 
-    void stopApplication(ApplicationInstanceVO applicationInstanceVO);
+    ApplicationInstanceVO stopApplication(ApplicationInstanceVO applicationInstanceVO);
 
-    void restartApplication(ApplicationInstanceVO applicationInstanceVO);
+    ApplicationInstanceVO restartApplication(ApplicationInstanceVO applicationInstanceVO);
 }
