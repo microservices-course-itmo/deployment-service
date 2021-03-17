@@ -60,7 +60,7 @@ public class DeploymentController {
         return this.deploymentService.getInstancesByAppName(templateName);
     }
 
-    @GetMapping("/applicationInstances/getSingleInstance/{id}")
+    @GetMapping("/applicationInstances/getSingleInstance/{entityId}")
     public ResponseEntity<ApplicationInstanceVO> singleInstanceByApplicationId(
             @PathVariable final Long id) {
         try {
@@ -79,7 +79,7 @@ public class DeploymentController {
         }
     }
 
-    @GetMapping("/application/get/byId/{id}")
+    @GetMapping("/application/get/byId/{entityId}")
     public ResponseEntity<ApplicationTemplateVO> getApplication(@PathVariable final Long id) {
         try {
             return ResponseEntity.ok(deploymentService.getApplicationById(id));
@@ -103,41 +103,41 @@ public class DeploymentController {
         return deploymentService.deployApplicationInstance(applicationDeployRequest);
     }
 
-    @PostMapping("/applicationInstance/start/{id}")
-    public ResponseEntity<ApplicationInstanceVO> startApplicationInstance(@PathVariable Long id) {
+    @PostMapping("/applicationInstance/start/{entityId}")
+    public ResponseEntity<ApplicationInstanceVO> startApplicationInstance(@PathVariable Long entityId) {
         try {
-            return ResponseEntity.ok(deploymentService.startApplication(id));
+            return ResponseEntity.ok(deploymentService.startApplication(entityId));
         } catch (final Throwable ex) {
             return constructErrorResponse(ex);
         }
     }
 
-    @PostMapping("/applicationInstance/stop/{id}")
-    public ResponseEntity<ApplicationInstanceVO> stopApplicationInstance(@PathVariable Long id) {
+    @PostMapping("/applicationInstance/stop/{entityId}")
+    public ResponseEntity<ApplicationInstanceVO> stopApplicationInstance(@PathVariable Long entityId) {
         try {
-            return ResponseEntity.ok(deploymentService.stopApplication(id));
+            return ResponseEntity.ok(deploymentService.stopApplication(entityId));
         } catch (final Throwable ex) {
             return constructErrorResponse(ex);
         }
     }
 
-    @PostMapping("/applicationInstance/restart/{id}")
-    public ResponseEntity<ApplicationInstanceVO> restartApplicationInstance(@PathVariable Long id) {
+    @PostMapping("/applicationInstance/restart/{entityId}")
+    public ResponseEntity<ApplicationInstanceVO> restartApplicationInstance(@PathVariable Long entityId) {
         try {
-            return ResponseEntity.ok(deploymentService.restartApplication(id));
+            return ResponseEntity.ok(deploymentService.restartApplication(entityId));
         } catch (final Throwable ex) {
             return constructErrorResponse(ex);
         }
     }
   
-    @DeleteMapping("/applicationInstance/{id}")
-    public ApplicationInstanceVO deleteApplicationInstance(@PathVariable final Long id) {
-        return deploymentService.removeApplicationInstanceById(id);
+    @DeleteMapping("/applicationInstance/{entityId}")
+    public ApplicationInstanceVO deleteApplicationInstance(@PathVariable final Long entityId) {
+        return deploymentService.removeApplicationInstanceById(entityId);
     }
 
-    @DeleteMapping("/application/delete/byId/{id}")
-    public void deleteApplication(@PathVariable final Long id) {
-        applicationInstanceService.removeEntitiesByIds(Collections.singletonList(id));
+    @DeleteMapping("/application/delete/byId/{entityId}")
+    public void deleteApplication(@PathVariable final Long entityId) {
+        applicationInstanceService.removeEntitiesByIds(Collections.singletonList(entityId));
     }
 
     @GetMapping("/application/names")
