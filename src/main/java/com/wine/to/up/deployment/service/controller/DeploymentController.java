@@ -62,9 +62,9 @@ public class DeploymentController {
 
     @GetMapping("/applicationInstances/getSingleInstance/{entityId}")
     public ResponseEntity<ApplicationInstanceVO> singleInstanceByApplicationId(
-            @PathVariable final Long id) {
+            @PathVariable final Long entityId) {
         try {
-            return ResponseEntity.ok(this.deploymentService.getSingleInstanceById(id));
+            return ResponseEntity.ok(this.deploymentService.getSingleInstanceById(entityId));
         } catch (final NotFoundException e) {
             return constructErrorResponse(e);
         }
@@ -80,9 +80,9 @@ public class DeploymentController {
     }
 
     @GetMapping("/application/get/byId/{entityId}")
-    public ResponseEntity<ApplicationTemplateVO> getApplication(@PathVariable final Long id) {
+    public ResponseEntity<ApplicationTemplateVO> getApplication(@PathVariable final Long entityId) {
         try {
-            return ResponseEntity.ok(deploymentService.getApplicationById(id));
+            return ResponseEntity.ok(deploymentService.getApplicationById(entityId));
         } catch (final NotFoundException e) {
             return constructErrorResponse(e);
         }
