@@ -18,7 +18,7 @@ class RegistryServiceVersionProvider(
         private val settingsService: SettingsService
 ) : ServiceVersionProvider {
 
-    val restTemplate = RestTemplate()
+    var restTemplate = RestTemplate()
 
     override fun findAllVersions(applicationTemplate: ApplicationTemplate): List<String> {
         val tags = getTagsList(applicationTemplate.name)
