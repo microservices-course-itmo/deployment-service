@@ -83,7 +83,7 @@ public class ApplicationServiceImpl implements ApplicationService {
                 .orElseThrow(NotFoundException::new);
 
         var versions = serviceVersionProvider.findAllVersions(applicationTemplate);
-        var instances = applicationInstanceService.getInstancesByTemplateId(applicationTemplate.getId());
+        var instances = applicationInstanceService.getInstancesByTemplateId(id);
         //TODO limit should be applied automatically
         var logs = logService.logsByTemplate(applicationTemplate, 30);
 
