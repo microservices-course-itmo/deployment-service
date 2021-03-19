@@ -21,6 +21,7 @@ import javax.ws.rs.ServiceUnavailableException;
 import java.util.Collections;
 import java.util.List;
 
+@CrossOrigin
 @RestController
 @PreAuthorize("isAuthenticated()")
 @ApiOperation(value = "Main controller", authorizations = {@Authorization(value = "jwtToken")})
