@@ -25,7 +25,9 @@ public class ApplicationInstanceVO {
 
     private final ApplicationInstanceStatus status;
 
-    ApplicationInstanceVO(Long id, String appId, Long templateId, String version, Long dateCreated, String createdBy, String alias, String url, ApplicationInstanceStatus status) {
+    private final Resources resources;
+
+    ApplicationInstanceVO(Long id, String appId, Long templateId, String version, Long dateCreated, String createdBy, String alias, String url, ApplicationInstanceStatus status, final Resources resources) {
         this.id = id;
         this.appId = appId;
         this.templateId = templateId;
@@ -35,6 +37,7 @@ public class ApplicationInstanceVO {
         this.alias = alias;
         this.url = url;
         this.status = status;
+        this.resources = resources;
     }
 
     public static ApplicationInstanceVOBuilder builder() {
@@ -170,6 +173,10 @@ public class ApplicationInstanceVO {
         return result;
     }
 
+    public Resources getResources() {
+        return resources;
+    }
+
     public static class ApplicationInstanceVOBuilder {
         private Long id;
         private String appId;
@@ -180,6 +187,7 @@ public class ApplicationInstanceVO {
         private String alias;
         private String url;
         private ApplicationInstanceStatus status;
+        private Resources resources;
 
         ApplicationInstanceVOBuilder() {
         }
@@ -229,8 +237,14 @@ public class ApplicationInstanceVO {
             return this;
         }
 
+        public ApplicationInstanceVOBuilder resources(Resources resources) {
+            this.resources = resources;
+            return this;
+        }
+
+
         public ApplicationInstanceVO build() {
-            return new ApplicationInstanceVO(id, appId, templateId, version, dateCreated, createdBy, alias, url, status);
+            return new ApplicationInstanceVO(id, appId, templateId, version, dateCreated, createdBy, alias, url, status, resources);
         }
 
         public String toString() {

@@ -10,6 +10,7 @@ import com.wine.to.up.deployment.service.entity.EnvironmentVariable;
 import com.wine.to.up.deployment.service.enums.ApplicationInstanceStatus;
 import com.wine.to.up.deployment.service.service.*;
 import com.wine.to.up.deployment.service.vo.ApplicationTemplateVO;
+import com.wine.to.up.deployment.service.vo.Resources;
 
 import javax.ws.rs.NotFoundException;
 import java.util.*;
@@ -128,6 +129,14 @@ public class ApplicationImportServiceImpl implements ApplicationImportService {
                 .findFirstByNameOrderByIdDesc(templateName)
                 .orElseThrow(NotFoundException::new);
 
+        final Resources resources;
+        final var dockerResources = instance.getSpec().getTaskTemplate().getResources();
+        if(dockerResources != null && dockerResources.getLimits() != null && dockerResources.getLimits().getMemoryBytes() != null) { //refactor this shit I'm tired
+            resources = new Resources(dockerResources.getLimits().getMemoryBytes());
+        } else {
+            resources = null;
+        }
+
         ApplicationInstance applicationInstance = new ApplicationInstance(id,
                 templateName, instance.getSpec().getName(),
                 template.getTemplateVersion(), getVersion(image),
@@ -135,7 +144,9 @@ public class ApplicationImportServiceImpl implements ApplicationImportService {
                 "system",
                 ApplicationInstanceStatus.STARTING,
                 "test url",
-                "");
+                templateName,
+                resources
+        );
 
 
         applicationInstanceRepository.save(applicationInstance);
