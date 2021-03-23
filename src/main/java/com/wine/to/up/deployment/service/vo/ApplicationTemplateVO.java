@@ -3,15 +3,11 @@ package com.wine.to.up.deployment.service.vo;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.wine.to.up.deployment.service.entity.EnvironmentVariable;
 
-import lombok.EqualsAndHashCode;
-
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@EqualsAndHashCode
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ApplicationTemplateVO {
     private final Long id;
@@ -153,6 +149,97 @@ public class ApplicationTemplateVO {
     public List<EnvironmentVariable> addEnvironmentVariable(EnvironmentVariable environmentVariable) {
         this.environmentVariables.add(environmentVariable);
         return environmentVariables;
+    }
+
+    public boolean equals(final Object o) {
+        if (o == this) return true;
+        if (!(o instanceof ApplicationTemplateVO)) return false;
+        final ApplicationTemplateVO other = (ApplicationTemplateVO) o;
+        if (!other.canEqual(this)) return false;
+        final Object this$id = this.getId();
+        final Object other$id = other.getId();
+        if (this$id == null ? other$id != null : !this$id.equals(other$id)) return false;
+        final Object this$name = this.getName();
+        final Object other$name = other.getName();
+        if (this$name == null ? other$name != null : !this$name.equals(other$name)) return false;
+        final Object this$description = this.getDescription();
+        final Object other$description = other.getDescription();
+        if (this$description == null ? other$description != null : !this$description.equals(other$description))
+            return false;
+        final Object this$templateVersion = this.getTemplateVersion();
+        final Object other$templateVersion = other.getTemplateVersion();
+        if (this$templateVersion == null ? other$templateVersion != null : !this$templateVersion.equals(other$templateVersion))
+            return false;
+        final Object this$alias = this.getAlias();
+        final Object other$alias = other.getAlias();
+        if (this$alias == null ? other$alias != null : !this$alias.equals(other$alias)) return false;
+        final Object this$environmentVariables = this.getEnvironmentVariables();
+        final Object other$environmentVariables = other.getEnvironmentVariables();
+        if (this$environmentVariables == null ? other$environmentVariables != null : !this$environmentVariables.equals(other$environmentVariables))
+            return false;
+        final Object this$volumes = this.getVolumes();
+        final Object other$volumes = other.getVolumes();
+        if (this$volumes == null ? other$volumes != null : !this$volumes.equals(other$volumes)) return false;
+        final Object this$ports = this.getPorts();
+        final Object other$ports = other.getPorts();
+        if (this$ports == null ? other$ports != null : !this$ports.equals(other$ports)) return false;
+        final Object this$versions = this.getVersions();
+        final Object other$versions = other.getVersions();
+        if (this$versions == null ? other$versions != null : !this$versions.equals(other$versions)) return false;
+        final Object this$instances = this.getInstances();
+        final Object other$instances = other.getInstances();
+        if (this$instances == null ? other$instances != null : !this$instances.equals(other$instances)) return false;
+        final Object this$logs = this.getLogs();
+        final Object other$logs = other.getLogs();
+        if (this$logs == null ? other$logs != null : !this$logs.equals(other$logs)) return false;
+        final Object this$createdBy = this.getCreatedBy();
+        final Object other$createdBy = other.getCreatedBy();
+        if (this$createdBy == null ? other$createdBy != null : !this$createdBy.equals(other$createdBy)) return false;
+        final Object this$dateCreated = this.getDateCreated();
+        final Object other$dateCreated = other.getDateCreated();
+        if (this$dateCreated == null ? other$dateCreated != null : !this$dateCreated.equals(other$dateCreated))
+            return false;
+        final Object this$baseBranch = this.getBaseBranch();
+        final Object other$baseBranch = other.getBaseBranch();
+        return this$baseBranch == null ? other$baseBranch == null : this$baseBranch.equals(other$baseBranch);
+    }
+
+    protected boolean canEqual(final Object other) {
+        return other instanceof ApplicationTemplateVO;
+    }
+
+    public int hashCode() {
+        final int PRIME = 59;
+        int result = 1;
+        final Object $id = this.getId();
+        result = result * PRIME + ($id == null ? 43 : $id.hashCode());
+        final Object $name = this.getName();
+        result = result * PRIME + ($name == null ? 43 : $name.hashCode());
+        final Object $description = this.getDescription();
+        result = result * PRIME + ($description == null ? 43 : $description.hashCode());
+        final Object $templateVersion = this.getTemplateVersion();
+        result = result * PRIME + ($templateVersion == null ? 43 : $templateVersion.hashCode());
+        final Object $alias = this.getAlias();
+        result = result * PRIME + ($alias == null ? 43 : $alias.hashCode());
+        final Object $environmentVariables = this.getEnvironmentVariables();
+        result = result * PRIME + ($environmentVariables == null ? 43 : $environmentVariables.hashCode());
+        final Object $volumes = this.getVolumes();
+        result = result * PRIME + ($volumes == null ? 43 : $volumes.hashCode());
+        final Object $ports = this.getPorts();
+        result = result * PRIME + ($ports == null ? 43 : $ports.hashCode());
+        final Object $versions = this.getVersions();
+        result = result * PRIME + ($versions == null ? 43 : $versions.hashCode());
+        final Object $instances = this.getInstances();
+        result = result * PRIME + ($instances == null ? 43 : $instances.hashCode());
+        final Object $logs = this.getLogs();
+        result = result * PRIME + ($logs == null ? 43 : $logs.hashCode());
+        final Object $createdBy = this.getCreatedBy();
+        result = result * PRIME + ($createdBy == null ? 43 : $createdBy.hashCode());
+        final Object $dateCreated = this.getDateCreated();
+        result = result * PRIME + ($dateCreated == null ? 43 : $dateCreated.hashCode());
+        final Object $baseBranch = this.getBaseBranch();
+        result = result * PRIME + ($baseBranch == null ? 43 : $baseBranch.hashCode());
+        return result;
     }
 
     public static class ApplicationTemplateVOBuilder {

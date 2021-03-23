@@ -7,8 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface ApplicationInstanceRepository extends MongoRepository<ApplicationInstance, Long>
-{
+public interface ApplicationInstanceRepository extends MongoRepository<ApplicationInstance, Long> {
     List<ApplicationInstance> findByTemplateName(String templateName);
 
     List<ApplicationInstance> findByTemplateId(Long templateId);

@@ -70,7 +70,7 @@ public class ApplicationInstanceVO {
     }
 
     public String getCreatedBy() {
-        if (this.createdBy!= null) {
+        if (this.createdBy != null) {
             return this.createdBy;
         } else {
             return "";
@@ -109,7 +109,7 @@ public class ApplicationInstanceVO {
         if (o == this) return true;
         if (!(o instanceof ApplicationInstanceVO)) return false;
         final ApplicationInstanceVO other = (ApplicationInstanceVO) o;
-        if (!other.canEqual((Object) this)) return false;
+        if (!other.canEqual(this)) return false;
         final Object this$id = this.getId();
         final Object other$id = other.getId();
         if (this$id == null ? other$id != null : !this$id.equals(other$id)) return false;
@@ -138,8 +138,7 @@ public class ApplicationInstanceVO {
         if (this$url == null ? other$url != null : !this$url.equals(other$url)) return false;
         final Object this$status = this.getStatus();
         final Object other$status = other.getStatus();
-        if (this$status == null ? other$status != null : !this$status.equals(other$status)) return false;
-        return true;
+        return this$status == null ? other$status == null : this$status.equals(other$status);
     }
 
     protected boolean canEqual(final Object other) {

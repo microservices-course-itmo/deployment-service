@@ -1,9 +1,7 @@
 package com.wine.to.up.deployment.service.vo;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.EqualsAndHashCode;
 
-@EqualsAndHashCode
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class SettingsVO {
     private final String dockerAddress;
@@ -30,6 +28,40 @@ public class SettingsVO {
 
     public String getImageRegistry() {
         return imageRegistry;
+    }
+
+    public boolean equals(final Object o) {
+        if (o == this) return true;
+        if (!(o instanceof SettingsVO)) return false;
+        final SettingsVO other = (SettingsVO) o;
+        if (!other.canEqual(this)) return false;
+        final Object this$dockerAddress = this.getDockerAddress();
+        final Object other$dockerAddress = other.getDockerAddress();
+        if (this$dockerAddress == null ? other$dockerAddress != null : !this$dockerAddress.equals(other$dockerAddress))
+            return false;
+        final Object this$versionRegistry = this.getVersionRegistry();
+        final Object other$versionRegistry = other.getVersionRegistry();
+        if (this$versionRegistry == null ? other$versionRegistry != null : !this$versionRegistry.equals(other$versionRegistry))
+            return false;
+        final Object this$imageRegistry = this.getImageRegistry();
+        final Object other$imageRegistry = other.getImageRegistry();
+        return this$imageRegistry == null ? other$imageRegistry == null : this$imageRegistry.equals(other$imageRegistry);
+    }
+
+    protected boolean canEqual(final Object other) {
+        return other instanceof SettingsVO;
+    }
+
+    public int hashCode() {
+        final int PRIME = 59;
+        int result = 1;
+        final Object $dockerAddress = this.getDockerAddress();
+        result = result * PRIME + ($dockerAddress == null ? 43 : $dockerAddress.hashCode());
+        final Object $versionRegistry = this.getVersionRegistry();
+        result = result * PRIME + ($versionRegistry == null ? 43 : $versionRegistry.hashCode());
+        final Object $imageRegistry = this.getImageRegistry();
+        result = result * PRIME + ($imageRegistry == null ? 43 : $imageRegistry.hashCode());
+        return result;
     }
 
     public static class SettingsVOBuilder {

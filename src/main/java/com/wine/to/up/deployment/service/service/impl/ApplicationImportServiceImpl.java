@@ -138,7 +138,7 @@ public class ApplicationImportServiceImpl implements ApplicationImportService {
                 "");
 
 
-        applicationInstanceRepository.save(applicationInstance);
+        applicationInstanceService.saveInstance(applicationInstance);
     }
 
     private String getVersion(String image) {
