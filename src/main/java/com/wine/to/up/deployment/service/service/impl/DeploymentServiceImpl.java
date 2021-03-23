@@ -69,6 +69,7 @@ public class DeploymentServiceImpl implements DeploymentService {
                 applicationDeployRequest.getVersion(),
                 actualVo,
                 applicationDeployRequest.getAlias(),
+                applicationDeployRequest.getAttributes(),
                 applicationDeployRequest.getResources());
         return applicationInstanceService.deployInstance(applicationDeployRequestWrapper);
     }

@@ -2,9 +2,9 @@ package com.wine.to.up.deployment.service.service.impl
 
 import com.github.dockerjava.api.DockerClient
 import com.github.dockerjava.api.model.*
-import com.wine.to.up.commonlib.security.AuthenticationProvider
 import com.wine.to.up.deployment.service.dao.ApplicationInstanceRepository
 import com.wine.to.up.deployment.service.entity.ApplicationInstance
+import com.wine.to.up.deployment.service.entity.EnvironmentVariable
 import com.wine.to.up.deployment.service.enums.ApplicationInstanceStatus
 import com.wine.to.up.deployment.service.service.*
 import com.wine.to.up.deployment.service.vo.ApplicationDeployRequestWrapper
@@ -37,8 +37,12 @@ class ApplicationInstanceServiceImpl(
         }
         val resources = applicationDeployRequestWrapper.resources
         val entity = ApplicationInstance(id, applicationTemplateVO.name, appId, applicationTemplateVO.id,
-                version, System.currentTimeMillis(), AuthenticationProvider.getUser()?.id?.toString() ?: "system", ApplicationInstanceStatus.STARTING, "test url", appId, resources)
+                version, System.currentTimeMillis(), "system", ApplicationInstanceStatus.STARTING,
+                "test url", appId, applicationDeployRequestWrapper.attributes, resources)
         val dockerClient = dockerClientFactory.dockerClient
+
+        val environmentVariables = applicationTemplateVO.environmentVariables
+        environmentVariables.add(constructInstanceIdEnvVar(applicationDeployRequestWrapper))
 
         applicationInstanceRepository.removeAllByAppId(entity.appId)
         removeFromDockerByAppId(dockerClient, entity.appId)
@@ -48,7 +52,7 @@ class ApplicationInstanceServiceImpl(
                 .withContainerSpec(ContainerSpec()
                         .withImage("${getRegistryAddress()}/${applicationTemplateVO.name}:${version}")
                         //.withImage("${applicationTemplateVO.name}:latest")
-                        .withEnv(applicationTemplateVO.environmentVariables.map { "${it.name}=${it.value}" })
+                        .withEnv(environmentVariables.map { "${it.name}=${it.value}" })
                 )
         if(resources != null) {
             var dockerResources = ResourceSpecs()
@@ -100,6 +104,7 @@ class ApplicationInstanceServiceImpl(
                     .status(status)
                     .version(it.version)
                     .url(it.url)
+                    .attributes(it.attributes)
                     .resources(it.resources)
                     .build()
         }
@@ -118,6 +123,7 @@ class ApplicationInstanceServiceImpl(
                     it.status,
                     it.url,
                     it.alias,
+                    it.attributes,
                     it.resources
             )
         }
@@ -171,4 +177,14 @@ class ApplicationInstanceServiceImpl(
             //do nothing
         }
     }
+
+    private fun constructInstanceIdEnvVar(applicationDeployRequestWrapper: ApplicationDeployRequestWrapper): EnvironmentVariable {
+        val instanceIdVarName = "INSTANCE_ID"
+        val attributes = applicationDeployRequestWrapper.attributes
+        if (attributes != null && attributes.isTestInstance) {
+            return EnvironmentVariable(instanceIdVarName,"test")
+        }
+        return EnvironmentVariable(instanceIdVarName,"dev")
+    }
+
 }
