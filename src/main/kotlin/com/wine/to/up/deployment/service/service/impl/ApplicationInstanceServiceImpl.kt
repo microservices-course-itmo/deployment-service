@@ -39,7 +39,7 @@ class ApplicationInstanceServiceImpl(
         val resources = applicationDeployRequestWrapper.resources
         val entity = ApplicationInstance(id, applicationTemplateVO.name, appId, applicationTemplateVO.id,
                 version, System.currentTimeMillis(), AuthenticationProvider.getUser()?.id?.toString() ?: "system",
-                ApplicationInstanceStatus.STARTING,"test url", appId, applicationDeployRequestWrapper.attributes, resources)
+                ApplicationInstanceStatus.STARTING, "test url", appId, applicationDeployRequestWrapper.attributes, resources)
         val dockerClient = dockerClientFactory.dockerClient
 
         val environmentVariables = applicationTemplateVO.environmentVariables
