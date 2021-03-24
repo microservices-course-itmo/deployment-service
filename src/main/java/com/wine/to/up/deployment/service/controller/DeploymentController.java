@@ -23,8 +23,6 @@ import java.util.List;
 
 @CrossOrigin
 @RestController
-@PreAuthorize("isAuthenticated()")
-@ApiOperation(value = "Main controller", authorizations = {@Authorization(value = "jwtToken")})
 public class DeploymentController {
 
     private DeploymentService deploymentService;
@@ -56,14 +54,12 @@ public class DeploymentController {
     }
 
     @GetMapping("/applicationInstances/getInstances/byName/{templateName}")
-    @ApiOperation(value = "Main controller", authorizations = {@Authorization(value = "jwtToken")})
     public List<ApplicationInstanceVO> multipleInstancesByApplicationName(
             @PathVariable final String templateName) {
         return this.deploymentService.getInstancesByAppName(templateName);
     }
 
     @GetMapping("/applicationInstances/getSingleInstance/{entityId}")
-    @ApiOperation(value = "Main controller", authorizations = {@Authorization(value = "jwtToken")})
     public ResponseEntity<ApplicationInstanceVO> singleInstanceByApplicationId(
             @PathVariable final Long entityId) {
         try {
@@ -74,7 +70,6 @@ public class DeploymentController {
     }
 
     @GetMapping("/application/get/byName/{name}")
-    @ApiOperation(value = "Main controller", authorizations = {@Authorization(value = "jwtToken")})
     public ResponseEntity<ApplicationTemplateVO> getApplication(@PathVariable final String name) {
         try {
             return ResponseEntity.ok(deploymentService.getApplicationByName(name));
@@ -84,7 +79,6 @@ public class DeploymentController {
     }
 
     @GetMapping("/application/get/byId/{entityId}")
-    @ApiOperation(value = "Main controller", authorizations = {@Authorization(value = "jwtToken")})
     public ResponseEntity<ApplicationTemplateVO> getApplication(@PathVariable final Long entityId) {
         try {
             return ResponseEntity.ok(deploymentService.getApplicationById(entityId));
@@ -94,25 +88,21 @@ public class DeploymentController {
     }
 
     @PostMapping("/application/createOrUpdate")
-    @ApiOperation(value = "Main controller", authorizations = {@Authorization(value = "jwtToken")})
     public ApplicationTemplateVO createOrUpdateApplicationTemplate(@RequestBody final ApplicationTemplateVO applicationTemplateVO) {
         return deploymentService.createOrUpdateApplicationTemplate(applicationTemplateVO);
     }
 
     @DeleteMapping("/application/delete/byName/{name}")
-    @ApiOperation(value = "Main controller", authorizations = {@Authorization(value = "jwtToken")})
     public void deleteApplicationTemplate(@PathVariable final String name) {
         applicationTemplateService.removeEntity(name);
     }
 
     @PostMapping("/applicationInstance/deploy")
-    @ApiOperation(value = "Main controller", authorizations = {@Authorization(value = "jwtToken")})
     public ApplicationInstanceVO deployApplicationInstance(@RequestBody final ApplicationDeployRequest applicationDeployRequest) {
         return deploymentService.deployApplicationInstance(applicationDeployRequest);
     }
 
     @PostMapping("/applicationInstance/start/{entityId}")
-    @ApiOperation(value = "Main controller", authorizations = {@Authorization(value = "jwtToken")})
     public ResponseEntity<ApplicationInstanceVO> startApplicationInstance(@PathVariable Long entityId) {
         try {
             return ResponseEntity.ok(deploymentService.startApplication(entityId));
@@ -122,7 +112,6 @@ public class DeploymentController {
     }
 
     @PostMapping("/applicationInstance/stop/{entityId}")
-    @ApiOperation(value = "Main controller", authorizations = {@Authorization(value = "jwtToken")})
     public ResponseEntity<ApplicationInstanceVO> stopApplicationInstance(@PathVariable Long entityId) {
         try {
             return ResponseEntity.ok(deploymentService.stopApplication(entityId));
@@ -132,7 +121,6 @@ public class DeploymentController {
     }
 
     @PostMapping("/applicationInstance/restart/{entityId}")
-    @ApiOperation(value = "Main controller", authorizations = {@Authorization(value = "jwtToken")})
     public ResponseEntity<ApplicationInstanceVO> restartApplicationInstance(@PathVariable Long entityId) {
         try {
             return ResponseEntity.ok(deploymentService.restartApplication(entityId));
@@ -142,37 +130,31 @@ public class DeploymentController {
     }
 
     @DeleteMapping("/applicationInstance/{entityId}")
-    @ApiOperation(value = "Main controller", authorizations = {@Authorization(value = "jwtToken")})
     public ApplicationInstanceVO deleteApplicationInstance(@PathVariable final Long entityId) {
         return deploymentService.removeApplicationInstanceById(entityId);
     }
 
     @DeleteMapping("/application/delete/byId/{entityId}")
-    @ApiOperation(value = "Main controller", authorizations = {@Authorization(value = "jwtToken")})
     public void deleteApplication(@PathVariable final Long entityId) {
         applicationInstanceService.removeEntitiesByIds(Collections.singletonList(entityId));
     }
 
     @GetMapping("/application/names")
-    @ApiOperation(value = "Main controller", authorizations = {@Authorization(value = "jwtToken")})
     public List<String> getAllNames() {
         return deploymentService.getAllNames();
     }
 
     @PostMapping("/settings/set")
-    @ApiOperation(value = "Main controller", authorizations = {@Authorization(value = "jwtToken")})
     public SettingsVO setSettings(@RequestBody final SettingsVO settings) {
         return deploymentService.setSettings(settings);
     }
 
     @GetMapping("/settings/get")
-    @ApiOperation(value = "Main controller", authorizations = {@Authorization(value = "jwtToken")})
     public SettingsVO getSettings() {
         return deploymentService.getSettings();
     }
 
     @GetMapping("/applicationInstances/import")
-    @ApiOperation(value = "Main controller", authorizations = {@Authorization(value = "jwtToken")})
     public ResponseEntity<?> getInstances() {
         applicationImportService.importInstances();
         return ResponseEntity.ok().build();
