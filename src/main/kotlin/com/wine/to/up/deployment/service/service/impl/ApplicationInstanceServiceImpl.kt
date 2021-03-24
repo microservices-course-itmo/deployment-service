@@ -2,6 +2,7 @@ package com.wine.to.up.deployment.service.service.impl
 
 import com.github.dockerjava.api.DockerClient
 import com.github.dockerjava.api.model.*
+import com.wine.to.up.commonlib.security.AuthenticationProvider
 import com.wine.to.up.deployment.service.dao.ApplicationInstanceRepository
 import com.wine.to.up.deployment.service.entity.ApplicationInstance
 import com.wine.to.up.deployment.service.entity.EnvironmentVariable
@@ -37,8 +38,8 @@ class ApplicationInstanceServiceImpl(
         }
         val resources = applicationDeployRequestWrapper.resources
         val entity = ApplicationInstance(id, applicationTemplateVO.name, appId, applicationTemplateVO.id,
-                version, System.currentTimeMillis(), "system", ApplicationInstanceStatus.STARTING,
-                "test url", appId, applicationDeployRequestWrapper.attributes, resources)
+                version, System.currentTimeMillis(), AuthenticationProvider.getUser()?.id?.toString() ?: "system",
+                ApplicationInstanceStatus.STARTING,"test url", appId, applicationDeployRequestWrapper.attributes, resources)
         val dockerClient = dockerClientFactory.dockerClient
 
         val environmentVariables = applicationTemplateVO.environmentVariables

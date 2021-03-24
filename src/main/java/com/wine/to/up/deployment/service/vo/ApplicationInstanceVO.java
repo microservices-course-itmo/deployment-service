@@ -31,7 +31,7 @@ public class ApplicationInstanceVO {
     private final Resources resources;
 
     ApplicationInstanceVO(Long id, String appId, Long templateId, String version, Long dateCreated, String createdBy,
-                          String alias, String url, ApplicationInstanceStatus status, Attributes attributes, , final Resources resources) {
+                          String alias, String url, ApplicationInstanceStatus status, Attributes attributes, final Resources resources) {
         this.id = id;
         this.appId = appId;
         this.templateId = templateId;
