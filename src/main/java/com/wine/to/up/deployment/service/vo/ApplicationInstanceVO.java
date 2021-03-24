@@ -77,7 +77,7 @@ public class ApplicationInstanceVO {
     }
 
     public String getCreatedBy() {
-        if (this.createdBy!= null) {
+        if (this.createdBy != null) {
             return this.createdBy;
         } else {
             return "";

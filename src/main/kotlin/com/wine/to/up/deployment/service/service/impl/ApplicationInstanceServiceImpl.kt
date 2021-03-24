@@ -26,6 +26,10 @@ class ApplicationInstanceServiceImpl(
 
     private val logger = LoggerFactory.getLogger(this::class.java)
 
+    override fun saveInstance(applicationInstance: ApplicationInstance): ApplicationInstanceVO {
+        return entitiesToVies(listOf(applicationInstanceRepository.save(applicationInstance)), ApplicationInstanceStatus.STARTING).first()
+    }
+
     override fun deployInstance(applicationDeployRequestWrapper: ApplicationDeployRequestWrapper): ApplicationInstanceVO {
         val applicationTemplateVO = applicationDeployRequestWrapper.applicationTemplateVO
         val alias = applicationDeployRequestWrapper.alias
@@ -131,7 +135,7 @@ class ApplicationInstanceServiceImpl(
     }
 
     override fun removeEntitiesByIds(ids: List<Long>) {
-        removeEntities(ids.map { applicationInstanceRepository.findById(it).orElseThrow() }) // TODO Response status exception here
+        removeEntities(ids.map { applicationInstanceRepository.findById(it).orElseThrow { NotFoundException() } })
     }
 
     override fun removeEntities(entities: List<ApplicationInstance>) {
@@ -172,7 +176,7 @@ class ApplicationInstanceServiceImpl(
     }
 
     private fun removeFromDockerByAppId(dockerClient: DockerClient, appId: String) {
-        try{
+        try {
             dockerClient.removeServiceCmd(appId).exec()
         } catch (e: com.github.dockerjava.api.exception.NotFoundException) {
             //do nothing
