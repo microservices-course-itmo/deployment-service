@@ -2,8 +2,10 @@ package com.wine.to.up.deployment.service.service.impl
 
 import com.github.dockerjava.api.DockerClient
 import com.github.dockerjava.api.model.*
+import com.wine.to.up.commonlib.security.AuthenticationProvider
 import com.wine.to.up.deployment.service.dao.ApplicationInstanceRepository
 import com.wine.to.up.deployment.service.entity.ApplicationInstance
+import com.wine.to.up.deployment.service.entity.EnvironmentVariable
 import com.wine.to.up.deployment.service.enums.ApplicationInstanceStatus
 import com.wine.to.up.deployment.service.service.*
 import com.wine.to.up.deployment.service.vo.ApplicationDeployRequestWrapper
@@ -38,24 +40,35 @@ class ApplicationInstanceServiceImpl(
         } else {
             applicationDeployRequestWrapper.alias
         }
+        val resources = applicationDeployRequestWrapper.resources
         val entity = ApplicationInstance(id, applicationTemplateVO.name, appId, applicationTemplateVO.id,
-                version, System.currentTimeMillis(), "system", ApplicationInstanceStatus.STARTING, "test url", appId)
+                version, System.currentTimeMillis(), AuthenticationProvider.getUser()?.id?.toString() ?: "system",
+                ApplicationInstanceStatus.STARTING, "test url", appId, applicationDeployRequestWrapper.attributes, resources)
         val dockerClient = dockerClientFactory.dockerClient
+
+        val environmentVariables = applicationTemplateVO.environmentVariables
+        environmentVariables.add(constructInstanceIdEnvVar(applicationDeployRequestWrapper, id))
 
         applicationInstanceRepository.removeAllByAppId(entity.appId)
         removeFromDockerByAppId(dockerClient, entity.appId)
 
-        dockerClient.createServiceCmd(ServiceSpec()
-                .withNetworks(Collections.singletonList(NetworkAttachmentConfig()
-                        .withTarget("default_network")))
-                .withName(entity.appId)
-                .withTaskTemplate(TaskSpec()
-                        .withContainerSpec(ContainerSpec()
-                                .withImage("${getRegistryAddress()}/${applicationTemplateVO.name}:${version}")
-                                //.withImage("${applicationTemplateVO.name}:latest")
-                                .withEnv(applicationTemplateVO.environmentVariables.map { "${it.name}=${it.value}" })
-                        )
+
+        var taskTemplate = TaskSpec()
+                .withContainerSpec(ContainerSpec()
+                        .withImage("${getRegistryAddress()}/${applicationTemplateVO.name}:${version}")
+                        //.withImage("${applicationTemplateVO.name}:latest")
+                        .withEnv(environmentVariables.map { "${it.name}=${it.value}" })
                 )
+        if(resources != null) {
+            var dockerResources = ResourceSpecs()
+            if(resources.memoryBytesLimit != null) {
+                dockerResources = dockerResources.withMemoryBytes(resources.memoryBytesLimit)
+            }
+            taskTemplate = taskTemplate.withResources(ResourceRequirements().withLimits(dockerResources))
+        }
+        dockerClient.createServiceCmd(ServiceSpec()
+                .withName(entity.appId)
+                .withTaskTemplate(taskTemplate)
                 .withEndpointSpec(EndpointSpec()
                         .withPorts(applicationTemplateVO.ports?.map {
                             PortConfig().withPublishedPort(it.key.toInt()).withTargetPort(it.value.toInt())
@@ -96,6 +109,8 @@ class ApplicationInstanceServiceImpl(
                     .status(status)
                     .version(it.version)
                     .url(it.url)
+                    .attributes(it.attributes)
+                    .resources(it.resources)
                     .build()
         }
     }
@@ -112,7 +127,9 @@ class ApplicationInstanceServiceImpl(
                     it.createdBy,
                     it.status,
                     it.url,
-                    it.alias
+                    it.alias,
+                    it.attributes,
+                    it.resources
             )
         }
     }
@@ -165,4 +182,15 @@ class ApplicationInstanceServiceImpl(
             //do nothing
         }
     }
+
+    private fun constructInstanceIdEnvVar(applicationDeployRequestWrapper: ApplicationDeployRequestWrapper,
+                                          id: Long): EnvironmentVariable {
+        val instanceIdVarName = "INSTANCE_ID"
+        val attributes = applicationDeployRequestWrapper.attributes
+        if (attributes != null && attributes.isTestInstance) {
+            return EnvironmentVariable(instanceIdVarName, "test_$id")
+        }
+        return EnvironmentVariable(instanceIdVarName, "dev_$id")
+    }
+
 }
