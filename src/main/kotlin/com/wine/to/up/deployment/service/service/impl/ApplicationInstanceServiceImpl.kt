@@ -43,7 +43,7 @@ class ApplicationInstanceServiceImpl(
         val dockerClient = dockerClientFactory.dockerClient
 
         val environmentVariables = applicationTemplateVO.environmentVariables
-        environmentVariables.add(constructInstanceIdEnvVar(applicationDeployRequestWrapper))
+        environmentVariables.add(constructInstanceIdEnvVar(applicationDeployRequestWrapper, id))
 
         applicationInstanceRepository.removeAllByAppId(entity.appId)
         removeFromDockerByAppId(dockerClient, entity.appId)
@@ -179,13 +179,14 @@ class ApplicationInstanceServiceImpl(
         }
     }
 
-    private fun constructInstanceIdEnvVar(applicationDeployRequestWrapper: ApplicationDeployRequestWrapper): EnvironmentVariable {
+    private fun constructInstanceIdEnvVar(applicationDeployRequestWrapper: ApplicationDeployRequestWrapper,
+                                          id: Long): EnvironmentVariable {
         val instanceIdVarName = "INSTANCE_ID"
         val attributes = applicationDeployRequestWrapper.attributes
         if (attributes != null && attributes.isTestInstance) {
-            return EnvironmentVariable(instanceIdVarName,"test")
+            return EnvironmentVariable(instanceIdVarName, "test_$id")
         }
-        return EnvironmentVariable(instanceIdVarName,"dev")
+        return EnvironmentVariable(instanceIdVarName, "dev_$id")
     }
 
 }

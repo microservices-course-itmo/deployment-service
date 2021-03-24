@@ -160,6 +160,9 @@ public class ApplicationInstance {
         return attributes;
     }
 
+    public void setAttributes(Attributes attributes) {
+        this.attributes = attributes;
+    }
 
     public Resources getResources() {
         return resources;
