@@ -1,12 +1,12 @@
 package com.wine.to.up.deployment.service.vo;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.wine.to.up.deployment.service.entity.EnvironmentVariable;
-
 import lombok.EqualsAndHashCode;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,7 +29,21 @@ public class ApplicationTemplateVO {
     private final Long dateCreated;
     private final String baseBranch;
 
-    private ApplicationTemplateVO(Long id, String name, String description, Long templateVersion, String alias, List<EnvironmentVariable> environmentVariables, List<String> volumes, Map<String, String> ports, List<String> versions, List<ApplicationInstanceVO> instances, List<LogVO> logs, String createdBy, Long dateCreated, String baseBranch) {
+    @JsonCreator
+    private ApplicationTemplateVO(@JsonProperty("id") final Long id,
+                                  @JsonProperty("name") final String name,
+                                  @JsonProperty("description") final String description,
+                                  @JsonProperty("templateVersion") final Long templateVersion,
+                                  @JsonProperty("alias") final String alias,
+                                  @JsonProperty("environmentVariables") final List<EnvironmentVariable> environmentVariables,
+                                  @JsonProperty("volumes") final List<String> volumes,
+                                  @JsonProperty("ports") final Map<String, String> ports,
+                                  @JsonProperty("versions") final List<String> versions,
+                                  @JsonProperty("instances") final List<ApplicationInstanceVO> instances,
+                                  @JsonProperty("logs") final List<LogVO> logs,
+                                  @JsonProperty("createdBy") final String createdBy,
+                                  @JsonProperty("dateCreated") final Long dateCreated,
+                                  @JsonProperty("baseBranch") final String baseBranch) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -150,7 +164,7 @@ public class ApplicationTemplateVO {
         return this.dateCreated;
     }
 
-    public List<EnvironmentVariable> addEnvironmentVariable(EnvironmentVariable environmentVariable) {
+    public List<EnvironmentVariable> addEnvironmentVariable(final EnvironmentVariable environmentVariable) {
         this.environmentVariables.add(environmentVariable);
         return environmentVariables;
     }
@@ -174,72 +188,72 @@ public class ApplicationTemplateVO {
         ApplicationTemplateVOBuilder() {
         }
 
-        public ApplicationTemplateVOBuilder id(Long id) {
+        public ApplicationTemplateVOBuilder id(final Long id) {
             this.id = id;
             return this;
         }
 
-        public ApplicationTemplateVOBuilder name(String name) {
+        public ApplicationTemplateVOBuilder name(final String name) {
             this.name = name;
             return this;
         }
 
-        public ApplicationTemplateVOBuilder baseBranch(String baseBranch) {
+        public ApplicationTemplateVOBuilder baseBranch(final String baseBranch) {
             this.baseBranch = baseBranch;
             return this;
         }
 
-        public ApplicationTemplateVOBuilder description(String description) {
+        public ApplicationTemplateVOBuilder description(final String description) {
             this.description = description;
             return this;
         }
 
-        public ApplicationTemplateVOBuilder templateVersion(Long templateVersion) {
+        public ApplicationTemplateVOBuilder templateVersion(final Long templateVersion) {
             this.templateVersion = templateVersion;
             return this;
         }
 
-        public ApplicationTemplateVOBuilder alias(String alias) {
+        public ApplicationTemplateVOBuilder alias(final String alias) {
             this.alias = alias;
             return this;
         }
 
-        public ApplicationTemplateVOBuilder environmentVariables(List<EnvironmentVariable> environmentVariables) {
+        public ApplicationTemplateVOBuilder environmentVariables(final List<EnvironmentVariable> environmentVariables) {
             this.environmentVariables = environmentVariables;
             return this;
         }
 
-        public ApplicationTemplateVOBuilder volumes(List<String> volumes) {
+        public ApplicationTemplateVOBuilder volumes(final List<String> volumes) {
             this.volumes = volumes;
             return this;
         }
 
-        public ApplicationTemplateVOBuilder ports(Map<String, String> ports) {
+        public ApplicationTemplateVOBuilder ports(final Map<String, String> ports) {
             this.ports = ports;
             return this;
         }
 
-        public ApplicationTemplateVOBuilder versions(List<String> versions) {
+        public ApplicationTemplateVOBuilder versions(final List<String> versions) {
             this.versions = versions;
             return this;
         }
 
-        public ApplicationTemplateVOBuilder instances(List<ApplicationInstanceVO> instances) {
+        public ApplicationTemplateVOBuilder instances(final List<ApplicationInstanceVO> instances) {
             this.instances = instances;
             return this;
         }
 
-        public ApplicationTemplateVOBuilder logs(List<LogVO> logs) {
+        public ApplicationTemplateVOBuilder logs(final List<LogVO> logs) {
             this.logs = logs;
             return this;
         }
 
-        public ApplicationTemplateVOBuilder createdBy(String createdBy) {
+        public ApplicationTemplateVOBuilder createdBy(final String createdBy) {
             this.createdBy = createdBy;
             return this;
         }
 
-        public ApplicationTemplateVOBuilder dateCreated(Long dateCreated) {
+        public ApplicationTemplateVOBuilder dateCreated(final Long dateCreated) {
             this.dateCreated = dateCreated;
             return this;
         }
