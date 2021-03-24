@@ -23,9 +23,13 @@ public class ApplicationInstance {
     private ApplicationInstanceStatus status;
     private String alias;
     private String url;
+    private Attributes attributes;
     private Resources resources;
 
-    public ApplicationInstance(final Long id, final String templateName, final String appId, final Long templateId, final String version, final Long dateCreated, final String userCreated, final ApplicationInstanceStatus status, final String url, final String alias, final Resources resources) {
+    public ApplicationInstance(final Long id, final String templateName, final String appId, final Long templateId,
+                               final String version, final Long dateCreated, final String userCreated,
+                               final ApplicationInstanceStatus status, final String url, final String alias,
+                               final Attributes attributes, final Resources resources) {
         this.id = id;
         this.appId = appId;
         this.templateName = templateName;
@@ -36,6 +40,7 @@ public class ApplicationInstance {
         this.status = status;
         this.url = url;
         this.alias = alias;
+        this.attributes = attributes;
         this.resources = resources;
     }
 
@@ -149,6 +154,14 @@ public class ApplicationInstance {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public Attributes getAttributes() {
+        return attributes;
+    }
+
+    public void setAttributes(Attributes attributes) {
+        this.attributes = attributes;
     }
 
     public Resources getResources() {

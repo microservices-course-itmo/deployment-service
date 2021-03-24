@@ -6,6 +6,7 @@ import com.wine.to.up.deployment.service.dao.ApplicationInstanceRepository;
 import com.wine.to.up.deployment.service.dao.ApplicationTemplateRepository;
 import com.wine.to.up.deployment.service.entity.ApplicationInstance;
 import com.wine.to.up.deployment.service.entity.ApplicationTemplate;
+import com.wine.to.up.deployment.service.entity.Attributes;
 import com.wine.to.up.deployment.service.entity.EnvironmentVariable;
 import com.wine.to.up.deployment.service.enums.ApplicationInstanceStatus;
 import com.wine.to.up.deployment.service.service.*;
@@ -51,7 +52,8 @@ public class ApplicationImportServiceImpl implements ApplicationImportService {
 
             if (isMicroService(image)) {
                 String templateName = getTemplateName(image);
-                if (!(isApplicationTemplateExists(templateName)) || !(isApplicationInstanceExists(instance.getSpec().getName()))) {
+                if (!(isApplicationTemplateExists(templateName))
+                        || !(isApplicationInstanceExists(instance.getSpec().getName()))) {
                     createApplicationTemplate(instance, templateName);
                     createApplicationInstance(instance, templateName);
                     recreatedTemplatesNames.add(templateName);
@@ -145,6 +147,7 @@ public class ApplicationImportServiceImpl implements ApplicationImportService {
                 ApplicationInstanceStatus.STARTING,
                 "test url",
                 templateName,
+                new Attributes(false),
                 resources
         );
 
