@@ -2,7 +2,6 @@ package com.wine.to.up.deployment.service.vo;
 
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.wine.to.up.deployment.service.entity.Attributes;
 import com.wine.to.up.deployment.service.enums.ApplicationInstanceStatus;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -30,8 +29,8 @@ public class ApplicationInstanceVO {
 
     private final Resources resources;
 
-    ApplicationInstanceVO(Long id, String appId, Long templateId, String version, Long dateCreated, String createdBy,
-                          String alias, String url, ApplicationInstanceStatus status, Attributes attributes, final Resources resources) {
+    ApplicationInstanceVO(final Long id, final String appId, final Long templateId, final String version, final Long dateCreated, final String createdBy,
+                          final String alias, final String url, final ApplicationInstanceStatus status, final Attributes attributes, final Resources resources) {
         this.id = id;
         this.appId = appId;
         this.templateId = templateId;
@@ -125,7 +124,7 @@ public class ApplicationInstanceVO {
         if (o == this) return true;
         if (!(o instanceof ApplicationInstanceVO)) return false;
         final ApplicationInstanceVO other = (ApplicationInstanceVO) o;
-        if (!other.canEqual((Object) this)) return false;
+        if (!other.canEqual(this)) return false;
         final Object this$id = this.getId();
         final Object other$id = other.getId();
         if (this$id == null ? other$id != null : !this$id.equals(other$id)) return false;
@@ -157,8 +156,7 @@ public class ApplicationInstanceVO {
         if (this$status == null ? other$status != null : !this$status.equals(other$status)) return false;
         final Object this$attributes = this.getAttributes();
         final Object other$attributes = other.getAttributes();
-        if (this$attributes == null ? other$attributes != null : !this$attributes.equals(other$attributes)) return false;
-        return true;
+        return this$attributes == null ? other$attributes == null : this$attributes.equals(other$attributes);
     }
 
     protected boolean canEqual(final Object other) {
@@ -211,57 +209,57 @@ public class ApplicationInstanceVO {
         ApplicationInstanceVOBuilder() {
         }
 
-        public ApplicationInstanceVOBuilder id(Long id) {
+        public ApplicationInstanceVOBuilder id(final Long id) {
             this.id = id;
             return this;
         }
 
-        public ApplicationInstanceVOBuilder appId(String appId) {
+        public ApplicationInstanceVOBuilder appId(final String appId) {
             this.appId = appId;
             return this;
         }
 
-        public ApplicationInstanceVOBuilder templateId(Long templateId) {
+        public ApplicationInstanceVOBuilder templateId(final Long templateId) {
             this.templateId = templateId;
             return this;
         }
 
-        public ApplicationInstanceVOBuilder version(String version) {
+        public ApplicationInstanceVOBuilder version(final String version) {
             this.version = version;
             return this;
         }
 
-        public ApplicationInstanceVOBuilder dateCreated(Long dateCreated) {
+        public ApplicationInstanceVOBuilder dateCreated(final Long dateCreated) {
             this.dateCreated = dateCreated;
             return this;
         }
 
-        public ApplicationInstanceVOBuilder createdBy(String createdBy) {
+        public ApplicationInstanceVOBuilder createdBy(final String createdBy) {
             this.createdBy = createdBy;
             return this;
         }
 
-        public ApplicationInstanceVOBuilder alias(String alias) {
+        public ApplicationInstanceVOBuilder alias(final String alias) {
             this.alias = alias;
             return this;
         }
 
-        public ApplicationInstanceVOBuilder url(String url) {
+        public ApplicationInstanceVOBuilder url(final String url) {
             this.url = url;
             return this;
         }
 
-        public ApplicationInstanceVOBuilder status(ApplicationInstanceStatus status) {
+        public ApplicationInstanceVOBuilder status(final ApplicationInstanceStatus status) {
             this.status = status;
             return this;
         }
 
-        public ApplicationInstanceVOBuilder attributes(Attributes attributes) {
+        public ApplicationInstanceVOBuilder attributes(final Attributes attributes) {
             this.attributes = attributes;
             return this;
         }
 
-        public ApplicationInstanceVOBuilder resources(Resources resources) {
+        public ApplicationInstanceVOBuilder resources(final Resources resources) {
             this.resources = resources;
             return this;
         }

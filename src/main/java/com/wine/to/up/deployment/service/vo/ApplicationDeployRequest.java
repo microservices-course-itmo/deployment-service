@@ -2,7 +2,6 @@ package com.wine.to.up.deployment.service.vo;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.wine.to.up.deployment.service.entity.Attributes;
 
 public class ApplicationDeployRequest {
     private final String name;

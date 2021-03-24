@@ -6,11 +6,11 @@ import com.wine.to.up.deployment.service.dao.ApplicationInstanceRepository;
 import com.wine.to.up.deployment.service.dao.ApplicationTemplateRepository;
 import com.wine.to.up.deployment.service.entity.ApplicationInstance;
 import com.wine.to.up.deployment.service.entity.ApplicationTemplate;
-import com.wine.to.up.deployment.service.entity.Attributes;
 import com.wine.to.up.deployment.service.entity.EnvironmentVariable;
 import com.wine.to.up.deployment.service.enums.ApplicationInstanceStatus;
 import com.wine.to.up.deployment.service.service.*;
 import com.wine.to.up.deployment.service.vo.ApplicationTemplateVO;
+import com.wine.to.up.deployment.service.vo.Attributes;
 import com.wine.to.up.deployment.service.vo.Resources;
 
 import javax.ws.rs.NotFoundException;
@@ -27,12 +27,12 @@ public class ApplicationImportServiceImpl implements ApplicationImportService {
     private final SequenceGeneratorService sequenceGeneratorService;
     private final ApplicationService applicationService;
 
-    public ApplicationImportServiceImpl(ApplicationInstanceService applicationInstanceService,
-                                        ApplicationTemplateRepository applicationTemplateRepository,
-                                        SettingsService settingsService,
-                                        ApplicationInstanceRepository applicationInstanceRepository,
-                                        SequenceGeneratorService sequenceGeneratorService,
-                                        ApplicationService applicationService) {
+    public ApplicationImportServiceImpl(final ApplicationInstanceService applicationInstanceService,
+                                        final ApplicationTemplateRepository applicationTemplateRepository,
+                                        final SettingsService settingsService,
+                                        final ApplicationInstanceRepository applicationInstanceRepository,
+                                        final SequenceGeneratorService sequenceGeneratorService,
+                                        final ApplicationService applicationService) {
         this.applicationInstanceService = applicationInstanceService;
         this.applicationTemplateRepository = applicationTemplateRepository;
         this.settingsService = settingsService;
@@ -43,15 +43,15 @@ public class ApplicationImportServiceImpl implements ApplicationImportService {
 
     @Override
     public void importInstances() {
-        List<Service> instances = getInstances();
-        List<ApplicationTemplateVO> templatesLastVersions = getLastVersionsOfTemplates();
-        Set<String> recreatedTemplatesNames = new HashSet<>();
+        final List<Service> instances = getInstances();
+        final List<ApplicationTemplateVO> templatesLastVersions = getLastVersionsOfTemplates();
+        final Set<String> recreatedTemplatesNames = new HashSet<>();
 
-        for (Service instance : instances) {
-            String image = instance.getSpec().getTaskTemplate().getContainerSpec().getImage();
+        for (final Service instance : instances) {
+            final String image = instance.getSpec().getTaskTemplate().getContainerSpec().getImage();
 
             if (isMicroService(image)) {
-                String templateName = getTemplateName(image);
+                final String templateName = getTemplateName(image);
                 if (!(isApplicationTemplateExists(templateName))
                         || !(isApplicationInstanceExists(instance.getSpec().getName()))) {
                     createApplicationTemplate(instance, templateName);
@@ -74,43 +74,43 @@ public class ApplicationImportServiceImpl implements ApplicationImportService {
                 .collect(Collectors.toList());
     }
 
-    private void setLastTemplates(Set<String> recreatedTemplatesNames, List<ApplicationTemplateVO> templates) {
+    private void setLastTemplates(final Set<String> recreatedTemplatesNames, final List<ApplicationTemplateVO> templates) {
         templates.stream()
                 .filter(it -> recreatedTemplatesNames.contains(it.getName()))
                 .forEach(applicationService::createOrUpdateApplication);
     }
 
-    private boolean isMicroService(String image) {
+    private boolean isMicroService(final String image) {
         if (image == null)
             return false;
         if (image.indexOf('/') != -1) {
-            String address = image.substring(0, image.indexOf('/'));
+            final String address = image.substring(0, image.indexOf('/'));
             return address.equals(settingsService.getSettings().getImageRegistry());
         }
         return false;
     }
 
-    private boolean isApplicationTemplateExists(String name) {
+    private boolean isApplicationTemplateExists(final String name) {
         return applicationTemplateRepository.countByName(name) != 0;
     }
 
-    private boolean isApplicationInstanceExists(String appId) {
+    private boolean isApplicationInstanceExists(final String appId) {
         return applicationInstanceRepository.countByAppId(appId) != 0;
     }
 
-    private void createApplicationTemplate(Service instance, String templateName) {
-        Map<String, String> ports = getPorts(instance
+    private void createApplicationTemplate(final Service instance, final String templateName) {
+        final Map<String, String> ports = getPorts(instance
                 .getSpec()
                 .getEndpointSpec()
                 .getPorts());
 
-        List<EnvironmentVariable> environmentVariables = getEnvironmentVariables(instance
+        final List<EnvironmentVariable> environmentVariables = getEnvironmentVariables(instance
                 .getSpec()
                 .getTaskTemplate()
                 .getContainerSpec()
                 .getEnv());
 
-        ApplicationTemplateVO applicationTemplateVO = ApplicationTemplateVO.builder()
+        final ApplicationTemplateVO applicationTemplateVO = ApplicationTemplateVO.builder()
                 .alias("")
                 .createdBy("system")
                 .description("Imported " + templateName)
@@ -123,23 +123,23 @@ public class ApplicationImportServiceImpl implements ApplicationImportService {
         applicationService.createOrUpdateApplication(applicationTemplateVO);
     }
 
-    private void createApplicationInstance(Service instance, String templateName) {
-        Long id = sequenceGeneratorService.generateSequence(ApplicationInstance.SEQUENCE_NAME);
-        String image = instance.getSpec().getTaskTemplate().getContainerSpec().getImage();
+    private void createApplicationInstance(final Service instance, final String templateName) {
+        final Long id = sequenceGeneratorService.generateSequence(ApplicationInstance.SEQUENCE_NAME);
+        final String image = instance.getSpec().getTaskTemplate().getContainerSpec().getImage();
 
-        ApplicationTemplate template = applicationTemplateRepository
+        final ApplicationTemplate template = applicationTemplateRepository
                 .findFirstByNameOrderByIdDesc(templateName)
                 .orElseThrow(NotFoundException::new);
 
         final Resources resources;
         final var dockerResources = instance.getSpec().getTaskTemplate().getResources();
-        if(dockerResources != null && dockerResources.getLimits() != null && dockerResources.getLimits().getMemoryBytes() != null) { //refactor this shit I'm tired
+        if (dockerResources != null && dockerResources.getLimits() != null && dockerResources.getLimits().getMemoryBytes() != null) { //refactor this shit I'm tired
             resources = new Resources(dockerResources.getLimits().getMemoryBytes());
         } else {
             resources = null;
         }
 
-        ApplicationInstance applicationInstance = new ApplicationInstance(id,
+        final ApplicationInstance applicationInstance = new ApplicationInstance(id,
                 templateName, instance.getSpec().getName(),
                 template.getTemplateVersion(), getVersion(image),
                 System.currentTimeMillis(),
@@ -155,31 +155,31 @@ public class ApplicationImportServiceImpl implements ApplicationImportService {
         applicationInstanceRepository.save(applicationInstance);
     }
 
-    private String getVersion(String image) {
-        String[] split = image.split(":");
+    private String getVersion(final String image) {
+        final String[] split = image.split(":");
         return split[split.length - 1];
     }
 
-    private String getTemplateName(String instanceName) {
+    private String getTemplateName(final String instanceName) {
         return instanceName.split("/")[1].split(":")[0];
     }
 
-    private Map<String, String> getPorts(List<PortConfig> portConfigList) {
+    private Map<String, String> getPorts(final List<PortConfig> portConfigList) {
         if (portConfigList == null)
             return Collections.emptyMap();
-        Map<String, String> ports = new HashMap<>();
-        for (PortConfig portConfig : portConfigList) {
+        final Map<String, String> ports = new HashMap<>();
+        for (final PortConfig portConfig : portConfigList) {
             ports.put(Integer.toString(portConfig.getPublishedPort()), Integer.toString(portConfig.getTargetPort()));
         }
         return ports;
     }
 
-    private List<EnvironmentVariable> getEnvironmentVariables(List<String> envVars) {
+    private List<EnvironmentVariable> getEnvironmentVariables(final List<String> envVars) {
         if (envVars == null)
             return Collections.emptyList();
-        List<EnvironmentVariable> environmentVariables = new ArrayList<>();
-        for (String envVar : envVars) {
-            int delimiterPosition = envVar.indexOf('=');
+        final List<EnvironmentVariable> environmentVariables = new ArrayList<>();
+        for (final String envVar : envVars) {
+            final int delimiterPosition = envVar.indexOf('=');
             if (delimiterPosition != -1) {
                 environmentVariables.add(new EnvironmentVariable(envVar.substring(0, delimiterPosition),
                         envVar.substring(delimiterPosition + 1)));
