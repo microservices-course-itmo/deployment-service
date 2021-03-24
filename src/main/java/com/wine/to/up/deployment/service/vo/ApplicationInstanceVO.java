@@ -2,6 +2,7 @@ package com.wine.to.up.deployment.service.vo;
 
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.wine.to.up.deployment.service.entity.Attributes;
 import com.wine.to.up.deployment.service.enums.ApplicationInstanceStatus;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -25,7 +26,12 @@ public class ApplicationInstanceVO {
 
     private final ApplicationInstanceStatus status;
 
-    ApplicationInstanceVO(Long id, String appId, Long templateId, String version, Long dateCreated, String createdBy, String alias, String url, ApplicationInstanceStatus status) {
+    private final Attributes attributes;
+
+    private final Resources resources;
+
+    ApplicationInstanceVO(Long id, String appId, Long templateId, String version, Long dateCreated, String createdBy,
+                          String alias, String url, ApplicationInstanceStatus status, Attributes attributes, final Resources resources) {
         this.id = id;
         this.appId = appId;
         this.templateId = templateId;
@@ -35,6 +41,8 @@ public class ApplicationInstanceVO {
         this.alias = alias;
         this.url = url;
         this.status = status;
+        this.attributes = attributes;
+        this.resources = resources;
     }
 
     public static ApplicationInstanceVOBuilder builder() {
@@ -101,8 +109,16 @@ public class ApplicationInstanceVO {
         }
     }
 
+    public Attributes getAttributes() {
+        return attributes;
+    }
+
     public String toString() {
-        return "ApplicationInstanceVO(id=" + this.getId() + ", appId=" + this.getAppId() + ", templateId=" + this.getTemplateId() + ", version=" + this.getVersion() + ", dateCreated=" + this.getDateCreated() + ", createdBy=" + this.getCreatedBy() + ", alias=" + this.getAlias() + ", url=" + this.getUrl() + ", status=" + this.getStatus() + ")";
+        return "ApplicationInstanceVO(id=" + this.getId() + ", appId=" + this.getAppId()
+                + ", templateId=" + this.getTemplateId() + ", version=" + this.getVersion()
+                + ", dateCreated=" + this.getDateCreated() + ", createdBy=" + this.getCreatedBy()
+                + ", alias=" + this.getAlias() + ", url=" + this.getUrl()
+                + ", status=" + this.getStatus() + ", attributes=" + this.getAttributes() + ")";
     }
 
     public boolean equals(final Object o) {
@@ -139,6 +155,9 @@ public class ApplicationInstanceVO {
         final Object this$status = this.getStatus();
         final Object other$status = other.getStatus();
         if (this$status == null ? other$status != null : !this$status.equals(other$status)) return false;
+        final Object this$attributes = this.getAttributes();
+        final Object other$attributes = other.getAttributes();
+        if (this$attributes == null ? other$attributes != null : !this$attributes.equals(other$attributes)) return false;
         return true;
     }
 
@@ -167,7 +186,13 @@ public class ApplicationInstanceVO {
         result = result * PRIME + ($url == null ? 43 : $url.hashCode());
         final Object $status = this.getStatus();
         result = result * PRIME + ($status == null ? 43 : $status.hashCode());
+        final Object $attributes = this.getAttributes();
+        result = result * PRIME + ($attributes == null ? 43 : $attributes.hashCode());
         return result;
+    }
+
+    public Resources getResources() {
+        return resources;
     }
 
     public static class ApplicationInstanceVOBuilder {
@@ -180,6 +205,8 @@ public class ApplicationInstanceVO {
         private String alias;
         private String url;
         private ApplicationInstanceStatus status;
+        private Attributes attributes;
+        private Resources resources;
 
         ApplicationInstanceVOBuilder() {
         }
@@ -229,12 +256,26 @@ public class ApplicationInstanceVO {
             return this;
         }
 
+        public ApplicationInstanceVOBuilder attributes(Attributes attributes) {
+            this.attributes = attributes;
+            return this;
+        }
+
+        public ApplicationInstanceVOBuilder resources(Resources resources) {
+            this.resources = resources;
+            return this;
+        }
+
         public ApplicationInstanceVO build() {
-            return new ApplicationInstanceVO(id, appId, templateId, version, dateCreated, createdBy, alias, url, status);
+            return new ApplicationInstanceVO(id, appId, templateId, version, dateCreated, createdBy,
+                    alias, url, status, attributes, resources);
         }
 
         public String toString() {
-            return "ApplicationInstanceVO.ApplicationInstanceVOBuilder(id=" + this.id + ", appId=" + this.appId + ", templateId=" + this.templateId + ", version=" + this.version + ", dateCreated=" + this.dateCreated + ", createdBy=" + this.createdBy + ", alias=" + this.alias + ", url=" + this.url + ", status=" + this.status + ")";
+            return "ApplicationInstanceVO.ApplicationInstanceVOBuilder(id=" + this.id + ", appId=" + this.appId
+                    + ", templateId=" + this.templateId + ", version=" + this.version + ", dateCreated="
+                    + this.dateCreated + ", createdBy=" + this.createdBy + ", alias=" + this.alias
+                    + ", url=" + this.url + ", status=" + this.status + ", attributes=" + this.attributes + ")";
         }
     }
 }
