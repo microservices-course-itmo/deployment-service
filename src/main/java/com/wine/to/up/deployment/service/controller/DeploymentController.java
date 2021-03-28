@@ -12,15 +12,13 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.Authorization;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
 import java.util.List;
 
 @RestController
-@PreAuthorize("isAuthenticated()")
-@ApiOperation(value = "Main controller", authorizations = {@Authorization(value = "jwtToken")})
+@CrossOrigin
 public class DeploymentController {
 
     private DeploymentService deploymentService;
@@ -98,19 +96,19 @@ public class DeploymentController {
 
     @PostMapping("/applicationInstance/start/{entityId}")
     @ApiOperation(value = "Main controller", authorizations = {@Authorization(value = "jwtToken")})
-    public ResponseEntity<ApplicationInstanceVO> startApplicationInstance(@PathVariable Long entityId) {
+    public ResponseEntity<ApplicationInstanceVO> startApplicationInstance(@PathVariable final Long entityId) {
         return ResponseEntity.ok(deploymentService.startApplication(entityId));
     }
 
     @PostMapping("/applicationInstance/stop/{entityId}")
     @ApiOperation(value = "Main controller", authorizations = {@Authorization(value = "jwtToken")})
-    public ResponseEntity<ApplicationInstanceVO> stopApplicationInstance(@PathVariable Long entityId) {
+    public ResponseEntity<ApplicationInstanceVO> stopApplicationInstance(@PathVariable final Long entityId) {
         return ResponseEntity.ok(deploymentService.stopApplication(entityId));
     }
 
     @PostMapping("/applicationInstance/restart/{entityId}")
     @ApiOperation(value = "Main controller", authorizations = {@Authorization(value = "jwtToken")})
-    public ResponseEntity<ApplicationInstanceVO> restartApplicationInstance(@PathVariable Long entityId) {
+    public ResponseEntity<ApplicationInstanceVO> restartApplicationInstance(@PathVariable final Long entityId) {
         return ResponseEntity.ok(deploymentService.restartApplication(entityId));
     }
 
