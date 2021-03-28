@@ -12,7 +12,6 @@ import com.wine.to.up.deployment.service.vo.ApplicationDeployRequestWrapper
 import com.wine.to.up.deployment.service.vo.ApplicationInstanceVO
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
-import java.util.*
 import javax.ws.rs.NotFoundException
 
 @Service("applicationInstanceService")
@@ -187,10 +186,16 @@ class ApplicationInstanceServiceImpl(
                                           id: Long): EnvironmentVariable {
         val instanceIdVarName = "INSTANCE_ID"
         val attributes = applicationDeployRequestWrapper.attributes
-        if (attributes != null && attributes.isTestInstance) {
-            return EnvironmentVariable(instanceIdVarName, "test_$id")
+        var variableValue = "$id"
+        if (attributes == null) {
+            return EnvironmentVariable(instanceIdVarName, variableValue)
         }
-        return EnvironmentVariable(instanceIdVarName, "dev_$id")
+        if (attributes != null && attributes.isTestInstance) {
+            variableValue = "test_$variableValue"
+        }
+        if (attributes != null && attributes.isStopTraffic) {
+            variableValue = "stopTraffic_$variableValue"
+        }
+        return EnvironmentVariable(instanceIdVarName, variableValue)
     }
-
 }
