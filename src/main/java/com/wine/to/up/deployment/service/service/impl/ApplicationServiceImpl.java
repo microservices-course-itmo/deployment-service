@@ -11,11 +11,9 @@ import com.wine.to.up.deployment.service.vo.ApplicationTemplateVO;
 import com.wine.to.up.deployment.service.vo.LogVO;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.ws.rs.NotFoundException;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -37,9 +35,6 @@ public class ApplicationServiceImpl implements ApplicationService {
     public void setServiceVersionProvider(final ServiceVersionProvider serviceVersionProvider) {
         this.serviceVersionProvider = serviceVersionProvider;
     }
-
-    @Autowired
-    private MongoTemplate mongoTemplate;
 
     @Autowired
     public void setLogService(final LogService logService) {
@@ -92,17 +87,20 @@ public class ApplicationServiceImpl implements ApplicationService {
 
     @Override
     public List<String> getAllNames() {
-        List<String> names = new ArrayList<>();
-
-        for (String name : mongoTemplate.getCollection("templates").distinct("name", String.class)) {
-            names.add(name);
-        }
-        return names;
+        return applicationTemplateRepository.findAll()
+                .stream()
+                .map(ApplicationTemplate::getName)
+                .collect(Collectors.toList());
     }
 
     @Override
     public void removeEntity(String name) {
         final var entities = applicationTemplateRepository.findAllByName(name);
+
+        if (entities.isEmpty()) {
+            throw new NotFoundException();
+        }
+
         final var instances = applicationInstanceService.getInstancesByTemplateName(name);
         applicationInstanceService.removeEntities(
                 applicationInstanceService.viewsToEntities(instances)
@@ -166,7 +164,7 @@ public class ApplicationServiceImpl implements ApplicationService {
         List<String> varNamesInTemplate = applicationTemplateVO.getEnvironmentVariables().stream()
                 .map(EnvironmentVariable::getName).collect(Collectors.toList());
 
-        for (StandardEnvironmentVariable  standardVar: StandardEnvironmentVariable.values()) {
+        for (StandardEnvironmentVariable standardVar : StandardEnvironmentVariable.values()) {
             if (!varNamesInTemplate.contains(standardVar.getEnvironmentVariable().getName())) {
                 applicationTemplateVO.addEnvironmentVariable(standardVar.getEnvironmentVariable());
             }

@@ -1,7 +1,5 @@
 package com.wine.to.up.deployment.service.vo;
 
-import com.wine.to.up.deployment.service.entity.Attributes;
-
 public class ApplicationDeployRequestWrapper {
     private final String version;
     private final String alias;
@@ -9,8 +7,8 @@ public class ApplicationDeployRequestWrapper {
     private final Attributes attributes;
     private final Resources resources;
 
-    public ApplicationDeployRequestWrapper(String version, ApplicationTemplateVO applicationTemplateVO, String alias,
-                                           Attributes attributes, final Resources resources) {
+    public ApplicationDeployRequestWrapper(final String version, final ApplicationTemplateVO applicationTemplateVO, final String alias,
+                                           final Attributes attributes, final Resources resources) {
         this.version = version;
         this.applicationTemplateVO = applicationTemplateVO;
         this.alias = alias;

@@ -8,13 +8,24 @@ import com.wine.to.up.deployment.service.vo.ApplicationInstanceVO
 
 interface ApplicationInstanceService {
     fun getInstancesByTemplateName(templateName: String): List<ApplicationInstanceVO>
+
     fun getInstancesByTemplateId(templateId: Long): List<ApplicationInstanceVO>
+
     fun getInstanceById(instanceId: Long): ApplicationInstanceVO
+
     fun deployInstance(applicationDeployRequestWrapper: ApplicationDeployRequestWrapper): ApplicationInstanceVO
+
     fun entitiesToVies(entities: List<ApplicationInstance>, forceStatus: ApplicationInstanceStatus? = null): List<ApplicationInstanceVO>
+
     fun removeEntitiesByIds(ids: List<Long>)
+
     fun removeEntities(entities: List<ApplicationInstance>)
+
     fun removeEntityById(id: Long): ApplicationInstanceVO
+
     fun viewsToEntities(views: List<ApplicationInstanceVO>): List<ApplicationInstance>
-    fun getInstances() : List<Service>
+
+    fun getInstances(): List<Service>
+
+    fun saveInstance(applicationInstance: ApplicationInstance): ApplicationInstanceVO
 }

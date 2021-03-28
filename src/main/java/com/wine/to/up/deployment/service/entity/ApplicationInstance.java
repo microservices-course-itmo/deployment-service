@@ -1,6 +1,7 @@
 package com.wine.to.up.deployment.service.entity;
 
 import com.wine.to.up.deployment.service.enums.ApplicationInstanceStatus;
+import com.wine.to.up.deployment.service.vo.Attributes;
 import com.wine.to.up.deployment.service.vo.Resources;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
@@ -52,7 +53,7 @@ public class ApplicationInstance {
         return this.id;
     }
 
-    public void setId(Long id) {
+    public void setId(final Long id) {
         this.id = id;
     }
 
@@ -64,7 +65,7 @@ public class ApplicationInstance {
         }
     }
 
-    public void setAppId(String appId) {
+    public void setAppId(final String appId) {
         this.appId = appId;
     }
 
@@ -76,7 +77,7 @@ public class ApplicationInstance {
         }
     }
 
-    public void setTemplateName(String templateName) {
+    public void setTemplateName(final String templateName) {
         this.templateName = templateName;
     }
 
@@ -84,7 +85,7 @@ public class ApplicationInstance {
         return this.templateId;
     }
 
-    public void setTemplateId(Long templateId) {
+    public void setTemplateId(final Long templateId) {
         this.templateId = templateId;
     }
 
@@ -96,7 +97,7 @@ public class ApplicationInstance {
         }
     }
 
-    public void setVersion(String version) {
+    public void setVersion(final String version) {
         this.version = version;
     }
 
@@ -104,7 +105,7 @@ public class ApplicationInstance {
         return this.dateCreated;
     }
 
-    public void setDateCreated(Long dateCreated) {
+    public void setDateCreated(final Long dateCreated) {
         this.dateCreated = dateCreated;
     }
 
@@ -116,7 +117,7 @@ public class ApplicationInstance {
         }
     }
 
-    public void setUserCreated(String userCreated) {
+    public void setUserCreated(final String userCreated) {
         this.userCreated = userCreated;
     }
 
@@ -128,7 +129,7 @@ public class ApplicationInstance {
         }
     }
 
-    public void setStatus(ApplicationInstanceStatus status) {
+    public void setStatus(final ApplicationInstanceStatus status) {
         this.status = status;
     }
 
@@ -148,11 +149,11 @@ public class ApplicationInstance {
         }
     }
 
-    public void setAlias(String alias) {
+    public void setAlias(final String alias) {
         this.alias = alias;
     }
 
-    public void setUrl(String url) {
+    public void setUrl(final String url) {
         this.url = url;
     }
 
@@ -160,7 +161,7 @@ public class ApplicationInstance {
         return attributes;
     }
 
-    public void setAttributes(Attributes attributes) {
+    public void setAttributes(final Attributes attributes) {
         this.attributes = attributes;
     }
 
@@ -168,7 +169,7 @@ public class ApplicationInstance {
         return resources;
     }
 
-    public void setResources(Resources resources) {
+    public void setResources(final Resources resources) {
         this.resources = resources;
     }
 }

@@ -8,30 +8,29 @@ import com.wine.to.up.deployment.service.vo.SettingsVO;
 import java.util.List;
 
 public interface DeploymentService {
+    List<ApplicationInstanceVO> getInstancesByAppName(String templateName);
 
-     List<ApplicationInstanceVO> getInstancesByAppName(String templateName);
+    ApplicationInstanceVO getSingleInstanceById(Long id);
 
-     ApplicationInstanceVO getSingleInstanceById(Long id);
+    ApplicationTemplateVO getApplicationByName(String name);
 
-     ApplicationTemplateVO getApplicationByName(String name);
+    ApplicationInstanceVO removeApplicationInstanceById(Long id);
 
-     ApplicationInstanceVO removeApplicationInstanceById(Long id);
+    ApplicationTemplateVO getApplicationById(Long id);
 
-     ApplicationTemplateVO getApplicationById(Long id);
+    ApplicationTemplateVO createOrUpdateApplicationTemplate(ApplicationTemplateVO applicationTemplateVO);
 
-     ApplicationTemplateVO createOrUpdateApplicationTemplate(ApplicationTemplateVO applicationTemplateVO);
+    ApplicationInstanceVO deployApplicationInstance(ApplicationDeployRequest applicationDeployRequest);
 
-     ApplicationInstanceVO deployApplicationInstance(ApplicationDeployRequest applicationDeployRequest);
+    List<String> getAllNames();
 
-     List<String> getAllNames();
+    SettingsVO setSettings(SettingsVO settings);
 
-     SettingsVO setSettings(SettingsVO settings);
+    SettingsVO getSettings();
 
-     SettingsVO getSettings();
+    ApplicationInstanceVO stopApplication(Long id);
 
-     ApplicationInstanceVO stopApplication(Long id);
+    ApplicationInstanceVO startApplication(Long id);
 
-     ApplicationInstanceVO startApplication(Long id);
-
-     ApplicationInstanceVO restartApplication(Long id);
+    ApplicationInstanceVO restartApplication(Long id);
 }

@@ -1,12 +1,8 @@
 package com.wine.to.up.deployment.service.entity;
 
-import lombok.Getter;
-import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Getter
-@Setter
 @Document(collection = "database_sequences")
 public class DatabaseSequence {
 
@@ -14,4 +10,19 @@ public class DatabaseSequence {
     private String id;
     private Long seq;
 
+    public String getId() {
+        return this.id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public Long getSeq() {
+        return this.seq;
+    }
+
+    public void setSeq(Long seq) {
+        this.seq = seq;
+    }
 }

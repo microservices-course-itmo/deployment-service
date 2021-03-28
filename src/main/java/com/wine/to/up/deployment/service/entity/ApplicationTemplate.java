@@ -1,7 +1,5 @@
 package com.wine.to.up.deployment.service.entity;
 
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.springframework.boot.context.properties.ConstructorBinding;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
@@ -10,9 +8,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.util.List;
 import java.util.Map;
 
-@Setter
 @ConstructorBinding
-@NoArgsConstructor
 @Document(collection = "templates")
 public class ApplicationTemplate {
 
@@ -44,6 +40,9 @@ public class ApplicationTemplate {
         this.description = description;
         this.dateCreated = System.currentTimeMillis();
         this.baseBranch = baseBranch;
+    }
+
+    public ApplicationTemplate() {
     }
 
     public Long getId() {
@@ -88,5 +87,49 @@ public class ApplicationTemplate {
 
     public String getBaseBranch() {
         return baseBranch;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setTemplateVersion(Long templateVersion) {
+        this.templateVersion = templateVersion;
+    }
+
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setPortMappings(Map<String, String> portMappings) {
+        this.portMappings = portMappings;
+    }
+
+    public void setVolumes(List<String> volumes) {
+        this.volumes = volumes;
+    }
+
+    public void setEnvironmentVariables(List<EnvironmentVariable> environmentVariables) {
+        this.environmentVariables = environmentVariables;
+    }
+
+    public void setBaseBranch(String baseBranch) {
+        this.baseBranch = baseBranch;
+    }
+
+    public void setDateCreated(Long dateCreated) {
+        this.dateCreated = dateCreated;
+    }
+
+    public void setMemoryLimits(Long memoryLimits) {
+        this.memoryLimits = memoryLimits;
     }
 }
