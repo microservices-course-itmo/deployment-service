@@ -9,7 +9,8 @@ public class Attributes {
     private final Boolean isStopTraffic;
 
     @JsonCreator
-    public Attributes(@JsonProperty("testInstance") final Boolean isTestInstance, Boolean isStopTraffic) {
+    public Attributes(@JsonProperty("testInstance") final Boolean isTestInstance,
+                      @JsonProperty("stopTraffic") final Boolean isStopTraffic) {
         this.isTestInstance = isTestInstance;
         this.isStopTraffic = isStopTraffic;
     }

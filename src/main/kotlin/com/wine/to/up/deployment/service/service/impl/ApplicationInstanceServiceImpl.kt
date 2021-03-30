@@ -190,10 +190,10 @@ class ApplicationInstanceServiceImpl(
         if (attributes == null) {
             return EnvironmentVariable(instanceIdVarName, variableValue)
         }
-        if (attributes != null && attributes.isTestInstance) {
+        if (attributes.isTestInstance) {
             variableValue = "test_$variableValue"
         }
-        if (attributes != null && attributes.isStopTraffic) {
+        if (attributes.isStopTraffic) {
             variableValue = "stopTraffic_$variableValue"
         }
         return EnvironmentVariable(instanceIdVarName, variableValue)
