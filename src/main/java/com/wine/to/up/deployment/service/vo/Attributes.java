@@ -15,14 +15,14 @@ public class Attributes {
         this.isStopTraffic = isStopTraffic;
     }
 
-    public Boolean isTestInstance() {
+    public boolean isTestInstance() {
         if(isTestInstance == null) {
             return false;
         }
         return isTestInstance;
     }
 
-    public Boolean isStopTraffic() {
+    public boolean isStopTraffic() {
         if(isStopTraffic == null) {
             return false;
         }
