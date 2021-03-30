@@ -147,7 +147,7 @@ public class ApplicationImportServiceImpl implements ApplicationImportService {
                 ApplicationInstanceStatus.STARTING,
                 "test url",
                 templateName,
-                new Attributes(false),
+                new Attributes(false, false),
                 resources
         );
 
