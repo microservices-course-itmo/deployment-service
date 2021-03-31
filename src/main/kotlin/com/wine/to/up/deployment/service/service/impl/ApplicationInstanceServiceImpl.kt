@@ -47,6 +47,7 @@ class ApplicationInstanceServiceImpl(
 
         val environmentVariables = applicationTemplateVO.environmentVariables
         environmentVariables.add(constructInstanceIdEnvVar(applicationDeployRequestWrapper, id))
+        environmentVariables.add(constructKafkaEnabledEnvVar(applicationDeployRequestWrapper))
 
         applicationInstanceRepository.removeAllByAppId(entity.appId)
         removeFromDockerByAppId(dockerClient, entity.appId)
@@ -197,6 +198,14 @@ class ApplicationInstanceServiceImpl(
             variableValue = "stopTraffic_$variableValue"
         }
         return EnvironmentVariable(instanceIdVarName, variableValue)
+    }
+
+    private fun constructKafkaEnabledEnvVar(
+            applicationDeployRequestWrapper: ApplicationDeployRequestWrapper): EnvironmentVariable {
+        val kafkaEnabledVarName = "KAFKA_ENABLED"
+        val attributes = applicationDeployRequestWrapper.attributes
+                ?: return EnvironmentVariable(kafkaEnabledVarName, true.toString())
+        return EnvironmentVariable(kafkaEnabledVarName, (!attributes.isStopTraffic).toString())
     }
 
 }
