@@ -54,7 +54,7 @@ class ApplicationInstanceServiceImpl(
 
         var taskTemplate = TaskSpec()
                 .withContainerSpec(ContainerSpec()
-                        .withImage("${getRegistryAddress()}/${applicationTemplateVO.name}:${version}")
+                        .withImage("${applicationTemplateVO.name}:${version}")
                         //.withImage("${applicationTemplateVO.name}:latest")
                         .withEnv(environmentVariables.map { "${it.name}=${it.value}" })
                 )
