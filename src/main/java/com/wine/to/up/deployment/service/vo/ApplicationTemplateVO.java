@@ -163,7 +163,9 @@ public class ApplicationTemplateVO {
     }
 
     public List<EnvironmentVariable> addEnvironmentVariable(final EnvironmentVariable environmentVariable) {
-        this.environmentVariables.add(environmentVariable);
+        if (this.environmentVariables != null) {
+            this.environmentVariables.add(environmentVariable);
+        }
         return environmentVariables;
     }
 
