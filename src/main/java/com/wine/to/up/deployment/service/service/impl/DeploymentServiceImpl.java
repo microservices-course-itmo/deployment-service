@@ -2,12 +2,13 @@ package com.wine.to.up.deployment.service.service.impl;
 
 import com.wine.to.up.deployment.service.service.*;
 import com.wine.to.up.deployment.service.vo.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-
+@Slf4j
 @Service
 public class DeploymentServiceImpl implements DeploymentService {
 
@@ -59,6 +60,7 @@ public class DeploymentServiceImpl implements DeploymentService {
 
     @Override
     public ApplicationTemplateVO createOrUpdateApplicationTemplate(ApplicationTemplateVO applicationTemplateVO) {
+        log.info("Create or Update method called in DeploymentService class");
         return applicationService.createOrUpdateApplication(applicationTemplateVO);
     }
 

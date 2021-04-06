@@ -9,6 +9,7 @@ import com.wine.to.up.deployment.service.service.*;
 import com.wine.to.up.deployment.service.vo.ApplicationInstanceVO;
 import com.wine.to.up.deployment.service.vo.ApplicationTemplateVO;
 import com.wine.to.up.deployment.service.vo.LogVO;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class ApplicationServiceImpl implements ApplicationService {
 
@@ -131,15 +133,16 @@ public class ApplicationServiceImpl implements ApplicationService {
         var versions = serviceVersionProvider.findAllVersions(applicationTemplate);
         applicationTemplate.setId(id);
 
-        final LogVO log;
+        final LogVO logVO;
         if (updatingEntity) {
-            log = logService.writeLog("system", "Приложение обновлено", applicationTemplateVO.getName(), id);
+            logVO = logService.writeLog("system", "Приложение обновлено", applicationTemplateVO.getName(), id);
         } else {
-            log = logService.writeLog("system", "Приложение создано", applicationTemplateVO.getName(), id);
+            logVO = logService.writeLog("system", "Приложение создано", applicationTemplateVO.getName(), id);
         }
 
         applicationTemplate.setTemplateVersion(sequenceGeneratorService.generateSequence("applicationTemplate_" + applicationTemplate.getName()));
-        return entityToView(applicationTemplateRepository.save(applicationTemplate), Collections.emptyList(), Collections.singletonList(log), versions);
+        log.info("Create or Update method called in ApplicationService class");
+        return entityToView(applicationTemplateRepository.save(applicationTemplate), Collections.emptyList(), Collections.singletonList(logVO), versions);
     }
 
     public ApplicationTemplateVO entityToView(ApplicationTemplate entity, List<ApplicationInstanceVO> instances, List<LogVO> logs, List<String> versions) {
