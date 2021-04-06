@@ -83,7 +83,9 @@ public class DeploymentController {
     @ApiOperation(value = "Main controller", authorizations = {@Authorization(value = "jwtToken")})
     public ApplicationTemplateVO createOrUpdateApplicationTemplate(@RequestBody final ApplicationTemplateVO applicationTemplateVO) {
         log.info("Create or Update method called in DeploymentController class");
-        return deploymentService.createOrUpdateApplicationTemplate(applicationTemplateVO);
+        ApplicationTemplateVO orUpdateApplicationTemplate = deploymentService.createOrUpdateApplicationTemplate(applicationTemplateVO);
+        log.info(orUpdateApplicationTemplate.toString());
+        return orUpdateApplicationTemplate;
     }
 
     @DeleteMapping("/application/delete/byName/{name}")
