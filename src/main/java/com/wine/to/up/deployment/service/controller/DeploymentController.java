@@ -70,6 +70,7 @@ public class DeploymentController {
     @GetMapping("/application/get/byName/{name}")
     @ApiOperation(value = "Main controller", authorizations = {@Authorization(value = "jwtToken")})
     public ResponseEntity<ApplicationTemplateVO> getApplication(@PathVariable final String name) {
+        log.info("Get by name method called in DeploymentController class");
         return ResponseEntity.ok(deploymentService.getApplicationByName(name));
     }
 
@@ -82,7 +83,7 @@ public class DeploymentController {
     @PostMapping("/application/createOrUpdate")
     @ApiOperation(value = "Main controller", authorizations = {@Authorization(value = "jwtToken")})
     public ApplicationTemplateVO createOrUpdateApplicationTemplate(@RequestBody final ApplicationTemplateVO applicationTemplateVO) {
-        log.info("Create or Update method called in DeploymentController class");
+
         return deploymentService.createOrUpdateApplicationTemplate(applicationTemplateVO);
     }
 

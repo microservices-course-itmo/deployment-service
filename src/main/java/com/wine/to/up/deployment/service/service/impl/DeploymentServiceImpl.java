@@ -45,6 +45,7 @@ public class DeploymentServiceImpl implements DeploymentService {
 
     @Override
     public ApplicationTemplateVO getApplicationByName(String name) {
+        log.info("Get by name method called in DeploymentService class");
         return applicationService.getApplicationTemplate(name);
     }
 
@@ -60,7 +61,6 @@ public class DeploymentServiceImpl implements DeploymentService {
 
     @Override
     public ApplicationTemplateVO createOrUpdateApplicationTemplate(ApplicationTemplateVO applicationTemplateVO) {
-        log.info("Create or Update method called in DeploymentService class");
         return applicationService.createOrUpdateApplication(applicationTemplateVO);
     }
 

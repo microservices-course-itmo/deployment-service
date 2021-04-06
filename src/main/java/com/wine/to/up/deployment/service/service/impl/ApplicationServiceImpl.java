@@ -60,15 +60,18 @@ public class ApplicationServiceImpl implements ApplicationService {
 
     @Override
     public ApplicationTemplateVO getApplicationTemplate(String name) {
+        log.info("get by name 1");
         ApplicationTemplate applicationTemplate = applicationTemplateRepository
                 .findFirstByNameOrderByIdDesc(name)
                 .orElseThrow(NotFoundException::new);
+        log.info("get by name 2");
         var versions = serviceVersionProvider.findAllVersions(applicationTemplate);
-
+        log.info("get by name 3");
         var instances = applicationInstanceService.getInstancesByTemplateName(name);
+        log.info("get by name 4");
         //TODO limit should be applied automatically
         var logs = logService.logsByTemplate(applicationTemplate, 30);
-
+        log.info("get by name 5");
         return entityToView(applicationTemplate, instances, logs, versions);
 
     }
@@ -115,36 +118,27 @@ public class ApplicationServiceImpl implements ApplicationService {
 
     @Override
     public ApplicationTemplateVO createOrUpdateApplication(ApplicationTemplateVO applicationTemplateVO) {
-        log.info("Create or Update method called in ApplicationService class1");
         final boolean updatingEntity = applicationTemplateRepository.countByName(applicationTemplateVO.getName()) > 0;
-        log.info("Create or Update method called in ApplicationService class2");
         populateStandardEnvVars(applicationTemplateVO);
-        log.info("Create or Update method called in ApplicationService class3");
         ApplicationTemplate applicationTemplate = new ApplicationTemplate(applicationTemplateVO.getTemplateVersion(),
                 applicationTemplateVO.getCreatedBy(), applicationTemplateVO.getName(), applicationTemplateVO.getPorts(),
                 applicationTemplateVO.getVolumes(), applicationTemplateVO.getEnvironmentVariables(),
                 applicationTemplateVO.getDescription(),
                 applicationTemplateVO.getBaseBranch() != null ? applicationTemplateVO.getBaseBranch() : "dev");
-        log.info("Create or Update method called in ApplicationService class3.5");
         if (StringUtils.isEmpty(applicationTemplate.getCreatedBy())) {
             applicationTemplate.setCreatedBy(AuthenticationProvider.getUser().getId().toString());
         }
-        log.info("Create or Update method called in ApplicationService class4");
         var id = sequenceGeneratorService.generateSequence(ApplicationTemplate.SEQUENCE_NAME);
-        log.info("Create or Update method called in ApplicationService class5");
         var versions = serviceVersionProvider.findAllVersions(applicationTemplate);
-        log.info("Create or Update method called in ApplicationService class6");
         applicationTemplate.setId(id);
-        log.info("Create or Update method called in ApplicationService class7");
         final LogVO logVO;
         if (updatingEntity) {
             logVO = logService.writeLog("system", "Приложение обновлено", applicationTemplateVO.getName(), id);
         } else {
             logVO = logService.writeLog("system", "Приложение создано", applicationTemplateVO.getName(), id);
         }
-        log.info("Create or Update method called in ApplicationService class8");
         applicationTemplate.setTemplateVersion(sequenceGeneratorService.generateSequence("applicationTemplate_" + applicationTemplate.getName()));
-        log.info("Create or Update method called in ApplicationService class9");
+
         return entityToView(applicationTemplateRepository.save(applicationTemplate), Collections.emptyList(), Collections.singletonList(logVO), versions);
     }
 
