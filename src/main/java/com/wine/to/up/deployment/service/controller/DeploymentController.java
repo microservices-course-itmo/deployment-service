@@ -8,6 +8,7 @@ import com.wine.to.up.deployment.service.vo.ApplicationDeployRequest;
 import com.wine.to.up.deployment.service.vo.ApplicationInstanceVO;
 import com.wine.to.up.deployment.service.vo.ApplicationTemplateVO;
 import com.wine.to.up.deployment.service.vo.SettingsVO;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Collections;
 import java.util.List;
 
+@Slf4j
 @RestController
 //@PreAuthorize("isAuthenticated()")
 public class DeploymentController {
@@ -71,6 +73,7 @@ public class DeploymentController {
 
     @PostMapping("/application/createOrUpdate")
     public ApplicationTemplateVO createOrUpdateApplicationTemplate(@RequestBody final ApplicationTemplateVO applicationTemplateVO) {
+        log.info("Create or Update method called in DeploymentController class");
         return deploymentService.createOrUpdateApplicationTemplate(applicationTemplateVO);
     }
 
