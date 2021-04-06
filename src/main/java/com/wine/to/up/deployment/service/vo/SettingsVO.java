@@ -1,6 +1,8 @@
 package com.wine.to.up.deployment.service.vo;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class SettingsVO {
@@ -8,7 +10,10 @@ public class SettingsVO {
     private final String versionRegistry;
     private final String imageRegistry;
 
-    private SettingsVO(String dockerAddress, String versionRegistry, final String imageRegistry) {
+    @JsonCreator
+    private SettingsVO(@JsonProperty("dockerAddress") final String dockerAddress,
+                       @JsonProperty("versionRegistry") final String versionRegistry,
+                       @JsonProperty("imageRegistry") final String imageRegistry) {
         this.dockerAddress = dockerAddress;
         this.versionRegistry = versionRegistry;
         this.imageRegistry = imageRegistry;
@@ -72,17 +77,17 @@ public class SettingsVO {
         SettingsVOBuilder() {
         }
 
-        public SettingsVOBuilder dockerAddress(String dockerAddress) {
+        public SettingsVOBuilder dockerAddress(final String dockerAddress) {
             this.dockerAddress = dockerAddress;
             return this;
         }
 
-        public SettingsVOBuilder versionRegistry(String versionregistry) {
+        public SettingsVOBuilder versionRegistry(final String versionregistry) {
             this.versionRegistry = versionregistry;
             return this;
         }
 
-        public SettingsVOBuilder imageRegistry(String imageRegistry) {
+        public SettingsVOBuilder imageRegistry(final String imageRegistry) {
             this.imageRegistry = imageRegistry;
             return this;
         }
