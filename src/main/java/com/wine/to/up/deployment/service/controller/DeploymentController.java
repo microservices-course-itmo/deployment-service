@@ -129,6 +129,13 @@ public class DeploymentController {
         return applicationInstanceService.removeEntityById(entityId);
     }
 
+    @DeleteMapping("/application/delete/byId/{entityId}")
+    @ApiOperation(value = "Main controller", authorizations = {@Authorization(value = "jwtToken")})
+    public ResponseEntity<?> deleteApplication(@PathVariable final Long entityId) {
+        applicationInstanceService.removeEntitiesByIds(Collections.singletonList(entityId));
+        return ResponseEntity.ok().build();
+    }
+
     @GetMapping("/application/names")
     @ApiOperation(value = "Main controller", authorizations = {@Authorization(value = "jwtToken")})
     public List<String> getAllNames() {
