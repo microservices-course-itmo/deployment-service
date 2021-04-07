@@ -5,7 +5,10 @@ import com.wine.to.up.deployment.service.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -28,7 +31,7 @@ public class DeploymentServiceImpl implements DeploymentService {
 
     @Override
     public List<String> getAllNames() {
-        return applicationService.getAllNames();
+        return new ArrayList<>(applicationService.getAllNames().stream().filter(Objects::nonNull).collect(Collectors.toSet()));
     }
 
     @Override

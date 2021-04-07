@@ -94,9 +94,7 @@ class ApplicationInstanceServiceImpl(
                 forceStatus
             } else if (dockerTasks.any { task -> task.status.state.value == "running" }) {
                 ApplicationInstanceStatus.RUNNING
-            } else if (dockerTasks.isEmpty()) {
-                ApplicationInstanceStatus.REMOVED
-            } else {
+            }  else {
                 ApplicationInstanceStatus.STOPPED
             }
             ApplicationInstanceVO.builder()

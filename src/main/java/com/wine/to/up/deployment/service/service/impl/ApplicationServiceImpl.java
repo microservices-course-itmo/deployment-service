@@ -11,8 +11,11 @@ import com.wine.to.up.deployment.service.vo.ApplicationTemplateVO;
 import com.wine.to.up.deployment.service.vo.LogVO;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 
+import javax.ws.rs.BadRequestException;
 import javax.ws.rs.NotFoundException;
 import java.util.Collections;
 import java.util.List;
@@ -113,6 +116,9 @@ public class ApplicationServiceImpl implements ApplicationService {
 
     @Override
     public ApplicationTemplateVO createOrUpdateApplication(ApplicationTemplateVO applicationTemplateVO) {
+        if(applicationTemplateVO.getName().equals("")) {
+            throw new BadRequestException("Name cannot be null");
+        }
         final boolean updatingEntity = applicationTemplateRepository.countByName(applicationTemplateVO.getName()) > 0;
 
         populateStandardEnvVars(applicationTemplateVO);
